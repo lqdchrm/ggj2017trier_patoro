@@ -12,6 +12,7 @@ namespace PaToRo_Desktop.Scenes
     class DebugOverlay: Group
     {
         private readonly BaseGame game;
+        public string Text { get; set; }
 
         public DebugOverlay(BaseGame game)
         {
@@ -22,7 +23,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(spriteBatch, gameTime);
 
-            spriteBatch.DrawString(game.Fonts.Get("debug"), "Hello World", Vector2.Zero, Color.Red);
+            spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Red);
         }
     }
 }

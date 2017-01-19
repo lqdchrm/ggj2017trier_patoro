@@ -46,8 +46,15 @@
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Fonts.cs" />
     <Compile Include="Engine\Group.cs" />
+    <Compile Include="Engine\Input\Buttons.cs" />
+    <Compile Include="Engine\Input\InputProvider.cs" />
+    <Compile Include="Engine\Input\Inputs.cs" />
+    <Compile Include="Engine\Input\InputState.cs" />
+    <Compile Include="Engine\Input\Sliders.cs" />
+    <Compile Include="Engine\Input\XBoxController.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Scenes.cs" />
+    <Compile Include="Engine\Screen.cs" />
     <Compile Include="PaToRoGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +72,14 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpDX.3.1.1\lib\net45\SharpDX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpDX.XInput.3.1.1\lib\net45\SharpDX.XInput.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -77,7 +92,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

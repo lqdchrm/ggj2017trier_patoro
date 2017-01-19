@@ -12,28 +12,28 @@ namespace PaToRo_Desktop.Engine.Entities
 {
     public class Sprite : Entity
     {
-        private Physics phy;
-        private Image gfx;
+        public Physics Phy { get; private set; }
+        public Image Gfx { get; private set; }
 
         public Sprite(string assetPath)
         {
-            gfx = new Image(assetPath);
+            Gfx = new Image(assetPath);
         }
 
         public void LoadContent(ContentManager content)
         {
-            gfx.LoadContent(content);
-            phy = new Physics(gfx.origin.X);
+            Gfx.LoadContent(content);
+            Phy = new Physics(Gfx.origin.X);
         }
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            gfx.Draw(spriteBatch, phy.Pos, phy.Rot);
+            Gfx.Draw(spriteBatch, Phy.Pos, Phy.Rot);
         }
 
         internal override void Update(GameTime gameTime)
         {
-            phy.Update(gameTime);
+            Phy.Update(gameTime);
         }
     }
 }

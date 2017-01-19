@@ -35,8 +35,14 @@ namespace PaToRo_Desktop.Engine
 
         }
 
+        internal virtual int HandleInput(GameTime gameTime)
+        {
+            return game.HandleInput(gameTime);
+        }
+
         internal override void Update(GameTime gameTime)
         {
+            HandleInput(gameTime);
             base.Update(gameTime);
         }
 
