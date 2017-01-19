@@ -39,6 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\BaseGame.cs" />
+    <Compile Include="Engine\Components\Circle.cs" />
+    <Compile Include="Engine\Components\Physics.cs" />
+    <Compile Include="Engine\Components\Image.cs" />
+    <Compile Include="Engine\Entities\Sprite.cs" />
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Fonts.cs" />
     <Compile Include="Engine\Group.cs" />
@@ -48,6 +52,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\DebugOverlay.cs" />
+    <Compile Include="Scenes\Ball.cs" />
     <Compile Include="Scenes\TestScene.cs" />
   </ItemGroup>
   <ItemGroup>

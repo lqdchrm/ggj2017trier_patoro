@@ -23,7 +23,13 @@ namespace PaToRo_Desktop.Scenes
         internal override void LoadContent()
         {
             base.LoadContent();
-            Children.Add(new DebugOverlay(game));
+
+            var ball = new Ball();
+            ball.LoadContent(game.Content);
+            Children.Add(ball);
+
+            var dbgOverlay = new DebugOverlay(game);
+            Children.Add(dbgOverlay);
         }
     }
 }

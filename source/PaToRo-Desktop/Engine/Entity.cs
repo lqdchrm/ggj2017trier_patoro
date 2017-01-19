@@ -10,6 +10,11 @@ namespace PaToRo_Desktop.Engine
 {
     public abstract class Entity
     {
+
+        public Entity()
+        {
+        }
+
         internal abstract void Update(GameTime gameTime);
 
         internal abstract void Draw(SpriteBatch spriteBatch, GameTime gameTime);
