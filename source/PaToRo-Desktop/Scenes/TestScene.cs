@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
 using System;
@@ -20,7 +21,7 @@ namespace PaToRo_Desktop.Scenes
         public float SpeedX;
         public float SpeedY;
         public float Direction;
-        public float TimePerPhase;
+        private Texture2D part;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -30,7 +31,6 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Initialize();
             BgColor = Color.Blue;
-            TimePerPhase = 5000.0f; // 5 seconds
             Direction = 1.0f;
         }
 
@@ -51,16 +51,48 @@ namespace PaToRo_Desktop.Scenes
             level.Generator = new SineGenerator(game);
             Children.Add(level);
 
+            part = game.Content.Load<Texture2D>("Images/particle");
+
             dbgOverlay = new DebugOverlay(game);
             Children.Add(dbgOverlay);
+        }
+
+        internal override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            int MaxPoints = 100;
+            float PosX = ball.Phy.Pos.X;
+            float PosY = ball.Phy.Pos.Y;
+            float InternalDirection = Direction;
+            spriteBatch.Begin();
+            for (int i = 0; i <= MaxPoints; ++i)
+            {
+                PosX += 15.0f; // level speed
+                PosY += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
+                PosY += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
+                float Tmp = (SpeedY / 6.0f) + 0.1f;
+                if (PosY < game.Screen.Height * Tmp)
+                {
+                    InternalDirection *= -1.0f;
+                    PosY = game.Screen.Height * Tmp;
+                }
+                if (PosY > game.Screen.Height * (1.0f - Tmp))
+                {
+                    InternalDirection *= -1.0f;
+                    PosY = game.Screen.Height * (1.0f - Tmp);
+
+                }
+                Vector2 Pos = new Vector2(PosX, PosY);
+                spriteBatch.Draw(part, Pos, Color.White);
+            }
+            spriteBatch.End();
         }
 
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            TimePerPhase -= gameTime.ElapsedGameTime.Milliseconds;
-            ball.Phy.Pos.Y += 1000.0f * (1.0f + SpeedX)/2.0f * gameTime.ElapsedGameTime.Milliseconds/1000.0f * Direction;
-            ball.Phy.Pos.Y += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds/1000.0f * Direction;
+            ball.Phy.Pos.Y += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
+            ball.Phy.Pos.Y += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
             float Tmp = (SpeedY / 6.0f) + 0.1f;
             if (ball.Phy.Pos.Y < game.Screen.Height * Tmp)
             {
