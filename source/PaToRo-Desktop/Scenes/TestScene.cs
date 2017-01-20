@@ -53,12 +53,21 @@ namespace PaToRo_Desktop.Scenes
             // Move Ball
             if (numPlayers > 0)
             {
-                ball.Phy.Spd.X = game.Inputs.Player(0).Value(Sliders.LeftStickX) * 100;
+                float speed = 0;
+                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Left) ? 100f : 0f;
+                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Right) ? -100f : 0f;
+                speed += game.Inputs.Player(0).Value(Sliders.LeftStickX) * 100;
+                ball.Phy.Spd.X = speed;
             }
 
             if (numPlayers > 1)
             {
-                ball.Phy.Spd.Y = game.Inputs.Player(1).Value(Sliders.LeftStickY) * 100;
+                float speed = 0;
+                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Down) ? 100f : 0f;
+                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Up) ? -100f : 0f;
+                speed += game.Inputs.Player(1).Value(Sliders.LeftStickY) * 100;
+
+                ball.Phy.Spd.Y = speed;
             }
 
             // Rumble

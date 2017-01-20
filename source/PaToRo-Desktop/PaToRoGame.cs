@@ -18,8 +18,11 @@ namespace PaToRo_Desktop
         {
             base.Initialize();
 
-            for (int i=0; i<4; ++i)
+            for (int i = 0; i < 4; ++i)
                 Inputs[i].Provider = new XBoxController(i);
+            for (int i = 4; i < 4 + 1; ++i)
+                Inputs[i].Provider = new KeyboardController(i);
+
 
             Scenes.Add("test", new TestScene(this));
             Scenes.Show("test");

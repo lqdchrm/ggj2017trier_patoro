@@ -51,6 +51,7 @@
     <Compile Include="Engine\Input\Inputs.cs" />
     <Compile Include="Engine\Input\InputState.cs" />
     <Compile Include="Engine\Input\Sliders.cs" />
+    <Compile Include="Engine\Input\KeyboardController.cs" />
     <Compile Include="Engine\Input\XBoxController.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Scenes.cs" />
