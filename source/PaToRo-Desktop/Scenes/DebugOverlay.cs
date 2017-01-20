@@ -23,10 +23,10 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(spriteBatch, gameTime);
 
-            float Amplitude = ((TestScene)game.Scenes.Current).SpeedX;
-            float Frequency = ((TestScene)game.Scenes.Current).SpeedY;
-            spriteBatch.DrawString(game.Fonts.Get("debug"), $"Amplitude {Amplitude}", Vector2.Zero, Color.Red);
-            spriteBatch.DrawString(game.Fonts.Get("debug"), $"Frequency {Frequency}", Vector2.Zero + new Vector2(0, 10), Color.Red);
+            //float Amplitude = ((TestScene)game.Scenes.Current).SpeedX;
+            //float Frequency = ((TestScene)game.Scenes.Current).SpeedY;
+            //spriteBatch.DrawString(game.Fonts.Get("debug"), $"Amplitude {Amplitude}", Vector2.Zero, Color.Red);
+            //spriteBatch.DrawString(game.Fonts.Get("debug"), $"Frequency {Frequency}", Vector2.Zero + new Vector2(0, 10), Color.Red);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PaToRo_Desktop.Scenes
     public class LevelScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private Ball ball;
+        private TheWaveRider ball;
         private Level level;
 
         public LevelScene(BaseGame game) : base(game)

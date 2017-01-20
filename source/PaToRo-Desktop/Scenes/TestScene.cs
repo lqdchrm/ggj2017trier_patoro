@@ -13,6 +13,7 @@ namespace PaToRo_Desktop.Scenes
     {
         private DebugOverlay dbgOverlay;
         private TheWaveRider ball;
+        private Level level;
         public float Phase;
         public float LevelSpeedX;
         public float LevelSpeedY;
@@ -45,6 +46,11 @@ namespace PaToRo_Desktop.Scenes
             LevelSpeedY = 150.0f;
             Children.Add(ball);
 
+            level = new Level(game, 64);
+            level.LoadContent(game.Content);
+            level.Generator = new SineGenerator(game);
+            Children.Add(level);
+
             dbgOverlay = new DebugOverlay(game);
             Children.Add(dbgOverlay);
         }
@@ -53,7 +59,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Update(gameTime);
             TimePerPhase -= gameTime.ElapsedGameTime.Milliseconds;
-            ball.Phy.Pos.X += LevelSpeedX * (((SpeedX + 1.0f) / 2.0f) + 0.2f) * gameTime.ElapsedGameTime.Milliseconds/1000.0f;
+            ball.Phy.Pos.Y += 1000.0f * (1.0f + SpeedX)/2.0f * gameTime.ElapsedGameTime.Milliseconds/1000.0f * Direction;
             ball.Phy.Pos.Y += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds/1000.0f * Direction;
             float Tmp = (SpeedY / 6.0f) + 0.1f;
             if (ball.Phy.Pos.Y < game.Screen.Height * Tmp)
@@ -67,7 +73,6 @@ namespace PaToRo_Desktop.Scenes
                 ball.Phy.Pos.Y = game.Screen.Height * (1.0f - Tmp);
 
             }
-            if (ball.Phy.Pos.X >= game.Screen.Width) ball.Phy.Pos.X = 0;
         }
 
         internal override int HandleInput(GameTime gameTime)
