@@ -19,6 +19,8 @@ namespace PaToRo_Desktop.Engine.Input
 
         Start, Select,
 
-        LeftStick, RightStick
+        LeftStick, RightStick,
+
+        ToggleFullscreen
     }
 }

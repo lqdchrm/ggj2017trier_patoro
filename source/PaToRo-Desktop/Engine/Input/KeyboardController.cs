@@ -62,6 +62,8 @@ namespace PaToRo_Desktop.Engine.Input
 
                 case Buttons.Select: return st.IsKeyDown(XnaInput.Keys.LeftControl) || st.IsKeyDown(XnaInput.Keys.RightControl);
                 case Buttons.Start: return st.IsKeyDown(XnaInput.Keys.Space);
+
+                case Buttons.ToggleFullscreen: return st.IsKeyDown(XnaInput.Keys.F1);
             }
             return false;
         }

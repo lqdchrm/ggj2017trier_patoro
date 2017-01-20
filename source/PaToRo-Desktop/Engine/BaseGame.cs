@@ -56,8 +56,11 @@ namespace PaToRo_Desktop.Engine
             if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.Escape))
                 Exit();
 
-            Screen.HandleInput();
             Inputs.Update(gameTime);
+
+            if (Inputs.NumPlayers > 0 && Inputs.Player(0).WasPressed(Buttons.ToggleFullscreen))
+                Screen.ToggleFullscreen();
+
             return Inputs.NumPlayers;
         }
 

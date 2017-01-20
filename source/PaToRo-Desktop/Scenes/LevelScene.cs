@@ -12,7 +12,6 @@ namespace PaToRo_Desktop.Scenes
     public class LevelScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private Ball ball;
         private Level level;
 
         public LevelScene(BaseGame game) : base(game)
@@ -48,26 +47,6 @@ namespace PaToRo_Desktop.Scenes
                 dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
                 game.Inputs.AssignToPlayer(numPlayers);
 
-            }
-
-            // Move Ball
-            if (numPlayers > 0)
-            {
-                float speed = 0;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Left) ? -100f : 0f;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Right) ? 100f : 0f;
-                speed += game.Inputs.Player(0).Value(Sliders.LeftStickX) * 100;
-                ball.Phy.Spd.X = speed;
-            }
-
-            if (numPlayers > 1)
-            {
-                float speed = 0;
-                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Down) ? 100f : 0f;
-                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Up) ? -100f : 0f;
-                speed += game.Inputs.Player(1).Value(Sliders.LeftStickY) * 100;
-
-                ball.Phy.Spd.Y = speed;
             }
 
             // Rumble

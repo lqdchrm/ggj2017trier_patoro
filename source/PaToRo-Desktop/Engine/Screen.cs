@@ -36,22 +36,6 @@ namespace PaToRo_Desktop.Engine
             graphics.ApplyChanges();
         }
 
-        public void SetFullScreen()
-        {
-            graphics.PreferredBackBufferWidth = graphics.GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = graphics.GraphicsDevice.DisplayMode.Height;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
-        }
-
-        public void SetWindowSize(int width, int height)
-        {
-            graphics.PreferredBackBufferWidth = width;
-            graphics.PreferredBackBufferHeight = height;
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
-        }
-
         public void PreDraw()
         {
             graphics.GraphicsDevice.SetRenderTarget(canvas);
@@ -67,17 +51,11 @@ namespace PaToRo_Desktop.Engine
             screenBatch.End();
         }
 
-        public void HandleInput()
+        public void ToggleFullscreen()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.F1))
-            {
-                if (graphics.IsFullScreen)
-                    graphics.IsFullScreen = false;
-                else
-                    graphics.IsFullScreen = true;
-
-                graphics.ApplyChanges();
-            }
+            graphics.PreferredBackBufferWidth = graphics.IsFullScreen ? Width : graphics.GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = graphics.IsFullScreen ? Height : graphics.GraphicsDevice.DisplayMode.Height;
+            graphics.ToggleFullScreen();
         }
     }
 }
