@@ -70,9 +70,15 @@ namespace PaToRo_Desktop.Scenes
             part = content.Load<Texture2D>("Images/particle");
         }
 
+        private bool stopTime;
+
         internal override void Update(GameTime gameTime)
         {
-            cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
+                stopTime = !stopTime;
+
+            if (!stopTime)
+                cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (cooldown <= 0)
             {
@@ -115,7 +121,7 @@ namespace PaToRo_Desktop.Scenes
                 pos.Y = lower[bufferIndex];
                 spriteBatch.Draw(part, pos, Color.White);
 
-                spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds- xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.Red);
+                spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.Red);
                 spriteBatch.DrawRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.DarkRed);
 
 
@@ -137,19 +143,21 @@ namespace PaToRo_Desktop.Scenes
 #if DEBUG
             for (int x = 1; x <= NumValues; x++)
             {
+
+                
                 var bufferIndex = (x + start) % (NumValues + 1);
                 var previousBufferindex = bufferIndex - 1;
                 if (previousBufferindex == -1)
                     previousBufferindex = NumValues;
                 spriteBatch.DrawLine(
-                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, upper[bufferIndex]),
-                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, upper[previousBufferindex]),
+                    new Vector2(x * distanceBetweenPoints - xOffset, upper[bufferIndex]),
+                    new Vector2((x - 1) * distanceBetweenPoints - xOffset, upper[previousBufferindex]),
                     Color.Green);
 
 
                 spriteBatch.DrawLine(
-                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, lower[bufferIndex]),
-                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, lower[previousBufferindex]),
+                    new Vector2(x * distanceBetweenPoints - xOffset, lower[bufferIndex]),
+                    new Vector2((x - 1) * distanceBetweenPoints - xOffset, lower[previousBufferindex]),
                     Color.Red);
 
             }
