@@ -1,4 +1,5 @@
-﻿using PaToRo_Desktop.Engine;
+﻿using MonoGame.Extended.Shapes;
+using PaToRo_Desktop.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace PaToRo_Desktop.Scenes
     public class Level : Entity
     {
         private readonly BaseGame game;
-        public int NumValues {  get { return upper.Length; } }
+        public int NumValues { get { return upper.Length; } }
 
         private Texture2D part;
 
@@ -53,14 +54,40 @@ namespace PaToRo_Desktop.Scenes
         {
             Vector2 pos = Vector2.Zero;
 
+            var distanceBetweenPoints = (float)game.Screen.Width / NumValues;
+            var distanceFromSceenBounds = distanceBetweenPoints / 2f;
+
             for (int i = 0; i < NumValues; ++i)
             {
-                pos.X = i * (game.Screen.Width / NumValues);
-                pos.Y = upper[i];
-                spriteBatch.Draw(part, pos, Color.White);
-                pos.Y = lower[i];
-                spriteBatch.Draw(part, pos, Color.White);
+
+
+                spriteBatch.FillRectangle(new RectangleF(i * distanceBetweenPoints - distanceFromSceenBounds, 0, distanceBetweenPoints, upper[i]), Color.Red);
+
+                spriteBatch.DrawRectangle(new RectangleF(i * distanceBetweenPoints - distanceFromSceenBounds, 0, distanceBetweenPoints,  upper[i]), Color.DarkRed);
+
+
+
+                spriteBatch.FillRectangle(new RectangleF(i * distanceBetweenPoints - distanceFromSceenBounds, lower[i], distanceBetweenPoints, game.Screen.Height - lower[i]), Color.Green);
+
+                spriteBatch.DrawRectangle(new RectangleF(i * distanceBetweenPoints - distanceFromSceenBounds, lower[i], distanceBetweenPoints, game.Screen.Height - lower[i]), Color.DarkGreen);
             }
+
+#if DEBUG
+            for (int x = 1; x < NumValues; x++)
+            {
+                spriteBatch.DrawLine(
+                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, upper[x]),
+                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, upper[x - 1]),
+                    Color.Green);
+
+                spriteBatch.DrawLine(
+                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, lower[x]),
+                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, lower[x - 1]),
+                    Color.Red);
+
+            }
+
+#endif
         }
     }
 }

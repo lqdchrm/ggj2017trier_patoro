@@ -49,6 +49,7 @@ namespace PaToRo_Desktop.Engine
         internal override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             throw new NotSupportedException();
+            
         }
 
         internal virtual void Draw(GameTime gameTime)
