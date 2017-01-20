@@ -13,19 +13,44 @@ namespace PaToRo_Desktop.Scenes
     public class Level : Entity
     {
         private readonly BaseGame game;
-        public int NumValues {  get { return upper.Length; } }
-
         private Texture2D part;
 
-        public float[] upper;
-        public float[] lower;
+        private int NumValues {  get { return upper.Length - 1; } }
 
-        public Level(BaseGame game, int num)
+        private float[] upper;
+        private float[] lower;
+        private int start = 0;
+        private float xOffset;
+        private float cooldown = 0;          // tracks time till new spawn
+
+        public Generator Generator { get; set; }
+        public float TimeStep { get; set; }    // time interval to spawn next value
+
+        public float getUpperAt(float xPos)
+        {
+            xPos -= xOffset;
+            var testPos = (xPos / game.Screen.Width) * NumValues;
+            var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
+            var result = upper[index];
+            return result;
+        }
+
+        public float getLowerAt(float xPos)
+        {
+            xPos -= xOffset;
+            var testPos = (xPos / game.Screen.Width) * NumValues;
+            var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
+            var result = lower[index];
+            return result;
+        }
+
+        public Level(BaseGame game, int num, float timeStep = 50.0f)
         {
             this.game = game;
 
-            upper = new float[num];
-            lower = new float[num];
+            upper = new float[num + 1];
+            lower = new float[num + 1];
+            this.TimeStep = timeStep;
 
             FillStatic();
         }
@@ -46,21 +71,55 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
+            cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
+            if (cooldown <= 0)
+            {
+                cooldown = TimeStep;
+
+                if (Generator != null)
+                {
+                    var t = (float)gameTime.TotalGameTime.TotalSeconds;
+                    Push(Generator.GetUpper(t), Generator.GetLower(t));
+                }
+            }
+
+            float stepWidth = (game.Screen.Width / NumValues);
+            float alpha = (TimeStep - cooldown) / TimeStep;
+            xOffset = stepWidth * alpha;
+        }
+
+        private void Push(float _upper, float _lower)
+        {
+            var len = upper.Length;
+            start = (start + 1) % len;
+            int insertPos = (start + len - 1) % len;
+            upper[insertPos] = _upper;
+            lower[insertPos] = _lower;
         }
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+
             Vector2 pos = Vector2.Zero;
 
-            for (int i = 0; i < NumValues; ++i)
+            for (int i = 0; i <= NumValues; ++i)
             {
-                pos.X = i * (game.Screen.Width / NumValues);
-                pos.Y = upper[i];
+                var _i = (i + start) % (NumValues+1);
+
+                pos.X = i * (game.Screen.Width / NumValues) - xOffset;
+                pos.Y = upper[_i];
                 spriteBatch.Draw(part, pos, Color.White);
-                pos.Y = lower[i];
+                pos.Y = lower[_i];
                 spriteBatch.Draw(part, pos, Color.White);
             }
+
+            pos.X = 50;
+            pos.Y = getUpperAt(pos.X);
+            spriteBatch.Draw(part, pos, Color.Green);
+            pos.Y = getLowerAt(pos.X);
+            spriteBatch.Draw(part, pos, Color.Red);
+
         }
     }
 }

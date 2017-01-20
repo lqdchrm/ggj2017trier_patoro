@@ -31,13 +31,8 @@ namespace PaToRo_Desktop.Scenes
 
             level = new Level(game, 64);
             level.LoadContent(game.Content);
+            level.Generator = new SineGenerator(game);
             Children.Add(level);
-
-            ball = new Ball();
-            ball.LoadContent(game.Content);
-            ball.Phy.Pos.X = game.Screen.Width * 0.5f;
-            ball.Phy.Pos.Y = game.Screen.Height * 0.5f;
-            Children.Add(ball);
 
             dbgOverlay = new DebugOverlay(game);
             Children.Add(dbgOverlay);
