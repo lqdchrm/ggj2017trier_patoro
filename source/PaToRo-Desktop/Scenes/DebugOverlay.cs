@@ -23,7 +23,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(spriteBatch, gameTime);
 
-            spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Blue);
+            spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Red);
         }
     }
 }

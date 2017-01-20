@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
 using System;
@@ -12,7 +13,15 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private Ball ball;
+        private TheWaveRider ball;
+        private Level level;
+        public float Phase;
+        public float LevelSpeedX;
+        public float LevelSpeedY;
+        public float SpeedX;
+        public float SpeedY;
+        public float Direction;
+        private Texture2D part;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -21,21 +30,81 @@ namespace PaToRo_Desktop.Scenes
         internal override void Initialize()
         {
             base.Initialize();
-            BgColor = Color.Black;
+            BgColor = Color.Blue;
+            Direction = 1.0f;
         }
 
         internal override void LoadContent()
         {
             base.LoadContent();
 
-            ball = new Ball();
+            ball = new TheWaveRider();
             ball.LoadContent(game.Content);
-            ball.Phy.Pos.X = game.Screen.Width * 0.5f;
-            ball.Phy.Pos.Y = game.Screen.Height * 0.5f;
+            ball.Phy.Pos.X += game.Screen.Width * 0.1f;
+            ball.Phy.Pos.Y += game.Screen.Height * 0.5f;
+            LevelSpeedX = 100.0f;
+            LevelSpeedY = 150.0f;
             Children.Add(ball);
+
+            level = new Level(game, 64);
+            level.LoadContent(game.Content);
+            level.Generator = new SineGenerator(game);
+            Children.Add(level);
+
+            part = game.Content.Load<Texture2D>("Images/particle");
 
             dbgOverlay = new DebugOverlay(game);
             Children.Add(dbgOverlay);
+        }
+
+        internal override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            int MaxPoints = 100;
+            float PosX = ball.Phy.Pos.X;
+            float PosY = ball.Phy.Pos.Y;
+            float InternalDirection = Direction;
+            spriteBatch.Begin();
+            for (int i = 0; i <= MaxPoints; ++i)
+            {
+                PosX += 15.0f; // level speed
+                PosY += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
+                PosY += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
+                float Tmp = (SpeedY / 6.0f) + 0.1f;
+                if (PosY < game.Screen.Height * Tmp)
+                {
+                    InternalDirection *= -1.0f;
+                    PosY = game.Screen.Height * Tmp;
+                }
+                if (PosY > game.Screen.Height * (1.0f - Tmp))
+                {
+                    InternalDirection *= -1.0f;
+                    PosY = game.Screen.Height * (1.0f - Tmp);
+
+                }
+                Vector2 Pos = new Vector2(PosX, PosY);
+                spriteBatch.Draw(part, Pos, Color.White);
+            }
+            spriteBatch.End();
+        }
+
+        internal override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            ball.Phy.Pos.Y += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
+            ball.Phy.Pos.Y += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
+            float Tmp = (SpeedY / 6.0f) + 0.1f;
+            if (ball.Phy.Pos.Y < game.Screen.Height * Tmp)
+            {
+                Direction *= -1.0f;
+                ball.Phy.Pos.Y = game.Screen.Height * Tmp;
+            }
+            if (ball.Phy.Pos.Y > game.Screen.Height * (1.0f - Tmp))
+            {
+                Direction *= -1.0f;
+                ball.Phy.Pos.Y = game.Screen.Height * (1.0f - Tmp);
+
+            }
         }
 
         internal override int HandleInput(GameTime gameTime)
@@ -50,51 +119,11 @@ namespace PaToRo_Desktop.Scenes
 
             }
 
-            // Move Ball
+            // Move TheWaveRider
             if (numPlayers > 0)
             {
-                float speed = 0;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Left) ? -100f : 0f;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Right) ? 100f : 0f;
-                speed += game.Inputs.Player(0).Value(Sliders.LeftStickX) * 100;
-                ball.Phy.Spd.X = speed;
-            }
-
-            if (numPlayers > 1)
-            {
-                float speed = 0;
-                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Down) ? 100f : 0f;
-                speed += game.Inputs.Player(1).IsDown(Buttons.DPad_Up) ? -100f : 0f;
-                speed += game.Inputs.Player(1).Value(Sliders.LeftStickY) * 100;
-
-                ball.Phy.Spd.Y = speed;
-            }
-
-            // Rumble
-            if (numPlayers > 1)
-            {
-                dbgOverlay.Text = "Use Triggers to rumble";
-
-
-                if (game.Inputs.Player(0).Value(Sliders.LeftTrigger) > 0.2
-                 || game.Inputs.Player(0).Value(Sliders.RightTrigger) > 0.2)
-                {
-                    game.Inputs.Player(1).Rumble(
-                        game.Inputs.Player(0).Value(Sliders.LeftTrigger),
-                        game.Inputs.Player(0).Value(Sliders.RightTrigger),
-                        200
-                    );
-                }
-
-                if (game.Inputs.Player(1).Value(Sliders.LeftTrigger) > 0.2
-                 || game.Inputs.Player(1).Value(Sliders.RightTrigger) > 0.2)
-                {
-                    game.Inputs.Player(0).Rumble(
-                        game.Inputs.Player(1).Value(Sliders.LeftTrigger),
-                        game.Inputs.Player(1).Value(Sliders.RightTrigger),
-                        200
-                    );
-                }
+                SpeedY = game.Inputs.Player(0).Value(Sliders.LeftStickY);
+                SpeedX = game.Inputs.Player(0).Value(Sliders.RightStickX);
             }
 
             return numPlayers;

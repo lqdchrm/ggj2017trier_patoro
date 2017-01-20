@@ -18,16 +18,16 @@ namespace PaToRo_Desktop.Scenes
 
         public float CalcMid(float t)
         {
-            return (game.Screen.Height * 0.5f) -(float)(Math.Sin(t*2) * 50);
+            return (game.Screen.Height * 0.5f) -(float)(Math.Sin(t*3) * 200);
         }
 
         public float GetUpper(float t)
         {
-            return CalcMid(t) - 50;
+            return CalcMid(t) - 200;
         }
         public float GetLower(float t)
         {
-            return CalcMid(t) + 50;
+            return CalcMid(t) + 200;
         }
     }
 }

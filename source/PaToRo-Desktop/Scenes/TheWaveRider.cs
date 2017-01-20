@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PaToRo_Desktop.Scenes
 {
-    public class Ball : Sprite
+    public class TheWaveRider : Sprite
     {
-        public Ball() : base("Images/basketball")
+        public TheWaveRider() : base("Images/basketball")
         {
         }
     }
