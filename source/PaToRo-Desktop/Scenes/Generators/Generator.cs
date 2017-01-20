@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaToRo_Desktop.Scenes
+namespace PaToRo_Desktop.Scenes.Generators
 {
     public interface Generator
     {

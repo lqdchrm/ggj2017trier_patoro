@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
 using PaToRo_Desktop.Scenes.Controllers;
+using PaToRo_Desktop.Scenes.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Initialize()
         {
             base.Initialize();
-            BgColor = Color.Blue;
+            BgColor = Color.Black;
             Direction = 1.0f;
         }
 
@@ -40,7 +41,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.LoadContent();
 
-            level = new Level(game, 64);
+            level = new Level(game, 64, 50);
             level.LoadContent(game.Content);
             level.Generator = new SineGenerator(game);
 

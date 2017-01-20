@@ -63,9 +63,9 @@
     <Compile Include="Scenes\Player.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
     <Compile Include="Scenes\TheWaveRider.cs" />
-    <Compile Include="Scenes\Generator.cs" />
+    <Compile Include="Scenes\Generators\Generator.cs" />
     <Compile Include="Scenes\Level.cs" />
-    <Compile Include="Scenes\SineGenerator.cs" />
+    <Compile Include="Scenes\Generators\SineGenerator.cs" />
     <Compile Include="Scenes\TestScene.cs" />
   </ItemGroup>
   <ItemGroup>

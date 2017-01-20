@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaToRo_Desktop.Scenes
+namespace PaToRo_Desktop.Scenes.Generators
 {
     public class SineGenerator : Generator
     {
@@ -18,7 +18,7 @@ namespace PaToRo_Desktop.Scenes
 
         public float CalcMid(float t)
         {
-            return (game.Screen.Height * 0.5f) -(float)(Math.Sin(t*3) * 200);
+            return (game.Screen.Height * 0.5f) -(float)(Math.Sin(t*3) * 50);
         }
 
         public float GetUpper(float t)
