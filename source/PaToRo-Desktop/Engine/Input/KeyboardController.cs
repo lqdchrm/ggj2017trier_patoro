@@ -52,15 +52,15 @@ namespace PaToRo_Desktop.Engine.Input
 
                 case Buttons.R: return st.IsKeyDown(XnaInput.Keys.D1);
                 case Buttons.L: return st.IsKeyDown(XnaInput.Keys.D2);
-                case Buttons.LeftStick: return st.IsKeyDown(XnaInput.Keys.A);
-                case Buttons.RightStick: return st.IsKeyDown(XnaInput.Keys.A);
+                case Buttons.LeftStick: return false;
+                case Buttons.RightStick: return false;
 
                 case Buttons.DPad_Left: return st.IsKeyDown(XnaInput.Keys.Left);
                 case Buttons.DPad_Right: return st.IsKeyDown(XnaInput.Keys.Right);
                 case Buttons.DPad_Up: return st.IsKeyDown(XnaInput.Keys.Up);
                 case Buttons.DPad_Down: return st.IsKeyDown(XnaInput.Keys.Down);
 
-                case Buttons.Select: return st.IsKeyDown(XnaInput.Keys.R);
+                case Buttons.Select: return st.IsKeyDown(XnaInput.Keys.LeftControl) || st.IsKeyDown(XnaInput.Keys.RightControl);
                 case Buttons.Start: return st.IsKeyDown(XnaInput.Keys.Space);
             }
             return false;
@@ -68,15 +68,15 @@ namespace PaToRo_Desktop.Engine.Input
 
         public override float Get(Sliders sldr)
         {
-            //switch (sldr)
-            //{
-            //    case Sliders.LeftStickX: return st.ThumbSticks.Left.X;
-            //    case Sliders.LeftStickY: return -st.ThumbSticks.Left.Y;
-            //    case Sliders.RightStickX: return st.ThumbSticks.Right.X;
-            //    case Sliders.RightStickY: return -st.ThumbSticks.Right.Y;
-            //    case Sliders.LeftTrigger: return st.Triggers.Left;
-            //    case Sliders.RightTrigger: return st.Triggers.Right;
-            //}
+            switch (sldr)
+            {
+                //case Sliders.LeftStickX: return st.ThumbSticks.Left.X;
+                //case Sliders.LeftStickY: return -st.ThumbSticks.Left.Y;
+                //case Sliders.RightStickX: return st.ThumbSticks.Right.X;
+                //case Sliders.RightStickY: return -st.ThumbSticks.Right.Y;
+                case Sliders.LeftTrigger: return st.IsKeyDown(XnaInput.Keys.LeftShift) ? 1.0f : 0.0f;
+                case Sliders.RightTrigger: return st.IsKeyDown(XnaInput.Keys.RightShift) ? 1.0f : 0.0f;
+            }
             return 0.0f;
         }
 
