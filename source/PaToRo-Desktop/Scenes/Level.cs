@@ -1,4 +1,5 @@
-﻿using PaToRo_Desktop.Engine;
+﻿using MonoGame.Extended.Shapes;
+using PaToRo_Desktop.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace PaToRo_Desktop.Scenes
         private readonly BaseGame game;
         private Texture2D part;
 
-        private int NumValues {  get { return upper.Length - 1; } }
+        private int NumValues { get { return upper.Length - 1; } }
 
         private float[] upper;
         private float[] lower;
@@ -100,18 +101,30 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-
             Vector2 pos = Vector2.Zero;
+            var distanceBetweenPoints = (float)game.Screen.Width / NumValues;
+            var distanceFromSceenBounds = distanceBetweenPoints / 2f;
 
-            for (int i = 0; i <= NumValues; ++i)
+            for (int x = 0; x <= NumValues; ++x)
             {
-                var _i = (i + start) % (NumValues+1);
+                var bufferIndex = (x + start) % (NumValues + 1);
 
-                pos.X = i * (game.Screen.Width / NumValues) - xOffset;
-                pos.Y = upper[_i];
+                pos.X = x * (game.Screen.Width / NumValues) - xOffset;
+                pos.Y = upper[bufferIndex];
                 spriteBatch.Draw(part, pos, Color.White);
-                pos.Y = lower[_i];
+                pos.Y = lower[bufferIndex];
                 spriteBatch.Draw(part, pos, Color.White);
+
+                spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds- xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.Red);
+                spriteBatch.DrawRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.DarkRed);
+
+
+
+                spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, lower[bufferIndex], distanceBetweenPoints, game.Screen.Height - lower[bufferIndex]), Color.Green);
+
+                spriteBatch.DrawRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, lower[bufferIndex], distanceBetweenPoints, game.Screen.Height - lower[bufferIndex]), Color.DarkGreen);
+
+
             }
 
             pos.X = 50;
@@ -120,6 +133,28 @@ namespace PaToRo_Desktop.Scenes
             pos.Y = getLowerAt(pos.X);
             spriteBatch.Draw(part, pos, Color.Red);
 
+
+#if DEBUG
+            for (int x = 1; x <= NumValues; x++)
+            {
+                var bufferIndex = (x + start) % (NumValues + 1);
+                var previousBufferindex = bufferIndex - 1;
+                if (previousBufferindex == -1)
+                    previousBufferindex = NumValues;
+                spriteBatch.DrawLine(
+                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, upper[bufferIndex]),
+                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, upper[previousBufferindex]),
+                    Color.Green);
+
+
+                spriteBatch.DrawLine(
+                    new Vector2(x * distanceBetweenPoints + distanceFromSceenBounds, lower[bufferIndex]),
+                    new Vector2((x - 1) * distanceBetweenPoints + distanceFromSceenBounds, lower[previousBufferindex]),
+                    Color.Red);
+
+            }
+
+#endif
         }
     }
 }
