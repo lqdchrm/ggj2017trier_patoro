@@ -21,7 +21,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Initialize()
         {
             base.Initialize();
-            BgColor = Color.Black;
+            BgColor = Color.Blue;
         }
 
         internal override void LoadContent()
