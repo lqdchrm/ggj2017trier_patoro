@@ -12,7 +12,7 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private Ball ball;
+        private TheWaveRider ball;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -28,7 +28,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.LoadContent();
 
-            ball = new Ball();
+            ball = new TheWaveRider();
             ball.LoadContent(game.Content);
             ball.Phy.Pos.X = game.Screen.Width * 0.5f;
             ball.Phy.Pos.Y = game.Screen.Height * 0.5f;
@@ -50,7 +50,7 @@ namespace PaToRo_Desktop.Scenes
 
             }
 
-            // Move Ball
+            // Move TheWaveRider
             if (numPlayers > 0)
             {
                 float speed = 0;
