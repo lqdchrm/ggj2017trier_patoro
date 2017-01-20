@@ -111,33 +111,33 @@ namespace PaToRo_Desktop.Scenes
             var distanceBetweenPoints = (float)game.Screen.Width / NumValues;
             var distanceFromSceenBounds = distanceBetweenPoints / 2f;
 
+            Vector2 origin = new Vector2(part.Width * 0.5f, part.Height * 0.5f);
+
             for (int x = 0; x <= NumValues; ++x)
             {
+                // render dots
                 var bufferIndex = (x + start) % (NumValues + 1);
 
                 pos.X = x * (game.Screen.Width / NumValues) - xOffset;
                 pos.Y = upper[bufferIndex];
-                spriteBatch.Draw(part, pos, Color.White);
+                spriteBatch.Draw(part, pos, null, null, origin);
                 pos.Y = lower[bufferIndex];
-                spriteBatch.Draw(part, pos, Color.White);
+                spriteBatch.Draw(part, pos, null, null, origin);
 
+                // render rects
                 spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.Red);
                 spriteBatch.DrawRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, 0, distanceBetweenPoints, upper[bufferIndex]), Color.DarkRed);
 
-
-
                 spriteBatch.FillRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, lower[bufferIndex], distanceBetweenPoints, game.Screen.Height - lower[bufferIndex]), Color.Green);
-
                 spriteBatch.DrawRectangle(new RectangleF(x * distanceBetweenPoints - distanceFromSceenBounds - xOffset, lower[bufferIndex], distanceBetweenPoints, game.Screen.Height - lower[bufferIndex]), Color.DarkGreen);
-
-
             }
 
+            // render check points
             pos.X = 50;
             pos.Y = getUpperAt(pos.X);
-            spriteBatch.Draw(part, pos, Color.Green);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Green);
             pos.Y = getLowerAt(pos.X);
-            spriteBatch.Draw(part, pos, Color.Red);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Red);
 
 
 #if DEBUG
