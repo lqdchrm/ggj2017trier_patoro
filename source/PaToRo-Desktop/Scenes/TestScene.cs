@@ -54,8 +54,8 @@ namespace PaToRo_Desktop.Scenes
             if (numPlayers > 0)
             {
                 float speed = 0;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Left) ? 100f : 0f;
-                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Right) ? -100f : 0f;
+                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Left) ? -100f : 0f;
+                speed += game.Inputs.Player(0).IsDown(Buttons.DPad_Right) ? 100f : 0f;
                 speed += game.Inputs.Player(0).Value(Sliders.LeftStickX) * 100;
                 ball.Phy.Spd.X = speed;
             }
