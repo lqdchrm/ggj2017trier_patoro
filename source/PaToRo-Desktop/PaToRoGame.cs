@@ -24,8 +24,8 @@ namespace PaToRo_Desktop
                 Inputs[i].Provider = new KeyboardController(i);
 
 
-            Scenes.Add("test", new TestScene(this));
-            Scenes.Show("test");
+            Scenes.Add("level", new LevelScene(this));
+            Scenes.Show("level");
         }
     }
 }

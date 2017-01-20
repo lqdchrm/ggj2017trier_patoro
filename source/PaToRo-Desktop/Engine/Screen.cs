@@ -18,7 +18,7 @@ namespace PaToRo_Desktop.Engine
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public Screen(GraphicsDeviceManager graphics, int width = 1280, int height = 800)
+        public Screen(GraphicsDeviceManager graphics, int width = 1280, int height = 720)
         {
             this.graphics = graphics;
             this.Width = width;
