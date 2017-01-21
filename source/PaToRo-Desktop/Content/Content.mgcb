@@ -259,3 +259,9 @@
 /processorParam:Quality=Best
 /build:Sounds/ggg_3/ggg_Vibrant.ogg
 
+#begin Fonts/PressStart2P.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P.spritefont
+
