@@ -55,3 +55,207 @@
 /processorParam:TextureFormat=Color
 /build:Images/halo.png
 
+#begin Sounds/ggg_1/ggg_Arps.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Arps.ogg
+
+#begin Sounds/ggg_1/ggg_Bells.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Bells.ogg
+
+#begin Sounds/ggg_1/ggg_Buzz.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Buzz.ogg
+
+#begin Sounds/ggg_1/ggg_Drums.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Drums.ogg
+
+#begin Sounds/ggg_1/ggg_Hat.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Hat.ogg
+
+#begin Sounds/ggg_1/ggg_Hihats.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Hihats.ogg
+
+#begin Sounds/ggg_1/ggg_Kick.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Kick.ogg
+
+#begin Sounds/ggg_1/ggg_Master.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Master.ogg
+
+#begin Sounds/ggg_1/ggg_Snare.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Snare.ogg
+
+#begin Sounds/ggg_1/ggg_Strings.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Strings.ogg
+
+#begin Sounds/ggg_1/ggg_Vibrant.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_1/ggg_Vibrant.ogg
+
+#begin Sounds/ggg_2/ggg_Arps.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Arps.ogg
+
+#begin Sounds/ggg_2/ggg_Bells.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Bells.ogg
+
+#begin Sounds/ggg_2/ggg_Buzz.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Buzz.ogg
+
+#begin Sounds/ggg_2/ggg_Claps.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Claps.ogg
+
+#begin Sounds/ggg_2/ggg_Drums.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Drums.ogg
+
+#begin Sounds/ggg_2/ggg_Hat.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Hat.ogg
+
+#begin Sounds/ggg_2/ggg_Hihats.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Hihats.ogg
+
+#begin Sounds/ggg_2/ggg_Kick.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Kick.ogg
+
+#begin Sounds/ggg_2/ggg_Master.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Master.ogg
+
+#begin Sounds/ggg_2/ggg_Snare.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Snare.ogg
+
+#begin Sounds/ggg_2/ggg_Strings.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Strings.ogg
+
+#begin Sounds/ggg_2/ggg_Vibrant.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_2/ggg_Vibrant.ogg
+
+#begin Sounds/ggg_3/ggg_Arps.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Arps.ogg
+
+#begin Sounds/ggg_3/ggg_Bells.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Bells.ogg
+
+#begin Sounds/ggg_3/ggg_Buzz.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Buzz.ogg
+
+#begin Sounds/ggg_3/ggg_Drums.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Drums.ogg
+
+#begin Sounds/ggg_3/ggg_Hat.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Hat.ogg
+
+#begin Sounds/ggg_3/ggg_Hihats.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Hihats.ogg
+
+#begin Sounds/ggg_3/ggg_Kick.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Kick.ogg
+
+#begin Sounds/ggg_3/ggg_Master.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Master.ogg
+
+#begin Sounds/ggg_3/ggg_Snare.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Snare.ogg
+
+#begin Sounds/ggg_3/ggg_Strings.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Strings.ogg
+
+#begin Sounds/ggg_3/ggg_Vibrant.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/ggg_3/ggg_Vibrant.ogg
+

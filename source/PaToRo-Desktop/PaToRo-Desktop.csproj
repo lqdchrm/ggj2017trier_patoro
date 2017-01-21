@@ -58,6 +58,7 @@
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Scenes.cs" />
     <Compile Include="Engine\Screen.cs" />
+    <Compile Include="Engine\Sound\Synth.cs" />
     <Compile Include="PaToRoGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

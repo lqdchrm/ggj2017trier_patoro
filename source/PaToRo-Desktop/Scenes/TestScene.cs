@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
+using PaToRo_Desktop.Engine.Sound;
 using PaToRo_Desktop.Scenes.Backgrounds;
 using PaToRo_Desktop.Scenes.Controllers;
 using PaToRo_Desktop.Scenes.Funcs;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
@@ -18,6 +20,9 @@ namespace PaToRo_Desktop.Scenes
     {
         private DebugOverlay dbgOverlay;
         internal TheNewWaveRider Rider;
+
+        // sound
+        private Synth Synth;
 
         // controls
         private DirectController directControl;
@@ -59,6 +64,12 @@ namespace PaToRo_Desktop.Scenes
             {
                 base.LoadContent();
 
+                // Sound
+                Synth = new Synth();
+                Synth.LoadContent(game.Content);
+                Synth.Play("ggg_1");
+
+                // Background
                 starfield = new Starfield(game, 700, 8);
                 starfield.LoadContent(game.Content);
 
@@ -122,6 +133,15 @@ namespace PaToRo_Desktop.Scenes
         internal override int HandleInput(GameTime gameTime)
         {
             var numPlayers = base.HandleInput(gameTime);
+
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D5))
+                Synth.Play("ggg_1");
+
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D6))
+                Synth.Play("ggg_2");
+
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D7))
+                Synth.Play("ggg_3");
 
             // register Players
             if (numPlayers < 2)
