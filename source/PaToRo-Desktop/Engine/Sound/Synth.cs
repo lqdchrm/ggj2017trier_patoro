@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace PaToRo_Desktop.Engine.Sound
         private readonly string[] voices = new string[] { "Arps", "Bells", "Buzz", "Drums", "Hat", "Hihats", "Kick", "Snare", "Strings", "Vibrant" };
 
         private string playing;
+        private float elapsedMillis;
 
         public Synth()
         {
@@ -39,8 +41,19 @@ namespace PaToRo_Desktop.Engine.Sound
             }
         }
 
+        public void Update(GameTime gameTime)
+        {
+            elapsedMillis += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (elapsedMillis >= 7232f)
+            {
+                Play(playing);
+            }
+            
+        }
+
         public void Play(string song)
         {
+            elapsedMillis = 0;
             if (!string.IsNullOrEmpty(playing) && tracks.ContainsKey(playing))
             {
                 var oldSong = tracks[playing];
@@ -55,7 +68,7 @@ namespace PaToRo_Desktop.Engine.Sound
                 var s = tracks[song];
                 foreach (var track in s.Values)
                 {
-                    track.IsLooped = true;
+                    track.IsLooped = false;
                     track.Volume = 0.5f;
                     track.Play();
                 }

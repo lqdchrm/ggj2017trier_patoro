@@ -67,7 +67,6 @@ namespace PaToRo_Desktop.Scenes
                 // Sound
                 Synth = new Synth();
                 Synth.LoadContent(game.Content);
-                Synth.Play("ggg_1");
 
                 // Background
                 starfield = new Starfield(game, 700, 8);
@@ -126,6 +125,9 @@ namespace PaToRo_Desktop.Scenes
             //    * Matrix.CreateScale(BaseFuncs.MapTo(1f, 1.15f, BaseFuncs.Saw(t*0.2f)))
             //    * Matrix.CreateRotationZ(0.3f * MathHelper.PiOver4 * BaseFuncs.Sin(0.05f * t))
             //    * Matrix.CreateTranslation(game.Screen.Width * 0.5f, game.Screen.Height * 0.5f, 0);
+
+            // Sound
+            Synth.Update(gameTime);
 
             base.Update(gameTime);
         }
