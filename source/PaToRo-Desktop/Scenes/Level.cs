@@ -179,7 +179,7 @@ namespace PaToRo_Desktop.Scenes
             }
 
             // render check points
-            pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
+            //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
             pos.Y = getUpperAt(pos.X);
             var scl = new Vector2(2.5f, 2.5f);
             spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Green);

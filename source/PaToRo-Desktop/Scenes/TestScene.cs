@@ -17,17 +17,14 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        internal TheNewWaveRider Rider;
-
-        // controls
-        private DirectController directControl;
-        private AccelController accelControl;
+        internal TheNewWaveRider[] Riders;
 
         private Starfield starfield;
 
         public Level Level;
 
         private Texture2D part;
+        int NumPlayers;
 
         // generators
         private PlayerGenerator paddle;
@@ -35,6 +32,7 @@ namespace PaToRo_Desktop.Scenes
 
         public TestScene(BaseGame game) : base(game)
         {
+            Riders = new TheNewWaveRider[10];
         }
 
         internal override void Initialize()
@@ -44,13 +42,7 @@ namespace PaToRo_Desktop.Scenes
                 base.Initialize();
                 BgColor = Color.Black;
             }
-
-            if (Rider != null)
-            {
-                Rider.Radius = 32.0f;
-                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-            }
+            NumPlayers = 0;
         }
 
         internal override void Draw(GameTime gameTime)
@@ -59,9 +51,9 @@ namespace PaToRo_Desktop.Scenes
             Vector2 PlayerPointStringPos = new Vector2();
             float LineOffset = 20.0f;
             spriteBatch.Begin();
-            for (int i = 0; i < game.Inputs.NumPlayers; i++)
+            for (int i = 0; i < NumPlayers; i++)
             {
-                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player 1: {(int)Rider.Points} Points", PlayerPointStringPos, Color.White);
+                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player 1: {(int)Riders[i].Points} Points", PlayerPointStringPos, Color.White);
                 PlayerPointStringPos.Y += LineOffset;
             }
             spriteBatch.End();
@@ -84,24 +76,13 @@ namespace PaToRo_Desktop.Scenes
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
-                Rider = new TheNewWaveRider(game, 32f);
-                Rider.LoadContent(game.Content);
-                Rider.Level = Level;
-                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-
-                var Rider2 = new TheNewWaveRider(game, 32f);
-                Rider2.LoadContent(game.Content);
-                Rider2.Level = Level;
-                Rider2.Phy.Pos.X = game.Screen.Width * 0.3f;
-                Rider2.Phy.Pos.Y = game.Screen.Height * 0.5f;
 
                 // controllers
-                directControl = new DirectController(game, 0, Rider);
-                directControl.LoadContent(game.Content);
+                //directControl = new DirectController(game, 0, Rider);
+                //directControl.LoadContent(game.Content);
 
-                accelControl = new AccelController(game, 0, Rider);
-                accelControl.LoadContent(game.Content);
+                //accelControl = new AccelController(game, 0, Rider);
+                //accelControl.LoadContent(game.Content);
 
                 part = game.Content.Load<Texture2D>("Images/particle");
 
@@ -111,17 +92,30 @@ namespace PaToRo_Desktop.Scenes
                 Children.Add(paddle);
                 Children.Add(Level);
 
-                // Children.Add(directControl);
-                Children.Add(accelControl);
+                //Children.Add(accelControl);
 
-                Children.Add(Rider);
-                Children.Add(Rider2);
+                //Children.Add(Rider);
+                //Children.Add(Rider2);
                 Children.Add(dbgOverlay);
             }
         }
 
         internal override void Update(GameTime gameTime)
         {
+            if (NumPlayers < game.Inputs.NumPlayers)
+            {
+                Riders[NumPlayers] = new TheNewWaveRider(game, 32f);
+                TheNewWaveRider Rider = Riders[NumPlayers];
+                Rider.LoadContent(game.Content);
+                Rider.Level = Level;
+                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
+                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Children.Add(Rider);
+                AccelController controller = new AccelController(game, NumPlayers, Rider);
+                controller.LoadContent(game.Content);
+                Children.Add(controller);
+                NumPlayers++;
+            }
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
             // change background color
