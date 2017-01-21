@@ -36,9 +36,10 @@ namespace PaToRo_Desktop.Scenes
 
         public Level Level { get; set; }
 
-        public TheNewWaveRider(BaseGame game, float radius)
+        public TheNewWaveRider(BaseGame game, float radius, Color color)
         {
             this.game = game;
+            this.color = color;
             Phy = new Physics(radius, game);
         }
 
@@ -64,11 +65,13 @@ namespace PaToRo_Desktop.Scenes
             // Inner Stuff
             if (Colliding <= 0)
             {
+                /*
                 color = new Color(
                     BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
                     BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1)),    // green
                     BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 2)),    // blue
                     1.0f);
+                    */
                 Points += POINTS_PER_FRAME;
             }
             else
@@ -139,7 +142,7 @@ namespace PaToRo_Desktop.Scenes
 
         public void Collide(bool upper)
         {
-            color = upper ? Color.Green : Color.Red;
+            //color = upper ? Color.Green : Color.Red;
 
             if (Colliding <= 0)
             {
