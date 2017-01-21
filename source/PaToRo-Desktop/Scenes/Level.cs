@@ -104,7 +104,9 @@ namespace PaToRo_Desktop.Scenes
 
             if (!stopTime)
             {
-                var dx = SpdInPixelPerSecond / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                var ds = game.Inputs.Player(0)?.Value(Engine.Input.Sliders.LeftStickX) * 180.0f ?? 0;
+
+                var dx = (SpdInPixelPerSecond + ds) / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 accumulator += dx;
                 xPos += dx;
                 var numBlocksToSpawn = accumulator / BlockWidth;
