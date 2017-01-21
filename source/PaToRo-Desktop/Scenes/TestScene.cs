@@ -17,7 +17,7 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private TheNewWaveRider rider;
+        internal TheNewWaveRider Rider;
         private DirectController control;
         private Starfield starfield;
 
@@ -53,14 +53,14 @@ namespace PaToRo_Desktop.Scenes
             level.LoadContent(game.Content);
             level.Generator = new SineStackedGenerator(game);
 
-            rider = new TheNewWaveRider(game, 32f);
-            rider.LoadContent(game.Content);
-            rider.Level = level;
-            rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-            rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-            rider.Phy.RotSpd = 20f;
+            Rider = new TheNewWaveRider(game, 32f);
+            Rider.LoadContent(game.Content);
+            Rider.Level = level;
+            Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
+            Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+            Rider.Phy.RotSpd = 20f;
 
-            control = new DirectController(game, 0, rider);
+            control = new DirectController(game, 0, Rider);
 
             LevelSpeedX = 100.0f;
             LevelSpeedY = 150.0f;
@@ -71,7 +71,7 @@ namespace PaToRo_Desktop.Scenes
             Children.Add(starfield);
             Children.Add(level);
             Children.Add(control);
-            Children.Add(rider);
+            Children.Add(Rider);
             Children.Add(dbgOverlay);
         }
 

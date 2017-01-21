@@ -127,8 +127,8 @@ namespace PaToRo_Desktop.Scenes
                 // render dots
                 var bufferIndex = (x + start) % (NumValues + 1);
                 var px = x * (game.Screen.Width / NumValues) - xOffset;
-                var pu = upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
-                var pl = lower[bufferIndex];
+                var pu = getUpperAt(px); // upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
+                var pl = getLowerAt(px); // lower[bufferIndex];
 
                 pos.X = px;
                 pos.Y = pu;
@@ -146,11 +146,12 @@ namespace PaToRo_Desktop.Scenes
             }
 
             // render check points
-            pos.X = 50;
+            pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
             pos.Y = getUpperAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Green);
+            var scl = new Vector2(2.5f, 2.5f);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Green);
             pos.Y = getLowerAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Red);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Red);
 
 
 #if DEBUG
