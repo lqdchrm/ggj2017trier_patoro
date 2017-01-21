@@ -50,6 +50,9 @@ namespace PaToRo_Desktop.Engine.Components
             Spd.X *= Dmp;
             Spd.Y *= Dmp;
 
+
+            Accel = Vector2.Zero;
+
             // update hitbox
             if (HitBox != null)
             {
@@ -60,14 +63,14 @@ namespace PaToRo_Desktop.Engine.Components
             if (game != null)
                 foreach (var physics in game.Scenes.Current.Children.OfType<IHasPhysics>())
                 {
-                    if (ReferenceEquals(physics, this))
+                    if (ReferenceEquals(physics.Phy, this))
                         continue;
 
                     if (CollidesWith(physics.Phy))
                     {
-                        var accelerationVector = physics.Phy.Pos - Pos;
+                        var accelerationVector = Pos - physics.Phy.Pos;
                         accelerationVector.Normalize();
-                        this.Accel += Accel * 100;
+                        this.Accel += accelerationVector * 5000;
                     }
 
                 }

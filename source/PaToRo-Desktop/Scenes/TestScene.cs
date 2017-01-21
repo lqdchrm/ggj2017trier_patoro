@@ -95,6 +95,7 @@ namespace PaToRo_Desktop.Scenes
                 Rider2.Level = level;
                 Rider2.Phy.Pos.X = game.Screen.Width * 0.3f;
                 Rider2.Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Rider2.Phy.Dmp = 0.95f;
 
                 // controllers
                 directControl = new DirectController(game, 0, Rider);

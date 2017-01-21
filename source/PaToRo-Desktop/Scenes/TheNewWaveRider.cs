@@ -25,7 +25,11 @@ namespace PaToRo_Desktop.Scenes
         private Color color;
 
         public Physics Phy { get; private set; }
-        public float Radius;
+        public float Radius
+        {
+            get { return this.Phy.HitBox.Radius; }
+            set { this.Phy.HitBox.Radius = value; }
+        }
         public float Colliding;
         public static float POINTS_PER_FRAME = 0.2f;
         public float Points;
@@ -35,8 +39,7 @@ namespace PaToRo_Desktop.Scenes
         public TheNewWaveRider(BaseGame game, float radius)
         {
             this.game = game;
-            Phy = new Physics(null, game);
-            this.Radius = radius;
+            Phy = new Physics(radius, game);
         }
 
         internal void LoadContent(ContentManager content)
