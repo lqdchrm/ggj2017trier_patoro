@@ -37,47 +37,55 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Initialize()
         {
-            //base.Initialize();
-            BgColor = Color.Black;
-            Direction = 1.0f;
-            if (rider != null)
+            if (!initialized)
             {
-                rider.Radius = 32.0f;
+                base.Initialize();
+                BgColor = Color.Black;
+                Direction = 1.0f;
+            }
+
+            if (Rider != null)
+            {
+                Rider.Radius = 32.0f;
+                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
+                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
             }
         }
 
         internal override void LoadContent()
         {
-            base.LoadContent();
+            if (!loaded)
+            {
+                base.LoadContent();
 
-            starfield = new Starfield(game, 700, 8);
-            starfield.LoadContent(game.Content);
+                starfield = new Starfield(game, 700, 8);
+                starfield.LoadContent(game.Content);
 
-            level = new Level(game, 128, 5);
-            level.LoadContent(game.Content);
-            level.Generator = new SineStackedGenerator(game);
+                level = new Level(game, 128, 5);
+                level.LoadContent(game.Content);
+                level.Generator = new SineStackedGenerator(game);
 
-            Rider = new TheNewWaveRider(game, 32f);
-            Rider.LoadContent(game.Content);
-            Rider.Level = level;
-            Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-            Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-            Rider.Phy.RotSpd = 20f;
+                Rider = new TheNewWaveRider(game, 32f);
+                Rider.LoadContent(game.Content);
+                Rider.Level = level;
+                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
+                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
 
-            control = new DirectController(game, 0, Rider);
-            control.LoadContent(game.Content);
+                control = new DirectController(game, 0, Rider);
+                control.LoadContent(game.Content);
 
-            LevelSpeedX = 100.0f;
-            LevelSpeedY = 150.0f;
-            part = game.Content.Load<Texture2D>("Images/particle");
+                LevelSpeedX = 100.0f;
+                LevelSpeedY = 150.0f;
+                part = game.Content.Load<Texture2D>("Images/particle");
 
-            dbgOverlay = new DebugOverlay(game);
+                dbgOverlay = new DebugOverlay(game);
 
-            Children.Add(starfield);
-            Children.Add(level);
-            Children.Add(control);
-            Children.Add(Rider);
-            Children.Add(dbgOverlay);
+                Children.Add(starfield);
+                Children.Add(level);
+                Children.Add(control);
+                Children.Add(Rider);
+                Children.Add(dbgOverlay);
+            }
         }
 
         internal override void Update(GameTime gameTime)
