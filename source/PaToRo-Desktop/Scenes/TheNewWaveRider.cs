@@ -35,7 +35,7 @@ namespace PaToRo_Desktop.Scenes
         public TheNewWaveRider(BaseGame game, float radius)
         {
             this.game = game;
-            Phy = new Physics(null);
+            Phy = new Physics(null, game);
             this.Radius = radius;
         }
 

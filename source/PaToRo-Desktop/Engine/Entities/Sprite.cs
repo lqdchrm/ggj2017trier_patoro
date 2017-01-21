@@ -23,7 +23,7 @@ namespace PaToRo_Desktop.Engine.Entities
         public void LoadContent(ContentManager content)
         {
             Gfx.LoadContent(content);
-            Phy = new Physics(Gfx.origin.X);
+            Phy = new Physics(Gfx.origin.X, null);
         }
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
