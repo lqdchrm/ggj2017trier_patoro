@@ -32,12 +32,17 @@ namespace PaToRo_Desktop.Scenes
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
         public float SpdInPixelPerSecond {  get { return BlockWidth * 1000.0f / TimeStep; } }
 
+        private float localTime;
+
         public float getUpperAt(float xPos)
         {
             xPos -= xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
             var result = upper[index];
+
+            // result += BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 *BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
+
             return result;
         }
 
@@ -47,6 +52,9 @@ namespace PaToRo_Desktop.Scenes
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
             var result = lower[index];
+
+            // result -= BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 * BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
+
             return result;
         }
 
@@ -79,6 +87,8 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
+            var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
+
             if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
                 stopTime = !stopTime;
 
@@ -91,7 +101,6 @@ namespace PaToRo_Desktop.Scenes
 
                 if (Generator != null)
                 {
-                    var t = (float)gameTime.TotalGameTime.TotalSeconds;
                     Push(Generator.GetUpper(t), Generator.GetLower(t));
                 }
             }
