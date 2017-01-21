@@ -22,8 +22,8 @@ namespace PaToRo_Desktop.Scenes
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             base.Draw(spriteBatch, gameTime);
-
-            spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Blue);
+            if (Text != null)
+                spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Blue);
         }
     }
 }

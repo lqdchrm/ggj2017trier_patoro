@@ -37,9 +37,13 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Initialize()
         {
-            base.Initialize();
+            //base.Initialize();
             BgColor = Color.Black;
             Direction = 1.0f;
+            if (rider != null)
+            {
+                rider.Radius = 32.0f;
+            }
         }
 
         internal override void LoadContent()

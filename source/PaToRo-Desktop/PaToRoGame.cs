@@ -25,6 +25,7 @@ namespace PaToRo_Desktop
 
 
             Scenes.Add("level", new TestScene(this));
+            Scenes.Add("end", new EndScene(this));
             Scenes.Show("level");
 
 #if !DEBUG
