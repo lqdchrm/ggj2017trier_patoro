@@ -65,7 +65,6 @@
     <Compile Include="Scenes\Funcs\BaseFuncs.cs" />
     <Compile Include="Scenes\Funcs\RandomFuncs.cs" />
     <Compile Include="Scenes\Generators\SineStacked.cs" />
-    <Compile Include="Scenes\Player.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
     <Compile Include="Scenes\TheNewWaveRider.cs" />
     <Compile Include="Scenes\TheWaveRider.cs" />

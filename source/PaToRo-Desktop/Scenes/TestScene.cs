@@ -78,11 +78,15 @@ namespace PaToRo_Desktop.Scenes
         {
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
+            // change background color
             BgColor = new Color(
-                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.2f * t)),      // red
-                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.1f * t + 0.8f)),    // green
-                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
+                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),      // red
+                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),    // green
+                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
                 1.0f);
+
+
+
             base.Update(gameTime);
         }
 

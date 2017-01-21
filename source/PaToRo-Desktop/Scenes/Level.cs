@@ -116,9 +116,9 @@ namespace PaToRo_Desktop.Scenes
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
             var color = new Color(
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 0.5f)),    // green
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1.7f)),    // blue
+                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(-t)),      // red
+                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.8f * t + 0.5f)),    // green
+                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.2f * t + 1.7f)),    // blue
                 1.0f);
 
 
