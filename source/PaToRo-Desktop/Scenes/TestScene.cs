@@ -52,7 +52,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            Vector2 PlayerPointStringPos = new Vector2();
+            Vector2 PlayerPointStringPos = new Vector2(0, 20);
             float LineOffset = 20.0f;
             spriteBatch.Begin();
             for (int i = 0; i < Riders.Count; i++)
@@ -202,13 +202,13 @@ namespace PaToRo_Desktop.Scenes
             var numPlayers = base.HandleInput(gameTime);
 
             if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D5))
-                Synth.Play("ggg_1");
+                Synth.Play("ggg_1", true);
 
             if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D6))
-                Synth.Play("ggg_2");
+                Synth.Play("ggg_2", true);
 
             if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D7))
-                Synth.Play("ggg_3");
+                Synth.Play("ggg_3", true);
 
             // register Players
             if (numPlayers < 6)
