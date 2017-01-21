@@ -26,6 +26,7 @@ namespace PaToRo_Desktop.Scenes
         private float xOffset;
         private float accumulator = 0;          // tracks time till new spawn
         private float xPos;
+        private double timePlayed;
 
         public Generator Generator { get; set; }
         public float TimeStep { get; set; }    // time interval to spawn next value
@@ -111,6 +112,7 @@ namespace PaToRo_Desktop.Scenes
         {
             this.game = game;
 
+            timePlayed = 0;
             upper = new float[num + 1];
             lower = new float[num + 1];
             this.Duration = duration;
@@ -118,6 +120,11 @@ namespace PaToRo_Desktop.Scenes
             this.SpdInPixelPerSecondEnd = spdInPixelPerSecondEnd;
 
             FillStatic();
+        }
+
+        public void Restart()
+        {
+            timePlayed = 0;
         }
 
         private void FillStatic()
@@ -138,10 +145,12 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
+            timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
             var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
-            if (gameTime.TotalGameTime > Duration)
+            if (timePlayed > Duration.TotalSeconds)
             {
                 game.Scenes.Show("end");
+                return;
             }
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 

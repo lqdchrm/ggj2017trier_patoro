@@ -206,9 +206,9 @@ namespace PaToRo_Desktop.Scenes
             hitSnd.Play();
 
             if (upper)
-                (game.Scenes.Current as TestScene).Level.upperColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.upperColl.Hit(BaseColor);
             else
-                (game.Scenes.Current as TestScene).Level.lowerColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(BaseColor);
 
             if (Colliding <= 0)
             {
