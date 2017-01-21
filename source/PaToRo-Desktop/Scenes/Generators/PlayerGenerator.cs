@@ -55,8 +55,25 @@ namespace PaToRo_Desktop.Scenes.Generators
 
         internal override void Update(GameTime gameTime)
         {
-            var braodnessChange = (game.Inputs.Player(1)?.Value(Engine.Input.Sliders.RightStickX) ?? 0f) * braodnessSpeed;
-            var possitionChange = (game.Inputs.Player(1)?.Value(Engine.Input.Sliders.LeftStickY) ?? 0f) * baseSpeed * (braodness / 120);
+            var inputState = game.Inputs.Player(1);
+
+            float braodnessChange=0;
+            float possitionChange=0;
+
+
+            if (inputState?.Provider is Engine.Input.XBoxController)
+            {
+                braodnessChange = inputState.Value(Engine.Input.Sliders.RightStickX) * braodnessSpeed;
+                possitionChange = inputState.Value(Engine.Input.Sliders.LeftStickY) * baseSpeed * (braodness / 120);
+            }
+            else if (inputState?.Provider is Engine.Input.KeyboardController)
+            {
+                braodnessChange += inputState.IsDown(Engine.Input.Buttons.X) ? braodnessSpeed : 0;
+                braodnessChange += inputState.IsDown(Engine.Input.Buttons.A) ? -braodnessSpeed : 0;
+                possitionChange += inputState.IsDown(Engine.Input.Buttons.DPad_Up) ? baseSpeed * (braodness / 120) : 0;
+                possitionChange += inputState.IsDown(Engine.Input.Buttons.DPad_Down) ? -baseSpeed * (braodness / 120) : 0;
+            }
+
 
             braodness = MathHelper.Clamp(braodness + braodnessChange, minbraodness, maxbraodness);
             var distanceFromCenter = game.Screen.Height / 2f - distanceFromEdge;
