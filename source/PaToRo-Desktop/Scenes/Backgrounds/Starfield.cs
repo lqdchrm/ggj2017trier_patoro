@@ -65,11 +65,8 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
             float sx = 0;
             float sy = 0;
 
-            if (game.Inputs.NumPlayers > 0)
-            {
-                sx = BaseFuncs.MapTo(50, -300, game.Inputs.Player(0).Value(Sliders.LeftStickX));
-                sy = game.Inputs.Player(0).Value(Sliders.LeftStickY) * -300;
-            }
+            sx = -(game.Scenes.Current as TestScene).Level.SpdInPixelPerSecond;
+            sy = 0;
 
             for (int i=0; i<numStars; ++i)
             {
