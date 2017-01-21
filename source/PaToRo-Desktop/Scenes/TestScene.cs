@@ -75,8 +75,6 @@ namespace PaToRo_Desktop.Scenes
                 Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
-
-
                 // controllers
                 //directControl = new DirectController(game, 0, Rider);
                 //directControl.LoadContent(game.Content);

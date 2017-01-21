@@ -12,8 +12,8 @@ namespace PaToRo_Desktop.Scenes.Generators
     {
         private readonly Generator baseGenerator;
 
-        private float spread = 1000;
-        private float spreadLength = 1000;
+        private float spread = 500;
+        private float spreadLength = 40;
 
         public SpreadGenerator(Generator baseGenerator)
         {
@@ -23,11 +23,11 @@ namespace PaToRo_Desktop.Scenes.Generators
 
         public float GetUpper(float t)
         {
-            return baseGenerator.GetUpper(t) - MathHelper.Lerp(0, spread, MathHelper.Clamp(t, 0, spreadLength));
+                return baseGenerator.GetUpper(t) - MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
         }
         public float GetLower(float t)
         {
-            return baseGenerator.GetLower(t) + MathHelper.Lerp(0, spread, MathHelper.Clamp(t, 0, spreadLength));
+            return baseGenerator.GetLower(t) + MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
 
         }
     }
