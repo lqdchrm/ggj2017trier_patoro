@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EndScene.cs" />
     <Compile Include="Engine\BaseGame.cs" />
     <Compile Include="Engine\Components\Circle.cs" />
     <Compile Include="Engine\Components\IHasPhysics.cs" />

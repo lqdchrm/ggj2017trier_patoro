@@ -109,6 +109,14 @@ namespace PaToRo_Desktop.Scenes
                     Colliding = true;
                 }
             }
+            if (Colliding)
+            {
+                Radius -= 0.5f;
+            }
+            if (Radius <= 5.0f)
+            {
+                game.Scenes.Show("end");
+            }
         }
     }
 }
