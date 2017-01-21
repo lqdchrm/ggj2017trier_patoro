@@ -192,7 +192,7 @@ namespace PaToRo_Desktop.Scenes
                 if (Phy.Spd.Y < -1200) Phy.Spd.Y = -1200;
 
                 // Check Collision with Level
-                if (Level != null)
+                if (Level != null && Level.isActive)
                 {
                     var upper = Level.getUpperAt(Phy.Pos.X);
                     var lower = Level.getLowerAt(Phy.Pos.X);

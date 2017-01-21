@@ -68,9 +68,6 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
             float sy = 0;
 
 
-            if (game.Scenes.Current is TestScene)
-                Speed = (game.Scenes.Current as TestScene).Level.SpdInPixelPerSecond;
-
             sx = -Speed;
 
             sy = 0;

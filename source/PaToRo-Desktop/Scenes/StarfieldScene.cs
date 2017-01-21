@@ -10,7 +10,7 @@ namespace PaToRo_Desktop.Scenes
 {
     public class StarfieldScene : Scene
     {
-        private static Starfield starfield;
+        protected static Starfield starfield;
 
 
         public StarfieldScene(BaseGame game) : base(game)

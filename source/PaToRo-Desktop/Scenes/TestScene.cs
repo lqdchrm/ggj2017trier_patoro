@@ -17,10 +17,18 @@ using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
+    enum state
+    {
+        Lobby, Game
+    }
+
     public class TestScene : StarfieldScene
     {
         private DebugOverlay dbgOverlay;
         internal readonly List<TheNewWaveRider> Riders;
+
+
+        private state State = state.Lobby;
 
         // sound
         private Synth Synth;
@@ -85,48 +93,61 @@ namespace PaToRo_Desktop.Scenes
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
-            Level.LoadContent(game.Content);
-            Level.Generator = generator; // paddle;
-
             part = game.Content.Load<Texture2D>("Images/particle");
             dbgOverlay = new DebugOverlay(game);
 
             Children.Add(Level);
             Children.Add(dbgOverlay);
+
+            Reset();
         }
 
         internal override void Update(GameTime gameTime)
         {
-            CheckForNewPlayers();
-
-            var t = (float)gameTime.TotalGameTime.TotalSeconds;
-
-            if (BaseScale > 1)
-            {
-                BaseScale -= t * 0.05f;
-                BaseScale = MathHelper.Clamp(BaseScale, 1, 3);
-            }
-
-            // change background color
-            //BgColor = new Color(
-            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),           // red
-            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),   // green
-            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
-            //    1.0f);
-
-            // manipulate screen matrix
-            //screenMatrix = Matrix.CreateTranslation(-game.Screen.Width * 0.5f, -game.Screen.Height * 0.5f, 0)
-            //    * Matrix.CreateScale(BaseFuncs.MapTo(1f, 1.15f, BaseFuncs.Saw(t*0.2f)))
-            //    * Matrix.CreateRotationZ(0.3f * MathHelper.PiOver4 * BaseFuncs.Sin(0.05f * t))
-            //    * Matrix.CreateTranslation(game.Screen.Width * 0.5f, game.Screen.Height * 0.5f, 0);
-
-            // Sound
-            Synth.Update(gameTime);
-
             base.Update(gameTime);
+            if (State == state.Lobby)
+            {
+                CheckForNewPlayers();
+                bool start = Riders.Count > 0 ? true : false;
+                foreach (TheNewWaveRider Rider in Riders)
+                {
+                    start = start && (Rider.Phy.Pos.X > game.Screen.Width - 100.0f);
+                }
+                if (start)
+                {
+                    State = state.Game;
+                    Level.isActive = true;
+                }
+            }
+            else
+            {
+                var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
-            CheckPlayerCollisions(gameTime);
+                if (BaseScale > 1)
+                {
+                    BaseScale -= t * 0.05f;
+                    BaseScale = MathHelper.Clamp(BaseScale, 1, 3);
+                }
+
+                // change background color
+                //BgColor = new Color(
+                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),           // red
+                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),   // green
+                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
+                //    1.0f);
+
+                // manipulate screen matrix
+                //screenMatrix = Matrix.CreateTranslation(-game.Screen.Width * 0.5f, -game.Screen.Height * 0.5f, 0)
+                //    * Matrix.CreateScale(BaseFuncs.MapTo(1f, 1.15f, BaseFuncs.Saw(t*0.2f)))
+                //    * Matrix.CreateRotationZ(0.3f * MathHelper.PiOver4 * BaseFuncs.Sin(0.05f * t))
+                //    * Matrix.CreateTranslation(game.Screen.Width * 0.5f, game.Screen.Height * 0.5f, 0);
+
+                // Sound
+                Synth.Update(gameTime);
+
+
+                CheckPlayerCollisions(gameTime);
+            }
         }
 
         private void CheckPlayerCollisions(GameTime gameTime)
@@ -178,6 +199,8 @@ namespace PaToRo_Desktop.Scenes
 
         public void Reset()
         {
+            CheckForNewPlayers();
+            starfield.Speed = 100.0f;
             Level.Restart();
             foreach (TheNewWaveRider Rider in Riders)
             {
@@ -221,7 +244,6 @@ namespace PaToRo_Desktop.Scenes
             {
                 dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
                 game.Inputs.AssignToPlayer(numPlayers);
-
             }
 
             return numPlayers;

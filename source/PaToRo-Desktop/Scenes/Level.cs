@@ -28,6 +28,8 @@ namespace PaToRo_Desktop.Scenes
         private float xPos;
         private double timePlayed;
 
+        public bool isActive = false;
+
         public Generator Generator { get; set; }
         public float TimeStep { get; set; }    // time interval to spawn next value
 
@@ -145,40 +147,43 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
-            timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
-            if (timePlayed > Duration.TotalSeconds)
+            if (isActive)
             {
-                game.Scenes.Show("end");
-                return;
-            }
-            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
-                stopTime = !stopTime;
-
-            if (!stopTime)
-            {
-                var dx = SpdInPixelPerSecond / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                accumulator += dx;
-                xPos += dx;
-                var numBlocksToSpawn = accumulator / BlockWidth;
-
-                while (numBlocksToSpawn > 1)
+                timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
+                if (timePlayed > Duration.TotalSeconds)
                 {
-                    if (Generator != null)
-                    {
-                        var dt = numBlocksToSpawn * BlockWidth;
-                        Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
-                    }
-                    --numBlocksToSpawn;
-                    accumulator -= BlockWidth;
+                    game.Scenes.Show("end");
+                    return;
                 }
+                var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                xOffset = (BlockWidth + accumulator) % BlockWidth;
+                if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
+                    stopTime = !stopTime;
 
-                // update border collision structs
-                upperColl.Update(delta);
-                lowerColl.Update(delta);
+                if (!stopTime)
+                {
+                    var dx = SpdInPixelPerSecond / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    accumulator += dx;
+                    xPos += dx;
+                    var numBlocksToSpawn = accumulator / BlockWidth;
+
+                    while (numBlocksToSpawn > 1)
+                    {
+                        if (Generator != null)
+                        {
+                            var dt = numBlocksToSpawn * BlockWidth;
+                            Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
+                        }
+                        --numBlocksToSpawn;
+                        accumulator -= BlockWidth;
+                    }
+
+                    xOffset = (BlockWidth + accumulator) % BlockWidth;
+
+                    // update border collision structs
+                    upperColl.Update(delta);
+                    lowerColl.Update(delta);
+                }
             }
         }
 
@@ -193,70 +198,73 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            Vector2 pos = Vector2.Zero;
-            Vector2 origin = new Vector2(part.Width * 0.5f, part.Height * 0.5f);
-            var t = (float)gameTime.TotalGameTime.TotalSeconds;
-
-            var color = new Color(
-                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(-t)),      // red
-                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.8f * t + 0.5f)),    // green
-                BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.2f * t + 1.7f)),    // blue
-                1.0f);
-
-
-            for (int x = 0; x <= NumValues; ++x)
+            if (isActive)
             {
-                // render dots
-                var bufferIndex = (x + start) % (NumValues + 1);
-                var px = x * (game.Screen.Width / NumValues) - xOffset;
-                var pu = getUpperAt(px); // upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
-                var pl = getLowerAt(px); // lower[bufferIndex];
+                Vector2 pos = Vector2.Zero;
+                Vector2 origin = new Vector2(part.Width * 0.5f, part.Height * 0.5f);
+                var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
-                pos.X = px;
-                pos.Y = pu;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, upperColl.player != null ? upperColl.player.BaseColor : color, upperColl.Alpha));
+                var color = new Color(
+                    BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(-t)),      // red
+                    BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.8f * t + 0.5f)),    // green
+                    BaseFuncs.MapTo(0.7f, 1.0f, BaseFuncs.Sin(0.2f * t + 1.7f)),    // blue
+                    1.0f);
 
-                pos.Y = pl;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, lowerColl.player != null ? lowerColl.player.BaseColor : color,  lowerColl.Alpha));
 
-                // render rects
-                //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);
-                //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.DarkRed);
+                for (int x = 0; x <= NumValues; ++x)
+                {
+                    // render dots
+                    var bufferIndex = (x + start) % (NumValues + 1);
+                    var px = x * (game.Screen.Width / NumValues) - xOffset;
+                    var pu = getUpperAt(px); // upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
+                    var pl = getLowerAt(px); // lower[bufferIndex];
 
-                //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.Green);
-                //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.DarkGreen);
-            }
+                    pos.X = px;
+                    pos.Y = pu;
+                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, upperColl.player != null ? upperColl.player.BaseColor : color, upperColl.Alpha));
 
-            // render check points
-            //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
-            pos.Y = getUpperAt(pos.X);
-            var scl = new Vector2(4, 4);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
-            pos.Y = getLowerAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
+                    pos.Y = pl;
+                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, lowerColl.player != null ? lowerColl.player.BaseColor : color, lowerColl.Alpha));
+
+                    // render rects
+                    //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);
+                    //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.DarkRed);
+
+                    //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.Green);
+                    //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.DarkGreen);
+                }
+
+                // render check points
+                //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
+                pos.Y = getUpperAt(pos.X);
+                var scl = new Vector2(4, 4);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
+                pos.Y = getLowerAt(pos.X);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
 
 
 #if DEBUG
-            //for (int x = 1; x <= NumValues; x++)
-            //{
-            //    var bufferIndex = (x + start) % (NumValues + 1);
-            //    var previousBufferindex = bufferIndex - 1;
-            //    if (previousBufferindex == -1)
-            //        previousBufferindex = NumValues;
-            //    spriteBatch.DrawLine(
-            //        new Vector2(x * BlockWidth - xOffset, upper[bufferIndex]),
-            //        new Vector2((x - 1) * BlockWidth - xOffset, upper[previousBufferindex]),
-            //        Color.Green);
+                //for (int x = 1; x <= NumValues; x++)
+                //{
+                //    var bufferIndex = (x + start) % (NumValues + 1);
+                //    var previousBufferindex = bufferIndex - 1;
+                //    if (previousBufferindex == -1)
+                //        previousBufferindex = NumValues;
+                //    spriteBatch.DrawLine(
+                //        new Vector2(x * BlockWidth - xOffset, upper[bufferIndex]),
+                //        new Vector2((x - 1) * BlockWidth - xOffset, upper[previousBufferindex]),
+                //        Color.Green);
 
 
-            //    spriteBatch.DrawLine(
-            //        new Vector2(x * BlockWidth - xOffset, lower[bufferIndex]),
-            //        new Vector2((x - 1) * BlockWidth - xOffset, lower[previousBufferindex]),
-            //        Color.Red);
+                //    spriteBatch.DrawLine(
+                //        new Vector2(x * BlockWidth - xOffset, lower[bufferIndex]),
+                //        new Vector2((x - 1) * BlockWidth - xOffset, lower[previousBufferindex]),
+                //        Color.Red);
 
-            //}
+                //}
 
 #endif
+            }
         }
     }
 }
