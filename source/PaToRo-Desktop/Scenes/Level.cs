@@ -40,7 +40,7 @@ namespace PaToRo_Desktop.Scenes
         public float SpdInPixelPerSecondStart { get; private set; }
         public float SpdInPixelPerSecondEnd { get; private set; }
 
-        public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
+        public float BlocksPerSecond { get { return SpdInPixelPerSecond / BlockWidth; } }
 
 
         public struct BorderCollision
@@ -80,7 +80,7 @@ namespace PaToRo_Desktop.Scenes
             xPos += xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
-            while(index < 0)
+            while (index < 0)
             {
                 index += NumValues + 1;
             }
@@ -129,11 +129,7 @@ namespace PaToRo_Desktop.Scenes
 
         private void FillStatic()
         {
-            for (int i = 0; i < upper.Length; ++i)
-            {
-                upper[i] = -20.0f;
-                lower[i] = game.Screen.Height + 20f;
-            }
+            accumulator += BlockWidth * upper.Length;
         }
 
         internal void LoadContent(ContentManager content)
@@ -168,7 +164,7 @@ namespace PaToRo_Desktop.Scenes
                     if (Generator != null)
                     {
                         var dt = numBlocksToSpawn * BlockWidth;
-                        Push(Generator.GetUpper((xPos - dt)/ 200), Generator.GetLower((xPos - dt) / 200));
+                        Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
                     }
                     --numBlocksToSpawn;
                     accumulator -= BlockWidth;
@@ -217,7 +213,7 @@ namespace PaToRo_Desktop.Scenes
                 spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, upperColl.color, upperColl.Alpha));
 
                 pos.Y = pl;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, lowerColl.color,  lowerColl.Alpha));
+                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, lowerColl.color, lowerColl.Alpha));
 
                 // render rects
                 //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);

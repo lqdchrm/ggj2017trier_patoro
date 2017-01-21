@@ -13,6 +13,8 @@ namespace PaToRo_Desktop.Engine.Input
         private int index;
         private XnaInput.GamePadState st;
 
+        private bool vibrationFaild;
+
         /* Hack for vibration, f**ng MonoGame doesn't support it */
         private readonly SharpDX.XInput.Controller Controller;
 
@@ -29,7 +31,16 @@ namespace PaToRo_Desktop.Engine.Input
             {
                 if (triggered)
                 {
-                    Controller.SetVibration(vibration);
+                    try
+                    {
+                        if (!vibrationFaild)
+                            Controller.SetVibration(vibration);
+
+                    }
+                    catch (Exception)
+                    {
+                        vibrationFaild = true;
+                    }
                     triggered = false;
                     vibrating = true;
                 }
@@ -38,15 +49,23 @@ namespace PaToRo_Desktop.Engine.Input
                 {
                     vibration.LeftMotorSpeed = 0;
                     vibration.RightMotorSpeed = 0;
-                    Controller.SetVibration(vibration);
-                    vibrating = false;
+                    try
+                    {
+                        if (!vibrationFaild)
+                            Controller.SetVibration(vibration);
+                        vibrating = false;
+                    }
+                    catch (Exception)
+                    {
+                        vibrationFaild = true;
+                    }
                 }
             }
         }
 
         public override bool Get(Buttons btn)
         {
-            switch(btn)
+            switch (btn)
             {
                 case Buttons.A: return st.Buttons.A == XnaInput.ButtonState.Pressed;
                 case Buttons.B: return st.Buttons.B == XnaInput.ButtonState.Pressed;
@@ -73,7 +92,7 @@ namespace PaToRo_Desktop.Engine.Input
 
         public override float Get(Sliders sldr)
         {
-            switch(sldr)
+            switch (sldr)
             {
                 case Sliders.LeftStickX: return st.ThumbSticks.Left.X;
                 case Sliders.LeftStickY: return -st.ThumbSticks.Left.Y;

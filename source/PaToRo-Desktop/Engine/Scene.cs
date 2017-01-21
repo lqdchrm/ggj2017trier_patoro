@@ -13,7 +13,7 @@ namespace PaToRo_Desktop.Engine
         protected readonly BaseGame game;
 
         protected bool initialized;
-        protected bool loaded;
+        private bool loaded;
 
         protected Color BgColor { get; set; }
         protected SpriteBatch spriteBatch;
@@ -30,11 +30,18 @@ namespace PaToRo_Desktop.Engine
             initialized = true;
         }
 
-        internal virtual void LoadContent()
+        internal void LoadContent()
         {
-            spriteBatch = new SpriteBatch(game.GraphicsDevice);
+            if (!loaded)
+                InternalLoadContent();
             loaded = true;
         }
+
+        internal virtual void InternalLoadContent()
+        {
+            spriteBatch = new SpriteBatch(game.GraphicsDevice);
+        }
+
 
         internal virtual void UnloadContent()
         {
@@ -55,8 +62,7 @@ namespace PaToRo_Desktop.Engine
 
         internal override void Draw(SpriteBatch batch, GameTime gameTime)
         {
-            throw new NotSupportedException();
-            
+            base.Draw(batch, gameTime);
         }
 
         internal virtual void Draw(GameTime gameTime)
@@ -64,7 +70,7 @@ namespace PaToRo_Desktop.Engine
             game.GraphicsDevice.Clear(BgColor);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, screenMatrix);
-            base.Draw(spriteBatch, gameTime);
+            Draw(spriteBatch, gameTime);
             spriteBatch.End();
         }
     }
