@@ -67,7 +67,7 @@ namespace PaToRo_Desktop.Scenes
                 paddle = new PlayerGenerator(game);
                 sineGen = new SineStackedGenerator(game);
 
-                level = new Level(game, 128, 1000);
+                level = new Level(game, 128, 500);
                 level.LoadContent(game.Content);
                 level.Generator = sineGen; // paddle;
 

@@ -44,8 +44,8 @@ namespace PaToRo_Desktop.Scenes.Controllers
             if (Entity != null && Entity.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Entity.Phy.Spd.X = cntrl.Value(Sliders.LeftStickX) * 800;
-                Entity.Phy.Spd.Y = cntrl.Value(Sliders.LeftStickY) * 800;
+                Entity.Phy.Accel.X = cntrl.Value(Sliders.LeftStickX) * 1600;
+                Entity.Phy.Accel.Y = cntrl.Value(Sliders.LeftStickY) * 1600;
             }
         }
 
