@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PaToRo_Desktop.Engine.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,6 @@ namespace PaToRo_Desktop.Engine
 {
     public abstract class Entity
     {
-
-        public Entity()
-        {
-        }
-
         internal abstract void Update(GameTime gameTime);
 
         internal abstract void Draw(SpriteBatch spriteBatch, GameTime gameTime);

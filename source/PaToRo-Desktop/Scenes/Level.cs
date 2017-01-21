@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using PaToRo_Desktop.Scenes.Generators;
+using PaToRo_Desktop.Scenes.Funcs;
 
 namespace PaToRo_Desktop.Scenes
 {
@@ -112,24 +113,36 @@ namespace PaToRo_Desktop.Scenes
         {
             Vector2 pos = Vector2.Zero;
             Vector2 origin = new Vector2(part.Width * 0.5f, part.Height * 0.5f);
+            var t = (float)gameTime.TotalGameTime.TotalSeconds;
+
+            var color = new Color(
+                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
+                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 0.5f)),    // green
+                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1.7f)),    // blue
+                1.0f);
+
 
             for (int x = 0; x <= NumValues; ++x)
             {
                 // render dots
                 var bufferIndex = (x + start) % (NumValues + 1);
+                var px = x * (game.Screen.Width / NumValues) - xOffset;
+                var pu = upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
+                var pl = lower[bufferIndex];
 
-                pos.X = x * (game.Screen.Width / NumValues) - xOffset;
-                pos.Y = upper[bufferIndex];
-                spriteBatch.Draw(part, pos, null, null, origin);
-                pos.Y = lower[bufferIndex];
-                spriteBatch.Draw(part, pos, null, null, origin);
+                pos.X = px;
+                pos.Y = pu;
+                spriteBatch.Draw(part, pos, null, null, origin, 0, null, color);
+
+                pos.Y = pl;
+                spriteBatch.Draw(part, pos, null, null, origin, 0, null, color);
 
                 // render rects
-                spriteBatch.FillRectangle(new RectangleF((x - 0.5f) * BlockWidth - xOffset, 0, BlockWidth, upper[bufferIndex]), Color.Red);
-                spriteBatch.DrawRectangle(new RectangleF((x - 0.5f) * BlockWidth - xOffset, 0, BlockWidth, upper[bufferIndex]), Color.DarkRed);
+                //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);
+                //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.DarkRed);
 
-                spriteBatch.FillRectangle(new RectangleF((x - 0.5f) * BlockWidth - xOffset, lower[bufferIndex], BlockWidth, game.Screen.Height - lower[bufferIndex]), Color.Green);
-                spriteBatch.DrawRectangle(new RectangleF((x - 0.5f) * BlockWidth - xOffset, lower[bufferIndex], BlockWidth, game.Screen.Height - lower[bufferIndex]), Color.DarkGreen);
+                //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.Green);
+                //spriteBatch.DrawRectangle(new RectangleF(px - (0.5f * BlockWidth), pl, BlockWidth, game.Screen.Height - pl), Color.DarkGreen);
             }
 
             // render check points
@@ -141,26 +154,24 @@ namespace PaToRo_Desktop.Scenes
 
 
 #if DEBUG
-            for (int x = 1; x <= NumValues; x++)
-            {
-
-                
-                var bufferIndex = (x + start) % (NumValues + 1);
-                var previousBufferindex = bufferIndex - 1;
-                if (previousBufferindex == -1)
-                    previousBufferindex = NumValues;
-                spriteBatch.DrawLine(
-                    new Vector2(x * BlockWidth - xOffset, upper[bufferIndex]),
-                    new Vector2((x - 1) * BlockWidth - xOffset, upper[previousBufferindex]),
-                    Color.Green);
+            //for (int x = 1; x <= NumValues; x++)
+            //{
+            //    var bufferIndex = (x + start) % (NumValues + 1);
+            //    var previousBufferindex = bufferIndex - 1;
+            //    if (previousBufferindex == -1)
+            //        previousBufferindex = NumValues;
+            //    spriteBatch.DrawLine(
+            //        new Vector2(x * BlockWidth - xOffset, upper[bufferIndex]),
+            //        new Vector2((x - 1) * BlockWidth - xOffset, upper[previousBufferindex]),
+            //        Color.Green);
 
 
-                spriteBatch.DrawLine(
-                    new Vector2(x * BlockWidth - xOffset, lower[bufferIndex]),
-                    new Vector2((x - 1) * BlockWidth - xOffset, lower[previousBufferindex]),
-                    Color.Red);
+            //    spriteBatch.DrawLine(
+            //        new Vector2(x * BlockWidth - xOffset, lower[bufferIndex]),
+            //        new Vector2((x - 1) * BlockWidth - xOffset, lower[previousBufferindex]),
+            //        Color.Red);
 
-            }
+            //}
 
 #endif
         }

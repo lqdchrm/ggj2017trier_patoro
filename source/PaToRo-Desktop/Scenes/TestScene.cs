@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
+using PaToRo_Desktop.Scenes.Backgrounds;
 using PaToRo_Desktop.Scenes.Controllers;
+using PaToRo_Desktop.Scenes.Funcs;
 using PaToRo_Desktop.Scenes.Generators;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,12 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        private TheWaveRider ball;
+        private TheNewWaveRider rider;
         private DirectController control;
+        private Starfield starfield;
+
         private Level level;
+
         public float Phase;
         public float LevelSpeedX;
         public float LevelSpeedY;
@@ -41,16 +46,20 @@ namespace PaToRo_Desktop.Scenes
         {
             base.LoadContent();
 
-            level = new Level(game, 128, 15);
+            starfield = new Starfield(game, 700, 8);
+            starfield.LoadContent(game.Content);
+
+            level = new Level(game, 128, 5);
             level.LoadContent(game.Content);
             level.Generator = new SineStackedGenerator(game);
 
-            ball = new TheWaveRider();
-            ball.LoadContent(game.Content);
-            ball.Phy.Pos.X += game.Screen.Width * 0.1f;
-            ball.Phy.Pos.Y += game.Screen.Height * 0.5f;
+            rider = new TheNewWaveRider();
+            rider.LoadContent(game.Content);
+            rider.Phy.Pos.X = game.Screen.Width * 0.1f;
+            rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+            rider.Phy.RotSpd = 20f;
 
-            control = new DirectController(game, 0, ball.Phy);
+            control = new DirectController(game, 0, rider);
 
             LevelSpeedX = 100.0f;
             LevelSpeedY = 150.0f;
@@ -58,10 +67,23 @@ namespace PaToRo_Desktop.Scenes
 
             dbgOverlay = new DebugOverlay(game);
 
+            Children.Add(starfield);
             Children.Add(level);
             Children.Add(control);
-            Children.Add(ball);
+            Children.Add(rider);
             Children.Add(dbgOverlay);
+        }
+
+        internal override void Update(GameTime gameTime)
+        {
+            var t = (float)gameTime.TotalGameTime.TotalSeconds;
+
+            BgColor = new Color(
+                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.2f * t)),      // red
+                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.1f * t + 0.8f)),    // green
+                BaseFuncs.MapTo(0.0f, 0.03f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
+                1.0f);
+            base.Update(gameTime);
         }
 
         //internal override void Draw(GameTime gameTime)
@@ -125,13 +147,6 @@ namespace PaToRo_Desktop.Scenes
                 game.Inputs.AssignToPlayer(numPlayers);
 
             }
-
-            //// Move TheWaveRider
-            //if (numPlayers > 0)
-            //{
-            //    SpeedY = game.Inputs.Player(0).Value(Sliders.LeftStickY);
-            //    SpeedX = game.Inputs.Player(0).Value(Sliders.RightStickX);
-            //}
 
             return numPlayers;
         }

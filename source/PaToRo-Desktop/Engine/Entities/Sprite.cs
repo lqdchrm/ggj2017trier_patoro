@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PaToRo_Desktop.Engine.Entities
 {
-    public class Sprite : Entity
+    public class Sprite : Entity, IHasPhysics
     {
         public Physics Phy { get; private set; }
         public Image Gfx { get; private set; }

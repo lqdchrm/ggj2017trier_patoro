@@ -36,7 +36,7 @@ namespace PaToRo_Desktop.Engine.Components
             // update movement
             Pos.X = Pos.X + Spd.X * delta;
             Pos.Y = Pos.Y + Spd.Y * delta;
-            Rot = RotSpd * delta;
+            Rot = Rot + RotSpd * delta;
 
             // update hitbox
             if (HitBox != null)

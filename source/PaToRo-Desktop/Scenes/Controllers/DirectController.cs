@@ -16,24 +16,24 @@ namespace PaToRo_Desktop.Scenes.Controllers
         private readonly BaseGame game;
         private int playerIdx;
 
-        public Physics Physics { get; set; }
+        public IHasPhysics Entity { get; set; }
 
 
-        public DirectController(BaseGame game, int playerIdx, Physics physics)
+        public DirectController(BaseGame game, int playerIdx, IHasPhysics entity)
         {
             this.game = game;
             this.playerIdx = playerIdx;
-            Physics = physics;
+            Entity = entity;
         }
 
 
         internal override void Update(GameTime gameTime)
         {
-            if (Physics != null && game.Inputs.NumPlayers > playerIdx)
+            if (Entity != null && Entity.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Physics.Spd.X = cntrl.Value(Sliders.LeftStickX) * 800;
-                Physics.Spd.Y = cntrl.Value(Sliders.LeftStickY) * 800;
+                Entity.Phy.Spd.X = cntrl.Value(Sliders.LeftStickX) * 800;
+                Entity.Phy.Spd.Y = cntrl.Value(Sliders.LeftStickY) * 800;
             }
         }
 

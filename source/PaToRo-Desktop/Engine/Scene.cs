@@ -56,7 +56,7 @@ namespace PaToRo_Desktop.Engine
         {
             game.GraphicsDevice.Clear(BgColor);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
             base.Draw(spriteBatch, gameTime);
             spriteBatch.End();
         }

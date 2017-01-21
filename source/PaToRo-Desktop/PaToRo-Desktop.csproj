@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Engine\BaseGame.cs" />
     <Compile Include="Engine\Components\Circle.cs" />
+    <Compile Include="Engine\Components\IHasPhysics.cs" />
     <Compile Include="Engine\Components\Physics.cs" />
     <Compile Include="Engine\Components\Image.cs" />
     <Compile Include="Engine\Entities\Sprite.cs" />
@@ -59,10 +60,14 @@
     <Compile Include="PaToRoGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes\Backgrounds\Starfield.cs" />
     <Compile Include="Scenes\DebugOverlay.cs" />
+    <Compile Include="Scenes\Funcs\BaseFuncs.cs" />
+    <Compile Include="Scenes\Funcs\RandomFuncs.cs" />
     <Compile Include="Scenes\Generators\SineStacked.cs" />
     <Compile Include="Scenes\Player.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
+    <Compile Include="Scenes\TheNewWaveRider.cs" />
     <Compile Include="Scenes\TheWaveRider.cs" />
     <Compile Include="Scenes\Generators\Generator.cs" />
     <Compile Include="Scenes\Level.cs" />
