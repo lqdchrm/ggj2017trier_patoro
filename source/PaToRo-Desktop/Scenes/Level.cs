@@ -92,8 +92,8 @@ namespace PaToRo_Desktop.Scenes
         {
             for (int i = 0; i < upper.Length; ++i)
             {
-                upper[i] = 0.0f;
-                lower[i] = game.Screen.Height;
+                upper[i] = -20.0f;
+                lower[i] = game.Screen.Height + 20f;
             }
         }
 

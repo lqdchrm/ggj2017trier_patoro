@@ -61,6 +61,11 @@ namespace PaToRo_Desktop.Scenes
             initialRadius = radius;
         }
 
+        internal void Dash()
+        {
+            Phy.Accel *= 10;
+        }
+
         internal void LoadContent(ContentManager content)
         {
             halo = content.Load<Texture2D>("Images/halo");

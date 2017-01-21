@@ -86,7 +86,7 @@ namespace PaToRo_Desktop.Scenes
                 // Gens
                 sineGen = new SpreadGenerator( new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 1500);
+                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 50, 1000);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
@@ -106,11 +106,11 @@ namespace PaToRo_Desktop.Scenes
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
             // change background color
-            BgColor = new Color(
-                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),           // red
-                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),   // green
-                BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
-                1.0f);
+            //BgColor = new Color(
+            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),           // red
+            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),   // green
+            //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
+            //    1.0f);
 
             // manipulate screen matrix
             //screenMatrix = Matrix.CreateTranslation(-game.Screen.Width * 0.5f, -game.Screen.Height * 0.5f, 0)

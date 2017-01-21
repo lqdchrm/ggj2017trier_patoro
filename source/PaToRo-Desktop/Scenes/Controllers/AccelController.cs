@@ -48,10 +48,11 @@ namespace PaToRo_Desktop.Scenes.Controllers
                 Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 4000;
                 Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 4000;
 
-                //if (!Rider.Active && game.Inputs.Player(playerIdx).AnyButtonDown)
-                //{
-                //    Rider.Spawn();
-                //}
+                if (Rider.Active)
+                {
+                    if (game.Inputs.Player(playerIdx).WasPressed(Buttons.A))
+                        Rider.Dash();
+                }
             }
         }
 
