@@ -12,10 +12,11 @@ namespace PaToRo_Desktop.Engine.Components
         public Vector2 Pos;
         public float Rot;
 
-        public Vector2 Accel;
         public Vector2 Spd;
         public float RotSpd;
 
+        public Vector2 Accel;
+        public float Dmp = 1.0f;
 
         public Circle HitBox;
 
@@ -41,6 +42,9 @@ namespace PaToRo_Desktop.Engine.Components
             Pos.X = Pos.X + Spd.X * delta;
             Pos.Y = Pos.Y + Spd.Y * delta;
             Rot = Rot + RotSpd * delta;
+
+            Spd.X *= Dmp;
+            Spd.Y *= Dmp;
 
             // update hitbox
             if (HitBox != null)

@@ -22,9 +22,11 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
         private Vector2 partOrigin;
 
+        private Color color;
+
         public Physics Phy { get; private set; }
         public float Radius;
-        public bool Colliding;
+        public float Colliding;
 
         public Level Level { get; set; }
 
@@ -47,12 +49,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
-
-            var color = new Color(
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t+1)),    // green
-                BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t+2)),    // blue
-                1.0f);
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Outer Halo
             var scl = 2 * Radius / halo.Width;
@@ -60,33 +57,55 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
 
             // Inner Stuff
-            if (!Colliding)
+            if (Colliding <= 0)
             {
-                // Dot
-                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
-
-                // Halos
-                float factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(t));   // -> 0..1
-                scale.X = scale.Y = scl * factor;
-                color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
-
-                // Inner Halos
-                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
-                scale.X = scale.Y = scl * factor;
-                color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
-
-                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
-                scale.X = scale.Y = scl * factor;
-                color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                color = new Color(
+                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
+                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1)),    // green
+                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 2)),    // blue
+                    1.0f);
             }
+            else
+            {
+                Colliding -= delta;
+            }
+
+            // Dot
+            spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
+
+            // Halos
+            float factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(t));   // -> 0..1
+            scale.X = scale.Y = scl * factor;
+            color.A = (byte)(255 * factor);
+            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+
+            // Inner Halos
+            factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
+            scale.X = scale.Y = scl * factor;
+            color.A = (byte)(255 * factor);
+            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+
+            factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
+            scale.X = scale.Y = scl * factor;
+            color.A = (byte)(255 * factor);
+            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
         }
 
         internal override void Update(GameTime gameTime)
         {
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Phy.Update(gameTime);
+
+            // Ensure Physics Bounds
+            if (Phy.Pos.X < Radius) Phy.Pos.X = Radius;
+            if (Phy.Pos.X > game.Screen.Width - Radius) Phy.Pos.X = game.Screen.Width - Radius;
+            if (Phy.Pos.Y < Radius) Phy.Pos.Y = Radius;
+            if (Phy.Pos.Y > game.Screen.Height - Radius) Phy.Pos.Y = game.Screen.Height - Radius;
+
+            if (Phy.Spd.X > 800) Phy.Spd.X = 800;
+            if (Phy.Spd.X < -800) Phy.Spd.X = -800;
+            if (Phy.Spd.Y > 800) Phy.Spd.Y = 800;
+            if (Phy.Spd.Y < -800) Phy.Spd.Y = -800;
 
             // Check Collision with Level
             if (Level != null)
@@ -94,28 +113,39 @@ namespace PaToRo_Desktop.Scenes
                 var upper = Level.getUpperAt(Phy.Pos.X);
                 var lower = Level.getLowerAt(Phy.Pos.X);
 
-                Colliding = false;
                 if (Phy.Pos.Y < upper + Radius)
                 {
-                    Phy.Pos.Y = upper + Radius;
-                    game.Inputs.Player(0)?.Rumble(0.5f, 0, 200);
-                    Colliding = true;
+                    Phy.Spd.Y = 200f + 0.5f * Math.Abs(Phy.Spd.Y);
+                    Phy.Pos.Y = upper + Radius + Phy.Spd.Y * delta;
+                    Phy.Accel.Y = 0;
+                    Collide(true);
                 }
 
                 if (Phy.Pos.Y > lower - Radius)
                 {
-                    Phy.Pos.Y = lower - Radius;
-                    game.Inputs.Player(0)?.Rumble(0, 0.5f, 200);
-                    Colliding = true;
+                    Phy.Spd.Y = -200f + 0.5f * -Math.Abs(Phy.Spd.Y);
+                    Phy.Pos.Y = lower - Radius + Phy.Spd.Y * delta;
+                    Phy.Accel.Y = 0;
+                    Collide(false);
                 }
             }
-            if (Colliding)
+        }
+
+        public void Collide(bool upper)
+        {
+            color = upper ? Color.Green : Color.Red;
+
+            if (Colliding <= 0)
             {
-                Radius -= 0.5f;
-            }
-            if (Radius <= 5.0f)
-            {
-                game.Scenes.Show("end");
+                Colliding = 0.5f;
+
+                game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
+
+                Radius -= 3f;
+                if (Radius <= 5.0f)
+                {
+                    game.Scenes.Show("end");
+                }
             }
         }
     }

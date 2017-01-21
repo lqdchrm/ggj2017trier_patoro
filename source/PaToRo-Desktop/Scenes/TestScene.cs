@@ -91,7 +91,7 @@ namespace PaToRo_Desktop.Scenes
                 Children.Add(paddle);
                 Children.Add(level);
                 
-                //Children.Add(directControl);
+                // Children.Add(directControl);
                 Children.Add(accelControl);
 
                 Children.Add(Rider);

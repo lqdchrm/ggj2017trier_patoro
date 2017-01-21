@@ -29,6 +29,7 @@ namespace PaToRo_Desktop.Scenes.Controllers
             this.game = game;
             this.playerIdx = playerIdx;
             Entity = entity;
+            Entity.Phy.Dmp = 0.95f;
         }
 
         public void LoadContent(ContentManager content)
