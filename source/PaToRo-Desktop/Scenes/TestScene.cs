@@ -86,7 +86,7 @@ namespace PaToRo_Desktop.Scenes
                 // Gens
                 sineGen = new SpreadGenerator( new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 50, 1000);
+                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
@@ -167,6 +167,15 @@ namespace PaToRo_Desktop.Scenes
 
                 pair.Item2.Phy.Pos = contactPoint + diffN * (pair.Item2.Radius + 1);
                 pair.Item1.Phy.Pos = contactPoint - diffN * (pair.Item1.Radius + 1);
+            }
+        }
+
+        public void Reset()
+        {
+            Level.Restart();
+            foreach( TheNewWaveRider Rider in Riders)
+            {
+                Rider.Reset();
             }
         }
 

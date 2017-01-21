@@ -89,6 +89,12 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
+        public void Reset()
+        {
+            Points = 0.0f;
+            Spawn();
+        }
+
         public void Die()
         {
             if (Active)
@@ -206,9 +212,9 @@ namespace PaToRo_Desktop.Scenes
             hitSnd.Play(0.5f, 0, 0);
 
             if (upper)
-                (game.Scenes.Current as TestScene).Level.upperColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.upperColl.Hit(BaseColor);
             else
-                (game.Scenes.Current as TestScene).Level.lowerColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(BaseColor);
 
             if (Colliding <= 0)
             {

@@ -23,9 +23,9 @@ namespace PaToRo_Desktop
             for (int i = 4; i < 4 + 1; ++i)
                 Inputs[i].Provider = new KeyboardController(i);
 
-
-            Scenes.Add("level", new TestScene(this));
-            Scenes.Add("end", new EndScene(this));
+            TestScene t = new TestScene(this);
+            Scenes.Add("level", t);
+            Scenes.Add("end", new EndScene(this, t));
             Scenes.Show("level");
 
 #if !DEBUG

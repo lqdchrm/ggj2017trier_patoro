@@ -26,22 +26,22 @@ namespace PaToRo_Desktop.Scenes
         private float xOffset;
         private float accumulator = 0;          // tracks time till new spawn
         private float xPos;
+        private double timePlayed;
 
         public Generator Generator { get; set; }
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(localTime / Duration.TotalSeconds)); } }
+        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(timePlayed / Duration.TotalSeconds)); } }
 
         public TimeSpan Duration { get; private set; }
-        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - localTime); } }
+        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - timePlayed); } }
 
         public float SpdInPixelPerSecondStart { get; private set; }
         public float SpdInPixelPerSecondEnd { get; private set; }
 
         public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
 
-        private float localTime;
 
         public struct BorderCollision
         {
@@ -111,6 +111,7 @@ namespace PaToRo_Desktop.Scenes
         {
             this.game = game;
 
+            timePlayed = 0;
             upper = new float[num + 1];
             lower = new float[num + 1];
             this.Duration = duration;
@@ -118,6 +119,12 @@ namespace PaToRo_Desktop.Scenes
             this.SpdInPixelPerSecondEnd = spdInPixelPerSecondEnd;
 
             FillStatic();
+        }
+
+        public void Restart()
+        {
+            timePlayed = 0;
+            xPos = 0;
         }
 
         private void FillStatic()
@@ -138,7 +145,12 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
-            var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
+            if (timePlayed > Duration.TotalSeconds)
+            {
+                game.Scenes.Show("end");
+                return;
+            }
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))

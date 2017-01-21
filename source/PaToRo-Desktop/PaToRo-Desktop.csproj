@@ -38,7 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EndScene.cs" />
+    <Compile Include="Scenes\EndScene.cs" />
     <Compile Include="Engine\BaseGame.cs" />
     <Compile Include="Engine\Components\Circle.cs" />
     <Compile Include="Engine\Components\IHasPhysics.cs" />
@@ -72,7 +72,6 @@
     <Compile Include="Scenes\Generators\SineStacked.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
     <Compile Include="Scenes\TheNewWaveRider.cs" />
-    <Compile Include="Scenes\TheWaveRider.cs" />
     <Compile Include="Scenes\Generators\Generator.cs" />
     <Compile Include="Scenes\Level.cs" />
     <Compile Include="Scenes\Generators\SineGenerator.cs" />
