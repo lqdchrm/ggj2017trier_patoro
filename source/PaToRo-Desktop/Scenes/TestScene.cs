@@ -25,7 +25,7 @@ namespace PaToRo_Desktop.Scenes
 
         private Starfield starfield;
 
-        private Level level;
+        public Level Level;
 
         private Texture2D part;
 
@@ -66,13 +66,13 @@ namespace PaToRo_Desktop.Scenes
                 paddle = new PlayerGenerator(game);
                 sineGen = new SineStackedGenerator(game);
 
-                level = new Level(game, 128, 500);
-                level.LoadContent(game.Content);
-                level.Generator = sineGen; // paddle;
+                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
+                Level.LoadContent(game.Content);
+                Level.Generator = sineGen; // paddle;
 
                 Rider = new TheNewWaveRider(game, 32f);
                 Rider.LoadContent(game.Content);
-                Rider.Level = level;
+                Rider.Level = Level;
                 Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
                 Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
 
@@ -89,7 +89,7 @@ namespace PaToRo_Desktop.Scenes
 
                 Children.Add(starfield);
                 Children.Add(paddle);
-                Children.Add(level);
+                Children.Add(Level);
                 
                 // Children.Add(directControl);
                 Children.Add(accelControl);
