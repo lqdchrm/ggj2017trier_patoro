@@ -129,29 +129,40 @@ namespace PaToRo_Desktop.Scenes
 
                 // Outer Halo
                 var scl = 2 * Radius / halo.Width;
-                var scale = new Vector2(scl, scl);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+
+                var dot = Vector2.Dot(Vector2.Normalize(Phy.Spd), Vector2.Normalize(Phy.Accel));
+                var squish = BaseFuncs.MapTo(1, 1.3f, Phy.Spd.Length(), 0, 2000);
+                if (float.IsNaN(dot))
+                    dot = -0.5f;
+
+                squish = (float)Math.Pow(squish, 2*dot);
+
+                var scale = new Vector2(scl * squish, scl / squish);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
 
                 // Dot
-                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
+                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, null, color);
 
                 // Halos
                 float factor = BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.SawUp(t));
-                scale.X = scale.Y = scl * factor;
+                scale.X = scl * factor * squish;
+                scale.Y = scl * factor / squish;
                 color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
                 // Inner Halos
                 factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
-                scale.X = scale.Y = scl * factor;
+                scale.X = scl * factor * squish;
+                scale.Y = scl * factor / squish;
                 color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
                 factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
-                scale.X = scale.Y = scl * factor;
+                scale.X = scl * factor * squish;
+                scale.Y = scl * factor / squish;
                 color.A = (byte)(255 * factor);
-                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
             }
         }
 

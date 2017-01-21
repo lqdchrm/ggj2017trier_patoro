@@ -48,6 +48,8 @@ namespace PaToRo_Desktop.Engine.Components
             Pos.Y = Pos.Y + Spd.Y * delta;
             Rot = Rot + RotSpd * delta;
 
+            Rot = (float)Math.Atan2(Spd.Y, Spd.X);
+
             Spd.X *= Dmp;
             Spd.Y *= Dmp;
 
