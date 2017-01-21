@@ -23,18 +23,32 @@ namespace PaToRo_Desktop.Scenes
         private Vector2 partOrigin;
 
         private Color color;
+        public Color BaseColor { get; private set; }
 
         public Physics Phy { get; private set; }
-        public float Radius;
+        public float Radius
+        {
+            get { return this.Phy.HitBox.Radius; }
+            set { this.Phy.HitBox.Radius = value; }
+        }
         public float Colliding;
+        public static float POINTS_PER_FRAME = 0.2f;
+        public float Points;
 
         public Level Level { get; set; }
 
-        public TheNewWaveRider(BaseGame game, float radius)
+        public int PlayerNum { get; private set; }
+
+        public static Color[] colors = new Color[] {
+            Color.Aquamarine, Color.BlueViolet, Color.Purple, Color.SeaShell, Color.Tomato, Color.Turquoise
+        };
+
+        public TheNewWaveRider(BaseGame game, int playerNum, float radius)
         {
             this.game = game;
-            Phy = new Physics(null);
-            this.Radius = radius;
+            this.PlayerNum = playerNum;
+            this.BaseColor = colors[playerNum % colors.Length];
+            Phy = new Physics(radius, game);
         }
 
         internal void LoadContent(ContentManager content)
@@ -51,24 +65,27 @@ namespace PaToRo_Desktop.Scenes
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Outer Halo
-            var scl = 2 * Radius / halo.Width;
-            var scale = new Vector2(scl, scl);
-            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
-
-            // Inner Stuff
+            // Colliding Viz
             if (Colliding <= 0)
             {
-                color = new Color(
-                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
-                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1)),    // green
-                    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 2)),    // blue
-                    1.0f);
+                color = new Color(BaseColor.R, BaseColor.G, BaseColor.B, BaseColor.A);
+                //new Color(
+                //    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t)),      // red
+                //    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1)),    // green
+                //    BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 2)),    // blue
+                //    1.0f);
+                Points += POINTS_PER_FRAME;
             }
             else
             {
                 Colliding -= delta;
             }
+            
+            // Outer Halo
+            var scl = 2 * Radius / halo.Width;
+            var scale = new Vector2(scl, scl);
+            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+
 
             // Dot
             spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
@@ -133,20 +150,20 @@ namespace PaToRo_Desktop.Scenes
 
         public void Collide(bool upper)
         {
-            color = upper ? Color.Green : Color.Red;
+            // color = upper ? Color.Green : Color.Red;
 
             if (Colliding <= 0)
             {
-                Colliding = 0.5f;
+                Colliding = 1.5f;
 
                 game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
 
-                if (Radius <= 5.0f)
+                if (Radius <= 15.0f)
                 {
                     //game.Scenes.Show("end");
                 } else
                 {
-                    Radius -= 3f;
+                    Radius -= 1.2f;
                 }
             }
         }

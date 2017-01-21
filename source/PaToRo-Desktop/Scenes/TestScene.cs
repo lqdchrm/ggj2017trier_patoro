@@ -19,14 +19,10 @@ namespace PaToRo_Desktop.Scenes
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        internal TheNewWaveRider Rider;
+        internal readonly List<TheNewWaveRider> Riders;
 
         // sound
         private Synth Synth;
-
-        // controls
-        private DirectController directControl;
-        private AccelController accelControl;
 
         private Starfield starfield;
 
@@ -40,6 +36,7 @@ namespace PaToRo_Desktop.Scenes
 
         public TestScene(BaseGame game) : base(game)
         {
+            Riders = new List<TheNewWaveRider>();
         }
 
         internal override void Initialize()
@@ -49,13 +46,24 @@ namespace PaToRo_Desktop.Scenes
                 base.Initialize();
                 BgColor = Color.Black;
             }
+        }
 
-            if (Rider != null)
+        internal override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            Vector2 PlayerPointStringPos = new Vector2();
+            float LineOffset = 20.0f;
+            spriteBatch.Begin();
+            for (int i = 0; i < Riders.Count; i++)
             {
-                Rider.Radius = 32.0f;
-                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+                var rider = Riders[i];
+                spriteBatch.DrawString(
+                    game.Fonts.Get("debug"),
+                    $"Player {rider.PlayerNum}: {rider.Points} Points",
+                    PlayerPointStringPos, rider.BaseColor);
+                PlayerPointStringPos.Y += LineOffset;
             }
+            spriteBatch.End();
         }
 
         internal override void LoadContent()
@@ -80,37 +88,33 @@ namespace PaToRo_Desktop.Scenes
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
-                Rider = new TheNewWaveRider(game, 32f);
-                Rider.LoadContent(game.Content);
-                Rider.Level = Level;
-                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-
-                // controllers
-                directControl = new DirectController(game, 0, Rider);
-                directControl.LoadContent(game.Content);
-
-                accelControl = new AccelController(game, 0, Rider);
-                accelControl.LoadContent(game.Content);
-
                 part = game.Content.Load<Texture2D>("Images/particle");
-
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
                 Children.Add(paddle);
                 Children.Add(Level);
-                
-                // Children.Add(directControl);
-                Children.Add(accelControl);
-
-                Children.Add(Rider);
                 Children.Add(dbgOverlay);
             }
         }
 
         internal override void Update(GameTime gameTime)
         {
+            while (Riders.Count < game.Inputs.NumPlayers)
+            {
+                var newRider = new TheNewWaveRider(game, Riders.Count, 32f);
+                newRider.LoadContent(game.Content);
+                newRider.Level = Level;
+                newRider.Phy.Pos.X = game.Screen.Width * 0.1f;
+                newRider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Children.Add(newRider);
+
+                AccelController controller = new AccelController(game, Riders.Count, newRider);
+                controller.LoadContent(game.Content);
+                Children.Add(controller);
+
+                Riders.Add(newRider);
+            }
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
             // change background color
@@ -146,7 +150,7 @@ namespace PaToRo_Desktop.Scenes
                 Synth.Play("ggg_3");
 
             // register Players
-            if (numPlayers < 2)
+            if (numPlayers < 6)
             {
                 dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
                 game.Inputs.AssignToPlayer(numPlayers);
