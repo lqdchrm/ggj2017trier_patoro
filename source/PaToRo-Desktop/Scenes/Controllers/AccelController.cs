@@ -45,8 +45,8 @@ namespace PaToRo_Desktop.Scenes.Controllers
             if (Rider != null && Rider.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 1600;
-                Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 1600;
+                Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 2000;
+                Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 2000;
 
                 //if (!Rider.Active && game.Inputs.Player(playerIdx).AnyButtonDown)
                 //{

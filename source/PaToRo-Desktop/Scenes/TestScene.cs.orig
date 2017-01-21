@@ -31,7 +31,12 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
 
         // generators
+<<<<<<< HEAD
+//        private PlayerGenerator paddle;
+        private SineStackedGenerator sineGen;
+=======
         private Generator sineGen;
+>>>>>>> origin/master
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -80,7 +85,12 @@ namespace PaToRo_Desktop.Scenes
                 starfield.LoadContent(game.Content);
 
                 // Gens
+<<<<<<< HEAD
+                //paddle = new PlayerGenerator(game);
+                sineGen = new SineStackedGenerator(game);
+=======
                 sineGen = new SpreadGenerator( new SineStackedGenerator(game));
+>>>>>>> origin/master
 
                 Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
                 Level.LoadContent(game.Content);
@@ -90,6 +100,10 @@ namespace PaToRo_Desktop.Scenes
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
+<<<<<<< HEAD
+                //Children.Add(paddle);
+=======
+>>>>>>> origin/master
                 Children.Add(Level);
                 Children.Add(dbgOverlay);
             }
@@ -97,8 +111,20 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
-            CheckForNewPlayers();
+            while (Riders.Count < game.Inputs.NumPlayers)
+            {
+                var newRider = new TheNewWaveRider(game, Riders.Count, 32f);
+                newRider.LoadContent(game.Content);
+                newRider.Level = Level;
+                Children.Add(newRider);
 
+                AccelController controller = new AccelController(game, Riders.Count, newRider);
+                controller.LoadContent(game.Content);
+                Children.Add(controller);
+
+                Riders.Add(newRider);
+                newRider.Spawn();
+            }
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
             // change background color
@@ -118,69 +144,6 @@ namespace PaToRo_Desktop.Scenes
             Synth.Update(gameTime);
 
             base.Update(gameTime);
-
-            CheckPlayerCollisions(gameTime);
-        }
-
-        private void CheckPlayerCollisions(GameTime gameTime)
-        {
-            var Actives = Riders.Where(r => r.Active).ToArray();
-
-            var Pairs = new List<Tuple<TheNewWaveRider, TheNewWaveRider>>();
-
-            for (var i = 0; i<Actives.Length; ++i)
-            {
-                var first = Actives[i];
-                for (var j = i+1; j < Actives.Length; ++j)
-                {
-                    var second = Actives[j];
-
-                    if (first.Phy.CollidesWith(second.Phy))
-                    {
-                        Pairs.Add(Tuple.Create(first, second));
-                    }
-                }
-            }
-
-            foreach(var pair in Pairs)
-            {
-                var tmp = pair.Item1.Phy.Spd;
-                pair.Item1.Phy.Spd = pair.Item2.Phy.Spd;
-                pair.Item2.Phy.Spd = tmp;
-
-                tmp = pair.Item1.Phy.Accel;
-                pair.Item1.Phy.Accel = pair.Item2.Phy.Accel;
-                pair.Item2.Phy.Accel = tmp;
-
-                var diff = pair.Item2.Phy.Pos - pair.Item1.Phy.Pos;
-                var contactPoint = pair.Item1.Phy.Pos + diff * (pair.Item1.Radius / (pair.Item1.Radius + pair.Item2.Radius));
-
-                if (diff.Length() == 0)
-                    diff = Vector2.UnitX;
-
-                var diffN = Vector2.Normalize(diff);
-
-                pair.Item2.Phy.Pos = contactPoint + diffN * (pair.Item2.Radius + 1);
-                pair.Item1.Phy.Pos = contactPoint - diffN * (pair.Item1.Radius + 1);
-            }
-        }
-
-        private void CheckForNewPlayers()
-        {
-            while (Riders.Count < game.Inputs.NumPlayers)
-            {
-                var newRider = new TheNewWaveRider(game, Riders.Count, 32f);
-                newRider.LoadContent(game.Content);
-                newRider.Level = Level;
-                Children.Add(newRider);
-
-                AccelController controller = new AccelController(game, Riders.Count, newRider);
-                controller.LoadContent(game.Content);
-                Children.Add(controller);
-
-                Riders.Add(newRider);
-                newRider.Spawn();
-            }
         }
 
         internal override int HandleInput(GameTime gameTime)

@@ -151,10 +151,10 @@ namespace PaToRo_Desktop.Scenes
                 if (Phy.Pos.Y < Radius) Phy.Pos.Y = Radius;
                 if (Phy.Pos.Y > game.Screen.Height - Radius) Phy.Pos.Y = game.Screen.Height - Radius;
 
-                if (Phy.Spd.X > 800) Phy.Spd.X = 800;
-                if (Phy.Spd.X < -800) Phy.Spd.X = -800;
-                if (Phy.Spd.Y > 800) Phy.Spd.Y = 800;
-                if (Phy.Spd.Y < -800) Phy.Spd.Y = -800;
+                if (Phy.Spd.X > 1200) Phy.Spd.X = 1200;
+                if (Phy.Spd.X < -1200) Phy.Spd.X = -1200;
+                if (Phy.Spd.Y > 1200) Phy.Spd.Y = 1200;
+                if (Phy.Spd.Y < -1200) Phy.Spd.Y = -1200;
 
                 // Check Collision with Level
                 if (Level != null)

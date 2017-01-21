@@ -13,7 +13,7 @@ namespace PaToRo_Desktop.Scenes.Generators
         private readonly Generator baseGenerator;
 
         private float spread = 500;
-        private float spreadLength = 40;
+        private float spreadLength = 10;
 
         public SpreadGenerator(Generator baseGenerator)
         {

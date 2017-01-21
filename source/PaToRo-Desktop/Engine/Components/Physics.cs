@@ -61,21 +61,25 @@ namespace PaToRo_Desktop.Engine.Components
                 HitBox.Center.Y = Pos.Y;
             }
 
-            if (game != null)
-                foreach (var physics in game.Scenes.Current.Children.OfType<IHasPhysics>())
-                {
-                    if (ReferenceEquals(physics.Phy, this) || (physics as TheNewWaveRider) == null || !(physics as TheNewWaveRider).Active)
-                        continue;
+            //if (game != null)
+            //{
+            //    foreach (var other in game.Scenes.Current.Children.OfType<IHasPhysics>())
+            //    {
+            //        if (ReferenceEquals(other.Phy, this) || (other as TheNewWaveRider) == null || !(other as TheNewWaveRider).Active)
+            //            continue;
 
-                    if (CollidesWith(physics.Phy))
-                    {
-                        var accelerationVector = Pos - physics.Phy.Pos;
-                        accelerationVector.Normalize();
-                        this.Accel += accelerationVector * 5000;
-                    }
+            //        if (CollidesWith(other.Phy))
+            //        {
+            //            var accelerationVector = Pos - other.Phy.Pos;
 
-                }
+            //            var forceVector = Spd - other.Phy.Spd;
+            //            var totalSpeed = forceVector.Length();
 
+            //            accelerationVector.Normalize();
+            //            this.Accel += accelerationVector * totalSpeed * 100;
+            //        }
+            //    }
+            //}
         }
 
         public bool CollidesWith(Physics other)
