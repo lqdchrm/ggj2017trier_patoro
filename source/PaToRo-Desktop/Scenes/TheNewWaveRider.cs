@@ -80,6 +80,8 @@ namespace PaToRo_Desktop.Scenes
                 Active = true;
                 Phy.Pos.X = game.Screen.Width * 0.1f;
                 Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Phy.Spd = Vector2.Zero;
+                Phy.Accel = Vector2.Zero;
                 Radius = initialRadius;
             }
         }
@@ -130,7 +132,7 @@ namespace PaToRo_Desktop.Scenes
                 if (float.IsNaN(dot))
                     dot = -0.5f;
 
-                squish = (float)Math.Pow(squish, 2*dot);
+                squish = (float)Math.Pow(squish, 2 * dot);
 
                 var scale = new Vector2(scl * squish, scl / squish);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
@@ -231,7 +233,7 @@ namespace PaToRo_Desktop.Scenes
             else
                 (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(this);
 
-                game.Inputs.Player(PlayerNum)?.Rumble( 1.0f , 0 , 200);
+            game.Inputs.Player(PlayerNum)?.Rumble(1.0f, 0, 200);
             if (Colliding <= 0)
             {
                 Colliding = 1.5f;
