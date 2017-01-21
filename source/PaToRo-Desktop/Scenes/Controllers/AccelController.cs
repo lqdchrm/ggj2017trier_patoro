@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PaToRo_Desktop.Scenes.Controllers
 {
-    public class DirectController : Entity
+    public class AccelController : Entity
     {
         private readonly BaseGame game;
         private int playerIdx;
@@ -24,7 +24,7 @@ namespace PaToRo_Desktop.Scenes.Controllers
 
         public IHasPhysics Entity { get; set; }
 
-        public DirectController(BaseGame game, int playerIdx, IHasPhysics entity)
+        public AccelController(BaseGame game, int playerIdx, IHasPhysics entity)
         {
             this.game = game;
             this.playerIdx = playerIdx;
@@ -44,8 +44,8 @@ namespace PaToRo_Desktop.Scenes.Controllers
             if (Entity != null && Entity.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Entity.Phy.Spd.X = cntrl.Value(Sliders.LeftStickX) * 800;
-                Entity.Phy.Spd.Y = cntrl.Value(Sliders.LeftStickY) * 800;
+                Entity.Phy.Accel.X = cntrl.Value(Sliders.LeftStickX) * 1600;
+                Entity.Phy.Accel.Y = cntrl.Value(Sliders.LeftStickY) * 1600;
             }
         }
 

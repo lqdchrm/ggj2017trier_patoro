@@ -18,18 +18,18 @@ namespace PaToRo_Desktop.Scenes
     {
         private DebugOverlay dbgOverlay;
         internal TheNewWaveRider Rider;
-        private DirectController control;
+
+        // controls
+        private DirectController directControl;
+        private AccelController accelControl;
+
         private Starfield starfield;
 
         private Level level;
 
-        public float Phase;
-        public float LevelSpeedX;
-        public float LevelSpeedY;
-        public float SpeedX;
-        public float SpeedY;
-        public float Direction;
         private Texture2D part;
+
+        // generators
         private PlayerGenerator paddle;
         private SineStackedGenerator sineGen;
 
@@ -43,7 +43,6 @@ namespace PaToRo_Desktop.Scenes
             {
                 base.Initialize();
                 BgColor = Color.Black;
-                Direction = 1.0f;
             }
 
             if (Rider != null)
@@ -77,11 +76,13 @@ namespace PaToRo_Desktop.Scenes
                 Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
                 Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
 
-                control = new DirectController(game, 0, Rider);
-                control.LoadContent(game.Content);
+                // controllers
+                directControl = new DirectController(game, 0, Rider);
+                directControl.LoadContent(game.Content);
 
-                LevelSpeedX = 100.0f;
-                LevelSpeedY = 150.0f;
+                accelControl = new AccelController(game, 0, Rider);
+                accelControl.LoadContent(game.Content);
+
                 part = game.Content.Load<Texture2D>("Images/particle");
 
                 dbgOverlay = new DebugOverlay(game);
@@ -89,7 +90,10 @@ namespace PaToRo_Desktop.Scenes
                 Children.Add(starfield);
                 Children.Add(paddle);
                 Children.Add(level);
-                Children.Add(control);
+                
+                //Children.Add(directControl);
+                Children.Add(accelControl);
+
                 Children.Add(Rider);
                 Children.Add(dbgOverlay);
             }
@@ -114,56 +118,6 @@ namespace PaToRo_Desktop.Scenes
 
             base.Update(gameTime);
         }
-
-        //internal override void Draw(GameTime gameTime)
-        //{
-        //    base.Draw(gameTime);
-        //    int MaxPoints = 100;
-        //    float PosX = ball.Phy.Pos.X;
-        //    float PosY = ball.Phy.Pos.Y;
-        //    float InternalDirection = Direction;
-        //    spriteBatch.Begin();
-        //    for (int i = 0; i <= MaxPoints; ++i)
-        //    {
-        //        PosX += 15.0f; // level speed
-        //        PosY += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
-        //        PosY += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * InternalDirection;
-        //        float Tmp = (SpeedY / 6.0f) + 0.1f;
-        //        if (PosY < game.Screen.Height * Tmp)
-        //        {
-        //            InternalDirection *= -1.0f;
-        //            PosY = game.Screen.Height * Tmp;
-        //        }
-        //        if (PosY > game.Screen.Height * (1.0f - Tmp))
-        //        {
-        //            InternalDirection *= -1.0f;
-        //            PosY = game.Screen.Height * (1.0f - Tmp);
-
-        //        }
-        //        Vector2 Pos = new Vector2(PosX, PosY);
-        //        spriteBatch.Draw(part, Pos, Color.White);
-        //    }
-        //    spriteBatch.End();
-        //}
-
-        //internal override void Update(GameTime gameTime)
-        //{
-        //    base.Update(gameTime);
-        //    ball.Phy.Pos.Y += 1000.0f * (1.0f + SpeedX) / 2.0f * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
-        //    ball.Phy.Pos.Y += LevelSpeedY * gameTime.ElapsedGameTime.Milliseconds / 1000.0f * Direction;
-        //    float Tmp = (SpeedY / 6.0f) + 0.1f;
-        //    if (ball.Phy.Pos.Y < game.Screen.Height * Tmp)
-        //    {
-        //        Direction *= -1.0f;
-        //        ball.Phy.Pos.Y = game.Screen.Height * Tmp;
-        //    }
-        //    if (ball.Phy.Pos.Y > game.Screen.Height * (1.0f - Tmp))
-        //    {
-        //        Direction *= -1.0f;
-        //        ball.Phy.Pos.Y = game.Screen.Height * (1.0f - Tmp);
-
-        //    }
-        //}
 
         internal override int HandleInput(GameTime gameTime)
         {

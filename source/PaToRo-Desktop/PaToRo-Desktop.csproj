@@ -62,6 +62,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\Backgrounds\Starfield.cs" />
+    <Compile Include="Scenes\Controllers\AccelController.cs" />
     <Compile Include="Scenes\DebugOverlay.cs" />
     <Compile Include="Scenes\Funcs\BaseFuncs.cs" />
     <Compile Include="Scenes\Funcs\RandomFuncs.cs" />
