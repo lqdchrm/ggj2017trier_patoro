@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
+using PaToRo_Desktop.Engine.Sound;
 using PaToRo_Desktop.Scenes.Backgrounds;
 using PaToRo_Desktop.Scenes.Controllers;
 using PaToRo_Desktop.Scenes.Funcs;
@@ -11,28 +12,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
     public class TestScene : Scene
     {
         private DebugOverlay dbgOverlay;
-        internal TheNewWaveRider[] Riders;
-        internal Color[] Colors = {Color.Blue, Color.White, Color.Red, Color.Green, Color.PaleGoldenrod};
+        internal readonly List<TheNewWaveRider> Riders;
+
+        // sound
+        private Synth Synth;
 
         private Starfield starfield;
 
         public Level Level;
 
         private Texture2D part;
-        int NumPlayers;
 
         // generators
         private Generator sineGen;
 
         public TestScene(BaseGame game) : base(game)
         {
-            Riders = new TheNewWaveRider[10];
+            Riders = new List<TheNewWaveRider>();
         }
 
         internal override void Initialize()
@@ -42,7 +45,6 @@ namespace PaToRo_Desktop.Scenes
                 base.Initialize();
                 BgColor = Color.Black;
             }
-            NumPlayers = 0;
         }
 
         internal override void Draw(GameTime gameTime)
@@ -51,9 +53,13 @@ namespace PaToRo_Desktop.Scenes
             Vector2 PlayerPointStringPos = new Vector2();
             float LineOffset = 20.0f;
             spriteBatch.Begin();
-            for (int i = 0; i < NumPlayers; i++)
+            for (int i = 0; i < Riders.Count; i++)
             {
-                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player {i+1}: {(int)Riders[i].Points} Points", PlayerPointStringPos, Color.White);
+                var rider = Riders[i];
+                spriteBatch.DrawString(
+                    game.Fonts.Get("debug"),
+                    $"Player {rider.PlayerNum}: {rider.Points} Points",
+                    PlayerPointStringPos, rider.BaseColor);
                 PlayerPointStringPos.Y += LineOffset;
             }
             spriteBatch.End();
@@ -65,6 +71,11 @@ namespace PaToRo_Desktop.Scenes
             {
                 base.LoadContent();
 
+                // Sound
+                Synth = new Synth();
+                Synth.LoadContent(game.Content);
+
+                // Background
                 starfield = new Starfield(game, 700, 8);
                 starfield.LoadContent(game.Content);
 
@@ -75,44 +86,31 @@ namespace PaToRo_Desktop.Scenes
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
-
-                // controllers
-                //directControl = new DirectController(game, 0, Rider);
-                //directControl.LoadContent(game.Content);
-
-                //accelControl = new AccelController(game, 0, Rider);
-                //accelControl.LoadContent(game.Content);
-
                 part = game.Content.Load<Texture2D>("Images/particle");
-
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
                 Children.Add(Level);
-
-                //Children.Add(accelControl);
-
-                //Children.Add(Rider);
-                //Children.Add(Rider2);
                 Children.Add(dbgOverlay);
             }
         }
 
         internal override void Update(GameTime gameTime)
         {
-            if (NumPlayers < game.Inputs.NumPlayers)
+            while (Riders.Count < game.Inputs.NumPlayers)
             {
-                Riders[NumPlayers] = new TheNewWaveRider(game, 32f, Colors[NumPlayers % Colors.Length]);
-                TheNewWaveRider Rider = Riders[NumPlayers];
-                Rider.LoadContent(game.Content);
-                Rider.Level = Level;
-                Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
-                Children.Add(Rider);
-                AccelController controller = new AccelController(game, NumPlayers, Rider);
+                var newRider = new TheNewWaveRider(game, Riders.Count, 32f);
+                newRider.LoadContent(game.Content);
+                newRider.Level = Level;
+                newRider.Phy.Pos.X = game.Screen.Width * 0.1f;
+                newRider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Children.Add(newRider);
+
+                AccelController controller = new AccelController(game, Riders.Count, newRider);
                 controller.LoadContent(game.Content);
                 Children.Add(controller);
-                NumPlayers++;
+
+                Riders.Add(newRider);
             }
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
@@ -129,6 +127,9 @@ namespace PaToRo_Desktop.Scenes
             //    * Matrix.CreateRotationZ(0.3f * MathHelper.PiOver4 * BaseFuncs.Sin(0.05f * t))
             //    * Matrix.CreateTranslation(game.Screen.Width * 0.5f, game.Screen.Height * 0.5f, 0);
 
+            // Sound
+            Synth.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -136,8 +137,17 @@ namespace PaToRo_Desktop.Scenes
         {
             var numPlayers = base.HandleInput(gameTime);
 
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D5))
+                Synth.Play("ggg_1");
+
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D6))
+                Synth.Play("ggg_2");
+
+            if (XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.D7))
+                Synth.Play("ggg_3");
+
             // register Players
-            if (numPlayers < 2)
+            if (numPlayers < 6)
             {
                 dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
                 game.Inputs.AssignToPlayer(numPlayers);
