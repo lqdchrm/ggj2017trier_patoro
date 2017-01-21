@@ -69,8 +69,12 @@ namespace PaToRo_Desktop.Engine.Components
                     if (CollidesWith(physics.Phy))
                     {
                         var accelerationVector = Pos - physics.Phy.Pos;
+
+                        var forceVector = Spd - physics.Phy.Spd;
+                        var totalSpeed = forceVector.Length();
+
                         accelerationVector.Normalize();
-                        this.Accel += accelerationVector * 5000;
+                        this.Accel += accelerationVector * totalSpeed * 100;
                     }
 
                 }
