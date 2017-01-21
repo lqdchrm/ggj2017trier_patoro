@@ -22,7 +22,7 @@ namespace PaToRo_Desktop.Engine.Sound
         public Synth()
         {
             tracks = new Dictionary<string, Dictionary<string, SoundEffectInstance>>();
-            foreach(var song in songs)
+            foreach (var song in songs)
             {
                 tracks.Add(song, new Dictionary<string, SoundEffectInstance>());
             }
@@ -34,16 +34,9 @@ namespace PaToRo_Desktop.Engine.Sound
             {
                 foreach (var voice in voices)
                 {
-                    try
-                    {
-                        var sfx = content.Load<SoundEffect>(string.Format("Sounds/{0}/ggg_{1}", song, voice));
-                        var sfxi = sfx.CreateInstance();
-                        tracks[song].Add(voice, sfxi);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
+                    var sfx = content.Load<SoundEffect>(string.Format("Sounds/{0}/ggg_{1}", song, voice));
+                    var sfxi = sfx.CreateInstance();
+                    tracks[song].Add(voice, sfxi);
                 }
             }
         }
@@ -55,7 +48,7 @@ namespace PaToRo_Desktop.Engine.Sound
             {
                 Play(playing);
             }
-            
+
         }
 
         public void Play(string song)
