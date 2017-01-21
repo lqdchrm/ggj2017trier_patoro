@@ -30,7 +30,7 @@ namespace PaToRo_Desktop.Scenes
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond {  get { return BlockWidth * 1000.0f / TimeStep; } }
+        public float SpdInPixelPerSecond { get { return BlockWidth * 1000.0f / TimeStep; } }
 
         public float getUpperAt(float xPos)
         {
@@ -84,6 +84,7 @@ namespace PaToRo_Desktop.Scenes
 
             if (!stopTime)
                 cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
 
             if (cooldown <= 0)
             {
