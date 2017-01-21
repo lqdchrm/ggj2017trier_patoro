@@ -22,23 +22,6 @@ namespace PaToRo_Desktop.Engine.Input
         public override void Update(GameTime gameTime)
         {
             st = XnaInput.Keyboard.GetState();
-            //if (cooldown > 0)
-            //{
-            //    if (triggered)
-            //    {
-            //        Controller.SetVibration(vibration);
-            //        triggered = false;
-            //        vibrating = true;
-            //    }
-            //    cooldown -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            //    if (cooldown <= 0)
-            //    {
-            //        vibration.LeftMotorSpeed = 0;
-            //        vibration.RightMotorSpeed = 0;
-            //        Controller.SetVibration(vibration);
-            //        vibrating = false;
-            //    }
-            //}
         }
 
         public override bool Get(Buttons btn)
@@ -68,12 +51,26 @@ namespace PaToRo_Desktop.Engine.Input
             return false;
         }
 
+        public float XAxis()
+        {
+            var left = st.IsKeyDown(XnaInput.Keys.Left) ? -1 : 0;
+            var right = st.IsKeyDown(XnaInput.Keys.Right) ? 1 : 0;
+            return left + right;
+        }
+
+        public float YAxis()
+        {
+            var up = st.IsKeyDown(XnaInput.Keys.Up) ? -1 : 0;
+            var down = st.IsKeyDown(XnaInput.Keys.Down) ? 1 : 0;
+            return up + down;
+        }
+
         public override float Get(Sliders sldr)
         {
             switch (sldr)
             {
-                //case Sliders.LeftStickX: return st.ThumbSticks.Left.X;
-                //case Sliders.LeftStickY: return -st.ThumbSticks.Left.Y;
+                case Sliders.LeftStickX: return XAxis();
+                case Sliders.LeftStickY: return YAxis();
                 //case Sliders.RightStickX: return st.ThumbSticks.Right.X;
                 //case Sliders.RightStickY: return -st.ThumbSticks.Right.Y;
                 case Sliders.LeftTrigger: return st.IsKeyDown(XnaInput.Keys.LeftShift) ? 1.0f : 0.0f;

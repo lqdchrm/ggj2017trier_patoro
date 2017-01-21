@@ -31,7 +31,14 @@ namespace PaToRo_Desktop.Scenes
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond { get; set; }
+        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(localTime / Duration.TotalSeconds)); } }
+
+        public TimeSpan Duration { get; private set; }
+        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - localTime); } }
+
+        public float SpdInPixelPerSecondStart { get; private set; }
+        public float SpdInPixelPerSecondEnd { get; private set; }
+
         public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
 
         private float localTime;
@@ -68,13 +75,15 @@ namespace PaToRo_Desktop.Scenes
             return result;
         }
 
-        public Level(BaseGame game, int num, float spdInPixelPerSecond = 500.0f)
+        public Level(BaseGame game, int num, TimeSpan duration, float spdInPixelPerSecondStart = 100.0f, float spdInPixelPerSecondEnd = 2000.0f)
         {
             this.game = game;
 
             upper = new float[num + 1];
             lower = new float[num + 1];
-            this.SpdInPixelPerSecond = spdInPixelPerSecond;
+            this.Duration = duration;
+            this.SpdInPixelPerSecondStart = spdInPixelPerSecondStart;
+            this.SpdInPixelPerSecondEnd = spdInPixelPerSecondEnd;
 
             FillStatic();
         }
@@ -104,9 +113,7 @@ namespace PaToRo_Desktop.Scenes
 
             if (!stopTime)
             {
-                var ds = game.Inputs.Player(0)?.Value(Engine.Input.Sliders.LeftStickX) * 180.0f ?? 0;
-
-                var dx = (SpdInPixelPerSecond + ds) / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                var dx = SpdInPixelPerSecond / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 accumulator += dx;
                 xPos += dx;
                 var numBlocksToSpawn = accumulator / BlockWidth;
@@ -172,7 +179,7 @@ namespace PaToRo_Desktop.Scenes
             }
 
             // render check points
-            pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
+            //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
             pos.Y = getUpperAt(pos.X);
             var scl = new Vector2(2.5f, 2.5f);
             spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Green);

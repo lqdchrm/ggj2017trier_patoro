@@ -147,10 +147,12 @@ namespace PaToRo_Desktop.Scenes
 
                 game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
 
-                Radius -= 3f;
                 if (Radius <= 5.0f)
                 {
-                    game.Scenes.Show("end");
+                    //game.Scenes.Show("end");
+                } else
+                {
+                    Radius -= 3f;
                 }
             }
         }
