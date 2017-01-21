@@ -43,6 +43,38 @@ namespace PaToRo_Desktop.Scenes
 
         private float localTime;
 
+        public struct BorderCollision
+        {
+            public bool wasHit;
+            public float cooldown;
+            public const float maxCooldown = 0.5f;
+            public Color color;
+
+            public float Alpha { get { return cooldown / maxCooldown; } }
+
+            public void Update(float delta)
+            {
+                if (wasHit)
+                {
+                    cooldown -= delta;
+                    if (cooldown < 0)
+                    {
+                        wasHit = false;
+                        cooldown = 0;
+                    }
+                }
+            }
+            public void Hit(Color color)
+            {
+                wasHit = true;
+                cooldown = maxCooldown;
+                this.color = color;
+            }
+        }
+
+        public BorderCollision upperColl;
+        public BorderCollision lowerColl;
+
         public float getUpperAt(float xPos)
         {
             xPos += xOffset;
@@ -92,8 +124,8 @@ namespace PaToRo_Desktop.Scenes
         {
             for (int i = 0; i < upper.Length; ++i)
             {
-                upper[i] = 0.0f;
-                lower[i] = game.Screen.Height;
+                upper[i] = -20.0f;
+                lower[i] = game.Screen.Height + 20f;
             }
         }
 
@@ -107,6 +139,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
                 stopTime = !stopTime;
@@ -130,6 +163,10 @@ namespace PaToRo_Desktop.Scenes
                 }
 
                 xOffset = (BlockWidth + accumulator) % BlockWidth;
+
+                // update border collision structs
+                upperColl.Update(delta);
+                lowerColl.Update(delta);
             }
         }
 
@@ -165,10 +202,10 @@ namespace PaToRo_Desktop.Scenes
 
                 pos.X = px;
                 pos.Y = pu;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, null, color);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, upperColl.color, upperColl.Alpha));
 
                 pos.Y = pl;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, null, color);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, lowerColl.color,  lowerColl.Alpha));
 
                 // render rects
                 //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);

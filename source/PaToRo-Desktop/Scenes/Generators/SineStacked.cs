@@ -28,11 +28,11 @@ namespace PaToRo_Desktop.Scenes.Generators
 
         public float GetUpper(float t)
         {
-            return CalcMid(t) - (float)Math.Sin(t)*100 - 200;
+            return CalcMid(t) - (float)Math.Sin(t)*100 - 250;
         }
         public float GetLower(float t)
         {
-            return CalcMid(t) + (float)Math.Sin(t)*100 + 200;
+            return CalcMid(t) + (float)Math.Sin(t)*100 + 250;
         }
     }
 }

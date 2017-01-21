@@ -45,19 +45,28 @@ namespace PaToRo_Desktop.Scenes.Controllers
             if (Rider != null && Rider.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 1600;
-                Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 1600;
+                Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 4000;
+                Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 4000;
+
+                if (Rider.Active)
+                {
+                    if (game.Inputs.Player(playerIdx).WasPressed(Buttons.A))
+                        Rider.Dash();
+                }
             }
         }
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            var pos = new Vector2(Rider.Phy.Pos.X, Rider.Phy.Pos.Y);
-            for (int i=1; i<10; ++i)
+            if (Rider.Active)
             {
-                spriteBatch.Draw(tex, pos, null, null, origin, 0, scale, Rider.BaseColor);
-                pos.X += Rider.Phy.Spd.X * i * 0.01f;
-                pos.Y += Rider.Phy.Spd.Y * i * 0.01f;
+                var pos = new Vector2(Rider.Phy.Pos.X, Rider.Phy.Pos.Y);
+                for (int i = 1; i < 10; ++i)
+                {
+                    spriteBatch.Draw(tex, pos, null, null, origin, 0, scale, Rider.BaseColor);
+                    pos.X += Rider.Phy.Spd.X * i * 0.01f;
+                    pos.Y += Rider.Phy.Spd.Y * i * 0.01f;
+                }
             }
         }
     }

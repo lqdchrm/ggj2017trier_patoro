@@ -66,7 +66,7 @@ namespace PaToRo_Desktop.Engine.Input
                 case Buttons.Select: return st.Buttons.Back == XnaInput.ButtonState.Pressed;
                 case Buttons.Start: return st.Buttons.Start == XnaInput.ButtonState.Pressed;
 
-                case Buttons.ToggleFullscreen: return st.Buttons.LeftStick == XnaInput.ButtonState.Pressed;
+                case Buttons.ToggleFullscreen: return st.Buttons.Back == XnaInput.ButtonState.Pressed;
             }
             return false;
         }
