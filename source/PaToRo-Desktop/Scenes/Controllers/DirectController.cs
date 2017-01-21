@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace PaToRo_Desktop.Scenes.Controllers
 {
@@ -16,8 +17,12 @@ namespace PaToRo_Desktop.Scenes.Controllers
         private readonly BaseGame game;
         private int playerIdx;
 
-        public IHasPhysics Entity { get; set; }
+        private Texture2D tex;
+        private Vector2 origin;
+        private Vector2 scale;
+        private Color color;
 
+        public IHasPhysics Entity { get; set; }
 
         public DirectController(BaseGame game, int playerIdx, IHasPhysics entity)
         {
@@ -26,6 +31,13 @@ namespace PaToRo_Desktop.Scenes.Controllers
             Entity = entity;
         }
 
+        public void LoadContent(ContentManager content)
+        {
+            tex = content.Load<Texture2D>("Images/particle");
+            origin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
+            scale = new Vector2(0.7f, 0.7f);
+            color = new Color(0.2f, 0.2f, 1.0f, 1.0f);
+        }
 
         internal override void Update(GameTime gameTime)
         {
@@ -39,6 +51,13 @@ namespace PaToRo_Desktop.Scenes.Controllers
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            var pos = new Vector2(Entity.Phy.Pos.X, Entity.Phy.Pos.Y);
+            for (int i=1; i<10; ++i)
+            {
+                spriteBatch.Draw(tex, pos, null, null, origin, 0, scale, color);
+                pos.X += Entity.Phy.Spd.X * i * 0.01f;
+                pos.Y += Entity.Phy.Spd.Y * i * 0.01f;
+            }
         }
     }
 }

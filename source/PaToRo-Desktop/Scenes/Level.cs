@@ -32,12 +32,17 @@ namespace PaToRo_Desktop.Scenes
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
         public float SpdInPixelPerSecond {  get { return BlockWidth * 1000.0f / TimeStep; } }
 
+        private float localTime;
+
         public float getUpperAt(float xPos)
         {
             xPos -= xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
             var result = upper[index];
+
+            // result += BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 *BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
+
             return result;
         }
 
@@ -47,6 +52,9 @@ namespace PaToRo_Desktop.Scenes
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
             var result = lower[index];
+
+            // result -= BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 * BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
+
             return result;
         }
 
@@ -79,6 +87,8 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Update(GameTime gameTime)
         {
+            var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
+
             if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
                 stopTime = !stopTime;
 
@@ -91,7 +101,6 @@ namespace PaToRo_Desktop.Scenes
 
                 if (Generator != null)
                 {
-                    var t = (float)gameTime.TotalGameTime.TotalSeconds;
                     Push(Generator.GetUpper(t), Generator.GetLower(t));
                 }
             }
@@ -127,8 +136,8 @@ namespace PaToRo_Desktop.Scenes
                 // render dots
                 var bufferIndex = (x + start) % (NumValues + 1);
                 var px = x * (game.Screen.Width / NumValues) - xOffset;
-                var pu = upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
-                var pl = lower[bufferIndex];
+                var pu = getUpperAt(px); // upper[bufferIndex]; // + (float)(Math.Sin(t * 4.2f + x * 0.5f) * 20);
+                var pl = getLowerAt(px); // lower[bufferIndex];
 
                 pos.X = px;
                 pos.Y = pu;
@@ -146,11 +155,12 @@ namespace PaToRo_Desktop.Scenes
             }
 
             // render check points
-            pos.X = 50;
+            pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
             pos.Y = getUpperAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Green);
+            var scl = new Vector2(2.5f, 2.5f);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Green);
             pos.Y = getLowerAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Red);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Red);
 
 
 #if DEBUG

@@ -12,6 +12,9 @@ namespace PaToRo_Desktop.Engine
     {
         protected readonly BaseGame game;
 
+        protected bool initialized;
+        protected bool loaded;
+
         protected Color BgColor { get; set; }
         protected SpriteBatch spriteBatch;
         protected Matrix? screenMatrix;
@@ -24,11 +27,13 @@ namespace PaToRo_Desktop.Engine
         internal virtual void Initialize()
         {
             BgColor = Color.Black;
+            initialized = true;
         }
 
         internal virtual void LoadContent()
         {
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+            loaded = true;
         }
 
         internal virtual void UnloadContent()
