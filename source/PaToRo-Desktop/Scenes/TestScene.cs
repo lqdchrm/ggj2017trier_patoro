@@ -61,7 +61,7 @@ namespace PaToRo_Desktop.Scenes
                 starfield = new Starfield(game, 700, 8);
                 starfield.LoadContent(game.Content);
 
-                level = new Level(game, 128, 5);
+                level = new Level(game, 128, 500);
                 level.LoadContent(game.Content);
                 level.Generator = new SineStackedGenerator(game);
 
