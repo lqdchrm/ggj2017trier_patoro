@@ -14,6 +14,7 @@ namespace PaToRo_Desktop.Engine
 
         protected Color BgColor { get; set; }
         protected SpriteBatch spriteBatch;
+        protected Matrix? screenMatrix;
 
         public Scene(BaseGame game)
         {
@@ -43,6 +44,7 @@ namespace PaToRo_Desktop.Engine
         internal override void Update(GameTime gameTime)
         {
             HandleInput(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -56,7 +58,7 @@ namespace PaToRo_Desktop.Engine
         {
             game.GraphicsDevice.Clear(BgColor);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, screenMatrix);
             base.Draw(spriteBatch, gameTime);
             spriteBatch.End();
         }
