@@ -23,6 +23,22 @@ namespace PaToRo_Desktop.Scenes.Funcs
         }
 
         /// <summary>
+        /// sawtooth from -1 to -1 over 1, i.e /\
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static float Saw(float t)
+        {
+            float min = -1;
+            float max = 1;
+            float alpha = (MathHelper.Pi + MathHelper.WrapAngle(t)) / MathHelper.TwoPi;
+            if (alpha < 0.5)
+                return MathHelper.Lerp(min, max, 2 * alpha);
+            else
+                return MathHelper.Lerp(min, max, 2 * (1-alpha));
+        }
+
+        /// <summary>
         /// sawtooth from -1 to 1 increasing, i.e /|
         /// </summary>
         /// <param name="t"></param>
