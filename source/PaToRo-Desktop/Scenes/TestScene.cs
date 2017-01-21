@@ -19,6 +19,7 @@ namespace PaToRo_Desktop.Scenes
         private DebugOverlay dbgOverlay;
         private TheNewWaveRider rider;
         private DirectController control;
+        private WaveController control2;
         private Starfield starfield;
 
         private Level level;
@@ -37,7 +38,6 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Initialize()
         {
-            //base.Initialize();
             BgColor = Color.Black;
             Direction = 1.0f;
             if (rider != null)
@@ -65,6 +65,7 @@ namespace PaToRo_Desktop.Scenes
             rider.Phy.RotSpd = 20f;
 
             control = new DirectController(game, 0, rider);
+            control2 = new WaveController(game, 0, rider);
 
             LevelSpeedX = 100.0f;
             LevelSpeedY = 150.0f;
@@ -74,7 +75,7 @@ namespace PaToRo_Desktop.Scenes
 
             Children.Add(starfield);
             Children.Add(level);
-            Children.Add(control);
+            Children.Add(control2);
             Children.Add(rider);
             Children.Add(dbgOverlay);
         }
