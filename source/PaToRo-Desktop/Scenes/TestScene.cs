@@ -53,8 +53,9 @@ namespace PaToRo_Desktop.Scenes
             level.LoadContent(game.Content);
             level.Generator = new SineStackedGenerator(game);
 
-            rider = new TheNewWaveRider();
+            rider = new TheNewWaveRider(game, 32f);
             rider.LoadContent(game.Content);
+            rider.Level = level;
             rider.Phy.Pos.X = game.Screen.Width * 0.1f;
             rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
             rider.Phy.RotSpd = 20f;

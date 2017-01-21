@@ -14,6 +14,8 @@ namespace PaToRo_Desktop.Scenes
 {
     public class TheNewWaveRider : Entity, IHasPhysics
     {
+        private readonly BaseGame game;
+
         private Texture2D halo;
         private Vector2 haloOrigin;
 
@@ -21,10 +23,15 @@ namespace PaToRo_Desktop.Scenes
         private Vector2 partOrigin;
 
         public Physics Phy { get; private set; }
+        public float Radius;
 
-        public TheNewWaveRider()
+        public Level Level { get; set; }
+
+        public TheNewWaveRider(BaseGame game, float radius)
         {
+            this.game = game;
             Phy = new Physics(null);
+            this.Radius = radius;
         }
 
         internal void LoadContent(ContentManager content)
@@ -46,22 +53,23 @@ namespace PaToRo_Desktop.Scenes
                 BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t+2)),    // blue
                 1.0f);
 
-            var scale = new Vector2(0.4f, 0.4f);
+            var scl = 2 * Radius / halo.Width;
+            var scale = new Vector2(scl, scl);
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
             spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
 
             float factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(t));   // -> 0..1
-            scale.X = scale.Y = 0.4f * factor;
+            scale.X = scale.Y = scl * factor;
             color.A = (byte)(255 * factor);
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
 
             factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t*2.6f));   // -> 0..1
-            scale.X = scale.Y = 0.4f * factor;
+            scale.X = scale.Y = scl * factor;
             color.A = (byte)(255 * factor);
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
 
             factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
-            scale.X = scale.Y = 0.4f * factor;
+            scale.X = scale.Y = scl * factor;
             color.A = (byte)(255 * factor);
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
         }
@@ -69,6 +77,25 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             Phy.Update(gameTime);
+
+            // Check Collision with Level
+            if (Level != null)
+            {
+                var upper = Level.getUpperAt(Phy.Pos.X);
+                var lower = Level.getLowerAt(Phy.Pos.X);
+
+                if (Phy.Pos.Y < upper + Radius)
+                {
+                    Phy.Pos.Y = upper + Radius;
+                    game.Inputs.Player(0)?.Rumble(0.5f, 0, 200);
+                }
+
+                if (Phy.Pos.Y > lower - Radius)
+                {
+                    Phy.Pos.Y = lower - Radius;
+                    game.Inputs.Player(0)?.Rumble(0, 0.5f, 200);
+                }
+            }
         }
     }
 }
