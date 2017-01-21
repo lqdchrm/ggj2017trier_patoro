@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
 using PaToRo_Desktop.Engine.Input;
@@ -29,6 +30,7 @@ namespace PaToRo_Desktop.Scenes
         public Level Level;
 
         private Texture2D part;
+        private SoundEffect hitSnd;
 
         // generators
         private Generator sineGen;
@@ -75,6 +77,8 @@ namespace PaToRo_Desktop.Scenes
                 Synth = new Synth();
                 Synth.LoadContent(game.Content);
 
+                hitSnd = game.Content.Load<SoundEffect>("Sounds/fx/hit");
+
                 // Background
                 starfield = new Starfield(game, 700, 8);
                 starfield.LoadContent(game.Content);
@@ -82,7 +86,7 @@ namespace PaToRo_Desktop.Scenes
                 // Gens
                 sineGen = new SpreadGenerator( new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
+                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 1500);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
@@ -138,6 +142,7 @@ namespace PaToRo_Desktop.Scenes
                     if (first.Phy.CollidesWith(second.Phy))
                     {
                         Pairs.Add(Tuple.Create(first, second));
+                        hitSnd.Play();
                     }
                 }
             }

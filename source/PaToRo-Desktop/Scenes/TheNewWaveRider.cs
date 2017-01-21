@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine.Components;
 using Microsoft.Xna.Framework.Content;
 using PaToRo_Desktop.Scenes.Funcs;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PaToRo_Desktop.Scenes
 {
@@ -21,6 +22,9 @@ namespace PaToRo_Desktop.Scenes
 
         private Texture2D part;
         private Vector2 partOrigin;
+
+        private SoundEffect hitSnd;
+        private SoundEffect damageSnd;
 
         private Color color;
         public Color BaseColor { get; private set; }
@@ -64,6 +68,9 @@ namespace PaToRo_Desktop.Scenes
 
             part = content.Load<Texture2D>("Images/particle");
             partOrigin = new Vector2(part.Width * 0.5f, part.Height * 0.5f);
+
+            hitSnd = content.Load<SoundEffect>("Sounds/fx/hit2");
+            damageSnd = content.Load<SoundEffect>("Sounds/fx/damage");
         }
 
         public void Spawn()
@@ -191,12 +198,14 @@ namespace PaToRo_Desktop.Scenes
         public void Collide(bool upper)
         {
             // color = upper ? Color.Green : Color.Red;
+            hitSnd.Play();
 
             if (Colliding <= 0)
             {
                 Colliding = 1.5f;
 
                 game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
+                damageSnd.Play();
 
                 if (Radius <= 15.0f)
                 {

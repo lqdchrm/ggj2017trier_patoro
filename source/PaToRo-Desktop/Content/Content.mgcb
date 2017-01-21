@@ -259,3 +259,21 @@
 /processorParam:Quality=Best
 /build:Sounds/ggg_3/ggg_Vibrant.ogg
 
+#begin Sounds/fx/hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/fx/hit.wav
+
+#begin Sounds/fx/damage.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/fx/damage.wav
+
+#begin Sounds/fx/hit2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/fx/hit2.wav
+
