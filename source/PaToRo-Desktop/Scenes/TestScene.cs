@@ -68,13 +68,19 @@ namespace PaToRo_Desktop.Scenes
 
                 level = new Level(game, 128, 500);
                 level.LoadContent(game.Content);
-                level.Generator = sineGen; // paddle;
+                level.Generator = new SpreadGenerator(sineGen); // paddle;
 
                 Rider = new TheNewWaveRider(game, 32f);
                 Rider.LoadContent(game.Content);
                 Rider.Level = level;
                 Rider.Phy.Pos.X = game.Screen.Width * 0.1f;
                 Rider.Phy.Pos.Y = game.Screen.Height * 0.5f;
+
+                var Rider2 = new TheNewWaveRider(game, 32f);
+                Rider2.LoadContent(game.Content);
+                Rider2.Level = level;
+                Rider2.Phy.Pos.X = game.Screen.Width * 0.3f;
+                Rider2.Phy.Pos.Y = game.Screen.Height * 0.5f;
 
                 // controllers
                 directControl = new DirectController(game, 0, Rider);
@@ -90,11 +96,12 @@ namespace PaToRo_Desktop.Scenes
                 Children.Add(starfield);
                 Children.Add(paddle);
                 Children.Add(level);
-                
+
                 // Children.Add(directControl);
                 Children.Add(accelControl);
 
                 Children.Add(Rider);
+                Children.Add(Rider2);
                 Children.Add(dbgOverlay);
             }
         }

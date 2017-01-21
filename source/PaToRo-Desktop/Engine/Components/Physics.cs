@@ -20,7 +20,9 @@ namespace PaToRo_Desktop.Engine.Components
 
         public Circle HitBox;
 
-        public Physics(float? radius)
+        private BaseGame game;
+
+        public Physics(float? radius, BaseGame game)
         {
             Pos = new Vector2();
             Rot = 0;
@@ -29,6 +31,8 @@ namespace PaToRo_Desktop.Engine.Components
             RotSpd = 0;
 
             HitBox = radius.HasValue ? new Circle(Vector2.Zero, radius.Value) : null;
+
+            this.game = game;
         }
 
         public void Update(GameTime gameTime)
@@ -52,13 +56,29 @@ namespace PaToRo_Desktop.Engine.Components
                 HitBox.Center.X = Pos.X;
                 HitBox.Center.Y = Pos.Y;
             }
+
+            if (game != null)
+                foreach (var physics in game.Scenes.Current.Children.OfType<IHasPhysics>())
+                {
+                    if (ReferenceEquals(physics, this))
+                        continue;
+
+                    if (CollidesWith(physics.Phy))
+                    {
+                        var accelerationVector = physics.Phy.Pos - Pos;
+                        accelerationVector.Normalize();
+                        this.Accel += Accel * 100;
+                    }
+
+                }
+
         }
 
         public bool CollidesWith(Physics other)
         {
-            if (HitBox != null && other.HitBox != null)
+            if (HitBox == null || other.HitBox == null)
                 return false;
-                
+
             return HitBox.Intersects(other.HitBox);
         }
 
