@@ -203,7 +203,7 @@ namespace PaToRo_Desktop.Scenes
         public void Collide(bool upper)
         {
             // color = upper ? Color.Green : Color.Red;
-            hitSnd.Play();
+            hitSnd.Play(0.5f, 0, 0);
 
             if (upper)
                 (game.Scenes.Current as TestScene).Level.upperColl.Hit(BaseColor);
@@ -215,7 +215,7 @@ namespace PaToRo_Desktop.Scenes
                 Colliding = 1.5f;
 
                 game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
-                damageSnd.Play();
+                damageSnd.Play(0.5f, 0, 0);
 
                 if (Radius <= 15.0f)
                 {
