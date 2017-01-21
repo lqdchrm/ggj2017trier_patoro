@@ -24,6 +24,7 @@ namespace PaToRo_Desktop.Scenes
 
         public Physics Phy { get; private set; }
         public float Radius;
+        public bool Colliding;
 
         public Level Level { get; set; }
 
@@ -53,25 +54,34 @@ namespace PaToRo_Desktop.Scenes
                 BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t+2)),    // blue
                 1.0f);
 
+            // Outer Halo
             var scl = 2 * Radius / halo.Width;
             var scale = new Vector2(scl, scl);
             spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
-            spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
 
-            float factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(t));   // -> 0..1
-            scale.X = scale.Y = scl * factor;
-            color.A = (byte)(255 * factor);
-            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+            // Inner Stuff
+            if (!Colliding)
+            {
+                // Dot
+                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, 0, null, color);
 
-            factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t*2.6f));   // -> 0..1
-            scale.X = scale.Y = scl * factor;
-            color.A = (byte)(255 * factor);
-            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                // Halos
+                float factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(t));   // -> 0..1
+                scale.X = scale.Y = scl * factor;
+                color.A = (byte)(255 * factor);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
 
-            factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
-            scale.X = scale.Y = scl * factor;
-            color.A = (byte)(255 * factor);
-            spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+                // Inner Halos
+                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
+                scale.X = scale.Y = scl * factor;
+                color.A = (byte)(255 * factor);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+
+                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
+                scale.X = scale.Y = scl * factor;
+                color.A = (byte)(255 * factor);
+                spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, 0, scale, color);
+            }
         }
 
         internal override void Update(GameTime gameTime)
@@ -84,16 +94,19 @@ namespace PaToRo_Desktop.Scenes
                 var upper = Level.getUpperAt(Phy.Pos.X);
                 var lower = Level.getLowerAt(Phy.Pos.X);
 
+                Colliding = false;
                 if (Phy.Pos.Y < upper + Radius)
                 {
                     Phy.Pos.Y = upper + Radius;
                     game.Inputs.Player(0)?.Rumble(0.5f, 0, 200);
+                    Colliding = true;
                 }
 
                 if (Phy.Pos.Y > lower - Radius)
                 {
                     Phy.Pos.Y = lower - Radius;
                     game.Inputs.Player(0)?.Rumble(0, 0.5f, 200);
+                    Colliding = true;
                 }
             }
         }
