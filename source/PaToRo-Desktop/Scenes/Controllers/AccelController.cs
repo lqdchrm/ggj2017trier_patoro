@@ -22,14 +22,14 @@ namespace PaToRo_Desktop.Scenes.Controllers
         private Vector2 scale;
         private Color color;
 
-        public IHasPhysics Entity { get; set; }
+        public TheNewWaveRider Rider { get; set; }
 
-        public AccelController(BaseGame game, int playerIdx, IHasPhysics entity)
+        public AccelController(BaseGame game, int playerIdx, TheNewWaveRider rider)
         {
             this.game = game;
             this.playerIdx = playerIdx;
-            Entity = entity;
-            Entity.Phy.Dmp = 0.95f;
+            this.Rider = rider;
+            Rider.Phy.Dmp = 0.95f;
         }
 
         public void LoadContent(ContentManager content)
@@ -42,22 +42,22 @@ namespace PaToRo_Desktop.Scenes.Controllers
 
         internal override void Update(GameTime gameTime)
         {
-            if (Entity != null && Entity.Phy != null && game.Inputs.NumPlayers > playerIdx)
+            if (Rider != null && Rider.Phy != null && game.Inputs.NumPlayers > playerIdx)
             {
                 var cntrl = game.Inputs.Player(playerIdx);
-                Entity.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 1600;
-                Entity.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 1600;
+                Rider.Phy.Accel.X += cntrl.Value(Sliders.LeftStickX) * 1600;
+                Rider.Phy.Accel.Y += cntrl.Value(Sliders.LeftStickY) * 1600;
             }
         }
 
         internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            var pos = new Vector2(Entity.Phy.Pos.X, Entity.Phy.Pos.Y);
+            var pos = new Vector2(Rider.Phy.Pos.X, Rider.Phy.Pos.Y);
             for (int i=1; i<10; ++i)
             {
-                spriteBatch.Draw(tex, pos, null, null, origin, 0, scale, color);
-                pos.X += Entity.Phy.Spd.X * i * 0.01f;
-                pos.Y += Entity.Phy.Spd.Y * i * 0.01f;
+                spriteBatch.Draw(tex, pos, null, null, origin, 0, scale, Rider.BaseColor);
+                pos.X += Rider.Phy.Spd.X * i * 0.01f;
+                pos.Y += Rider.Phy.Spd.Y * i * 0.01f;
             }
         }
     }
