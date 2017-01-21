@@ -51,7 +51,13 @@ namespace PaToRo_Desktop.Scenes.Controllers
                 if (Rider.Active)
                 {
                     if (game.Inputs.Player(playerIdx).WasPressed(Buttons.A))
-                        Rider.Dash();
+                        Rider.Phy.Accel *= 10;
+
+                    if (game.Inputs.Player(playerIdx).IsDown(Buttons.B))
+                        Rider.Phy.Dmp = 0.85f;
+                    else
+                        Rider.Phy.Dmp = 0.95f;
+
                 }
             }
         }

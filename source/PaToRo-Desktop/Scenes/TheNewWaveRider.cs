@@ -61,11 +61,6 @@ namespace PaToRo_Desktop.Scenes
             initialRadius = radius;
         }
 
-        internal void Dash()
-        {
-            Phy.Accel *= 10;
-        }
-
         internal void LoadContent(ContentManager content)
         {
             halo = content.Load<Texture2D>("Images/halo");
@@ -220,7 +215,6 @@ namespace PaToRo_Desktop.Scenes
 
         public void Collide(bool upper)
         {
-            // color = upper ? Color.Green : Color.Red;
             hitSnd.Play(0.5f, 0, 0);
 
             if (upper)
