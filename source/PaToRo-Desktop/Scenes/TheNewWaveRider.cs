@@ -205,6 +205,11 @@ namespace PaToRo_Desktop.Scenes
             // color = upper ? Color.Green : Color.Red;
             hitSnd.Play();
 
+            if (upper)
+                (game.Scenes.Current as TestScene).Level.upperColl.Hit(BaseColor);
+            else
+                (game.Scenes.Current as TestScene).Level.lowerColl.Hit(BaseColor);
+
             if (Colliding <= 0)
             {
                 Colliding = 1.5f;
