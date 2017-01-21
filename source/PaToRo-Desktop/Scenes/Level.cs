@@ -24,21 +24,27 @@ namespace PaToRo_Desktop.Scenes
         private float[] lower;
         private int start = 0;
         private float xOffset;
-        private float cooldown = 0;          // tracks time till new spawn
+        private float accumulator = 0;          // tracks time till new spawn
+        private float xPos;
 
         public Generator Generator { get; set; }
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond {  get { return BlockWidth * 1000.0f / TimeStep; } }
+        public float SpdInPixelPerSecond { get; set; }
+        public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
 
         private float localTime;
 
         public float getUpperAt(float xPos)
         {
-            xPos -= xOffset;
+            xPos += xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
+            while(index < 0)
+            {
+                index += NumValues + 1;
+            }
             var result = upper[index];
 
             // result += BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 *BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
@@ -48,9 +54,13 @@ namespace PaToRo_Desktop.Scenes
 
         public float getLowerAt(float xPos)
         {
-            xPos -= xOffset;
+            xPos += xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
             var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
+            while (index < 0)
+            {
+                index += NumValues + 1;
+            }
             var result = lower[index];
 
             // result -= BaseFuncs.MapTo(-50, 0, BaseFuncs.Saw(-xPos / 40.0f + localTime * 10) * 2 * BaseFuncs.Sin(xPos / 40.0f + localTime * 5));
@@ -58,13 +68,13 @@ namespace PaToRo_Desktop.Scenes
             return result;
         }
 
-        public Level(BaseGame game, int num, float timeStep = 50.0f)
+        public Level(BaseGame game, int num, float spdInPixelPerSecond = 500.0f)
         {
             this.game = game;
 
             upper = new float[num + 1];
             lower = new float[num + 1];
-            this.TimeStep = timeStep;
+            this.SpdInPixelPerSecond = spdInPixelPerSecond;
 
             FillStatic();
         }
@@ -93,20 +103,25 @@ namespace PaToRo_Desktop.Scenes
                 stopTime = !stopTime;
 
             if (!stopTime)
-                cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (cooldown <= 0)
             {
-                cooldown = TimeStep;
+                var dx = SpdInPixelPerSecond / 1000.0f * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                accumulator += dx;
+                xPos += dx;
+                var numBlocksToSpawn = accumulator / BlockWidth;
 
-                if (Generator != null)
+                while (numBlocksToSpawn > 1)
                 {
-                    Push(Generator.GetUpper(t), Generator.GetLower(t));
+                    if (Generator != null)
+                    {
+                        var dt = numBlocksToSpawn * BlockWidth;
+                        Push(Generator.GetUpper((xPos - dt)/ 200), Generator.GetLower((xPos - dt) / 200));
+                    }
+                    --numBlocksToSpawn;
+                    accumulator -= BlockWidth;
                 }
-            }
 
-            float alpha = (TimeStep - cooldown) / TimeStep;
-            xOffset = BlockWidth * alpha;
+                xOffset = (BlockWidth + accumulator) % BlockWidth;
+            }
         }
 
         private void Push(float _upper, float _lower)
