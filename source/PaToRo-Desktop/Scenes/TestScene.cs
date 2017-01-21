@@ -86,7 +86,7 @@ namespace PaToRo_Desktop.Scenes
                 // Gens
                 sineGen = new SpreadGenerator( new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromMinutes(2), 50, 1000);
+                Level = new Level(game, 128, TimeSpan.FromSeconds(10), 50, 1000);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 

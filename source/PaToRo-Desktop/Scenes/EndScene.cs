@@ -48,6 +48,11 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start))
+            {
+                game.Scenes.Show("level");
+                return;
+            } 
             if (GameOverPositionX > - 500.0f) {
                 GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             } else {

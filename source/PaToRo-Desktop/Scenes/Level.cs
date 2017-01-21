@@ -139,6 +139,10 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            if (gameTime.TotalGameTime > Duration)
+            {
+                game.Scenes.Show("end");
+            }
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D9))
