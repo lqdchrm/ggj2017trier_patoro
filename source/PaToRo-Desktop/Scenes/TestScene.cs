@@ -60,7 +60,7 @@ namespace PaToRo_Desktop.Scenes
                 var rider = Riders[i];
                 spriteBatch.DrawString(
                     game.Fonts.Get("debug"),
-                    $"Player {rider.PlayerNum}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
+                    $"Player {rider.PlayerNum + 1}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
                     PlayerPointStringPos, rider.BaseColor);
                 PlayerPointStringPos.Y += LineOffset;
             }
@@ -84,7 +84,7 @@ namespace PaToRo_Desktop.Scenes
                 starfield.LoadContent(game.Content);
 
                 // Gens
-                sineGen = new SpreadGenerator( new SineStackedGenerator(game));
+                sineGen = new SpreadGenerator(new SineStackedGenerator(game));
 
                 Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
                 Level.LoadContent(game.Content);
@@ -132,10 +132,10 @@ namespace PaToRo_Desktop.Scenes
 
             var Pairs = new List<Tuple<TheNewWaveRider, TheNewWaveRider>>();
 
-            for (var i = 0; i<Actives.Length; ++i)
+            for (var i = 0; i < Actives.Length; ++i)
             {
                 var first = Actives[i];
-                for (var j = i+1; j < Actives.Length; ++j)
+                for (var j = i + 1; j < Actives.Length; ++j)
                 {
                     var second = Actives[j];
 
@@ -143,11 +143,14 @@ namespace PaToRo_Desktop.Scenes
                     {
                         Pairs.Add(Tuple.Create(first, second));
                         hitSnd.Play();
+                        game.Inputs.Player(first.PlayerNum)?.Rumble(0, 1.0f, 200);
+                        game.Inputs.Player(second.PlayerNum)?.Rumble(0, 1.0f, 200);
+
                     }
                 }
             }
 
-            foreach(var pair in Pairs)
+            foreach (var pair in Pairs)
             {
                 var tmp = pair.Item1.Phy.Spd;
                 pair.Item1.Phy.Spd = pair.Item2.Phy.Spd;
@@ -173,7 +176,7 @@ namespace PaToRo_Desktop.Scenes
         public void Reset()
         {
             Level.Restart();
-            foreach( TheNewWaveRider Rider in Riders)
+            foreach (TheNewWaveRider Rider in Riders)
             {
                 Rider.Reset();
             }

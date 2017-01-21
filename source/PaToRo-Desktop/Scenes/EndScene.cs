@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using PaToRo_Desktop.Engine;
 using System;
+using System.Linq;
 
 namespace PaToRo_Desktop.Scenes
 {
@@ -30,15 +31,15 @@ namespace PaToRo_Desktop.Scenes
             foreach (char c in "Game Over !")
             {
                 TextPosition.X += OffsetX;
-                TextPosition.Y = (float)Math.Sin(TextPosition.X * 1/TextWavelength) * TextAmplitude + OffsetY;
-                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"{c}", TextPosition, Colors[Counter%Colors.Length]);
+                TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
                 Counter++;
             }
-            Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f, game.Screen.Height / 2.0f);
+            Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
             Counter = 0;
-            foreach(TheNewWaveRider Rider in testScene.Riders)
+            foreach (TheNewWaveRider Rider in testScene.Riders.OrderByDescending(r => r.Points))
             {
-                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Score Player {Rider.PlayerNum}: {Rider.Points}", ScorePosition, Colors[Counter%Colors.Length]);
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Score Player {Rider.PlayerNum + 1}: {Rider.Points:0}", ScorePosition, Rider.BaseColor);
                 ScorePosition.Y += 30;
                 Counter++;
             }
@@ -53,10 +54,13 @@ namespace PaToRo_Desktop.Scenes
                 testScene.Reset();
                 game.Scenes.Show("level");
                 return;
-            } 
-            if (GameOverPositionX > - 500.0f) {
+            }
+            if (GameOverPositionX > -500.0f)
+            {
                 GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            } else {
+            }
+            else
+            {
                 GameOverPositionX = game.Screen.Width;
             }
         }

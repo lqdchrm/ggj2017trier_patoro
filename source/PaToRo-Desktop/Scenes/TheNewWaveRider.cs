@@ -196,7 +196,8 @@ namespace PaToRo_Desktop.Scenes
                         Collide(false);
                     }
                 }
-            } else
+            }
+            else
             {
                 RespawnTimerInSec -= delta;
                 if (RespawnTimerInSec <= 0)
@@ -216,11 +217,11 @@ namespace PaToRo_Desktop.Scenes
             else
                 (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(BaseColor);
 
+                game.Inputs.Player(PlayerNum)?.Rumble( 1.0f , 0 , 200);
             if (Colliding <= 0)
             {
                 Colliding = 1.5f;
 
-                game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
                 damageSnd.Play(0.5f, 0, 0);
 
                 if (Radius <= 15.0f)
