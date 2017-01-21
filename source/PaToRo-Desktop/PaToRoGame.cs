@@ -26,6 +26,10 @@ namespace PaToRo_Desktop
 
             Scenes.Add("level", new TestScene(this));
             Scenes.Show("level");
+
+#if !Debug
+            Screen.ToggleFullscreen();
+#endif
         }
     }
 }
