@@ -10,7 +10,7 @@ namespace PaToRo_Desktop.Scenes
 {
     public class StarfieldScene : Scene
     {
-        private Starfield starfield;
+        private static Starfield starfield;
 
 
         public StarfieldScene(BaseGame game) : base(game)
@@ -21,8 +21,11 @@ namespace PaToRo_Desktop.Scenes
         {
             base.InternalLoadContent();
             // Background
-            starfield = new Starfield(game, 700, 8);
-            starfield.LoadContent(game.Content);
+            if (starfield == null)
+            {
+                starfield = new Starfield(game, 700, 8);
+                starfield.LoadContent(game.Content);
+            }
             Children.Add(starfield);
 
         }

@@ -54,7 +54,7 @@ namespace PaToRo_Desktop.Scenes.Controllers
                         Rider.Phy.Accel *= 10;
 
                     if (game.Inputs.Player(playerIdx).IsDown(Buttons.B))
-                        Rider.Phy.Dmp = 0.85f;
+                        Rider.Phy.Dmp = 0.9f;
                     else
                         Rider.Phy.Dmp = 0.95f;
 

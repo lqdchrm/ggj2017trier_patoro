@@ -13,6 +13,7 @@ namespace PaToRo_Desktop.Scenes
     {
         private SpriteFont font;
         private bool startGame;
+        private float startPressed;
 
         public StartScene(BaseGame game) : base(game)
         {
@@ -36,7 +37,15 @@ namespace PaToRo_Desktop.Scenes
 
 
             var position = (new Vector2(game.Screen.Width, game.Screen.Height) - m) / 2f;
-            spriteBatch.DrawString(font, title, position, Color.Red);
+
+            var baseColor = Color.Red;
+            if (this.startGame)
+            {
+                var progress = MathHelper.Clamp(((float)gameTime.TotalGameTime.TotalSeconds - (float)startPressed), 0f, 1f);
+                baseColor = Color.Lerp(baseColor, Color.Transparent, progress);
+            }
+
+            spriteBatch.DrawString(font, title, position, baseColor);
 
         }
 
@@ -45,7 +54,19 @@ namespace PaToRo_Desktop.Scenes
             base.Update(gameTime);
 
             if (game.Inputs.Any(x => x.AnyButtonDown))
+            {
                 startGame = true;
+                this.startPressed = (float)gameTime.TotalGameTime.TotalSeconds;
+            }
+
+            if (this.startGame)
+            {
+                var progress = MathHelper.Clamp(((float)gameTime.TotalGameTime.TotalSeconds - (float)startPressed), 0f, 1f);
+                if (progress == 1)
+                {
+                    game.Scenes.Show("level");
+                }
+            }
         }
 
     }
