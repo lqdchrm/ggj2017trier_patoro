@@ -80,6 +80,8 @@ namespace PaToRo_Desktop.Scenes
                 Active = true;
                 Phy.Pos.X = game.Screen.Width * 0.1f;
                 Phy.Pos.Y = game.Screen.Height * 0.5f;
+                Phy.Spd = Vector2.Zero;
+                Phy.Accel = Vector2.Zero;
                 Radius = initialRadius;
             }
         }
@@ -130,14 +132,14 @@ namespace PaToRo_Desktop.Scenes
                 if (float.IsNaN(dot))
                     dot = -0.5f;
 
-                squish = (float)Math.Pow(squish, 2*dot);
+                squish = (float)Math.Pow(squish, 2 * dot);
 
                 var scale = new Vector2(scl * squish, scl / squish);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
 
                 // Dot
-                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, null, color);
+                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, Vector2.One * TestScene.BaseScale, color);
 
                 // Halos
                 float factor = BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.SawUp(t));
@@ -158,6 +160,15 @@ namespace PaToRo_Desktop.Scenes
                 scale.Y = scl * factor / squish;
                 color.A = (byte)(255 * factor);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
+
+                // Border
+                var pos = new Vector2();
+                pos.X = Phy.Pos.X;
+                pos.Y = (game.Scenes.Current as TestScene).Level.getUpperAt(pos.X);
+                var _scl = new Vector2(2.5f, 2.5f);
+                spriteBatch.Draw(part, pos, null, null, partOrigin, 0, _scl, BaseColor);
+                pos.Y = (game.Scenes.Current as TestScene).Level.getLowerAt(pos.X);
+                spriteBatch.Draw(part, pos, null, null, partOrigin, 0, _scl, BaseColor);
             }
         }
 
@@ -218,11 +229,11 @@ namespace PaToRo_Desktop.Scenes
             hitSnd.Play(0.5f, 0, 0);
 
             if (upper)
-                (game.Scenes.Current as TestScene)?.Level.upperColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.upperColl.Hit(this);
             else
-                (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(BaseColor);
+                (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(this);
 
-                game.Inputs.Player(PlayerNum)?.Rumble( 1.0f , 0 , 200);
+            game.Inputs.Player(PlayerNum)?.Rumble(1.0f, 0, 200);
             if (Colliding <= 0)
             {
                 Colliding = 1.5f;

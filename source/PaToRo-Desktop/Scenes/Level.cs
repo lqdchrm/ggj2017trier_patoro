@@ -40,7 +40,7 @@ namespace PaToRo_Desktop.Scenes
         public float SpdInPixelPerSecondStart { get; private set; }
         public float SpdInPixelPerSecondEnd { get; private set; }
 
-        public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
+        public float BlocksPerSecond { get { return SpdInPixelPerSecond / BlockWidth; } }
 
 
         public struct BorderCollision
@@ -48,7 +48,7 @@ namespace PaToRo_Desktop.Scenes
             public bool wasHit;
             public float cooldown;
             public const float maxCooldown = 0.5f;
-            public Color color;
+            public TheNewWaveRider player;
 
             public float Alpha { get { return cooldown / maxCooldown; } }
 
@@ -64,23 +64,29 @@ namespace PaToRo_Desktop.Scenes
                     }
                 }
             }
-            public void Hit(Color color)
+            public void Hit(TheNewWaveRider player)
             {
                 wasHit = true;
                 cooldown = maxCooldown;
-                this.color = color;
+                this.player = player;
+                TestScene.BaseScale = 2.5f;
             }
         }
 
         public BorderCollision upperColl;
         public BorderCollision lowerColl;
 
-        public float getUpperAt(float xPos)
+        private int getIndexAt(float xPos)
         {
             xPos += xOffset;
             var testPos = (xPos / game.Screen.Width) * NumValues;
-            var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
-            while(index < 0)
+            return ((int)Math.Round(testPos) + start) % (NumValues + 1);
+        }
+
+        public float getUpperAt(float xPos)
+        {
+            var index = getIndexAt(xPos);
+            while (index < 0)
             {
                 index += NumValues + 1;
             }
@@ -93,9 +99,7 @@ namespace PaToRo_Desktop.Scenes
 
         public float getLowerAt(float xPos)
         {
-            xPos += xOffset;
-            var testPos = (xPos / game.Screen.Width) * NumValues;
-            var index = ((int)Math.Round(testPos) + start) % (NumValues + 1);
+            var index = getIndexAt(xPos);
             while (index < 0)
             {
                 index += NumValues + 1;
@@ -129,11 +133,7 @@ namespace PaToRo_Desktop.Scenes
 
         private void FillStatic()
         {
-            for (int i = 0; i < upper.Length; ++i)
-            {
-                upper[i] = -20.0f;
-                lower[i] = game.Screen.Height + 20f;
-            }
+            accumulator += BlockWidth * upper.Length;
         }
 
         internal void LoadContent(ContentManager content)
@@ -168,7 +168,7 @@ namespace PaToRo_Desktop.Scenes
                     if (Generator != null)
                     {
                         var dt = numBlocksToSpawn * BlockWidth;
-                        Push(Generator.GetUpper((xPos - dt)/ 200), Generator.GetLower((xPos - dt) / 200));
+                        Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
                     }
                     --numBlocksToSpawn;
                     accumulator -= BlockWidth;
@@ -214,10 +214,10 @@ namespace PaToRo_Desktop.Scenes
 
                 pos.X = px;
                 pos.Y = pu;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, upperColl.color, upperColl.Alpha));
+                spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, upperColl.player != null ? upperColl.player.BaseColor : color, upperColl.Alpha));
 
                 pos.Y = pl;
-                spriteBatch.Draw(part, pos, null, null, origin, 0, null, Color.Lerp(color, lowerColl.color,  lowerColl.Alpha));
+                spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, lowerColl.player != null ? lowerColl.player.BaseColor : color,  lowerColl.Alpha));
 
                 // render rects
                 //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);
@@ -230,10 +230,10 @@ namespace PaToRo_Desktop.Scenes
             // render check points
             //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
             pos.Y = getUpperAt(pos.X);
-            var scl = new Vector2(2.5f, 2.5f);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Green);
+            var scl = new Vector2(4, 4);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
             pos.Y = getLowerAt(pos.X);
-            spriteBatch.Draw(part, pos, null, null, origin, 0, scl, Color.Red);
+            spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
 
 
 #if DEBUG

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace PaToRo_Desktop.Scenes
 {
-    internal class EndScene : Scene
+    internal class EndScene : StarfieldScene
     {
         private TestScene testScene;
         private Color[] Colors = { new Color(191, 91, 91), new Color(198, 185, 85), new Color(134, 180, 96), new Color(60, 141, 136), new Color(89, 87, 88) };

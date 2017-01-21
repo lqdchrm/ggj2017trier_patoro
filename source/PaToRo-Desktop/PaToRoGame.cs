@@ -26,7 +26,10 @@ namespace PaToRo_Desktop
             TestScene t = new TestScene(this);
             Scenes.Add("level", t);
             Scenes.Add("end", new EndScene(this, t));
-            Scenes.Show("level");
+            Scenes.Add("start", new StartScene(this));
+
+            //Scenes.Show("level");
+            Scenes.Show("start");
 
 #if !DEBUG
             Screen.ToggleFullscreen();

@@ -26,6 +26,8 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
         private Texture2D tex;
         private Vector2 origin;
 
+        public float Speed { get; set; }
+
         public Starfield(BaseGame game, int numStars, int numLayers)
         {
             this.game = game;
@@ -36,7 +38,7 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
             this.spd = new Vector2[numStars];
             this.scale = new Vector2[numLayers];
 
-            for (int i=0; i<numStars; ++i)
+            for (int i = 0; i < numStars; ++i)
             {
                 this.pos[i].X = RandomFuncs.FromRange(0, game.Screen.Width);
                 this.pos[i].Y = RandomFuncs.FromRange(0, game.Screen.Height);
@@ -45,7 +47,7 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
                 this.spd[i].X = -RandomFuncs.FromRange(0, (float)Math.Pow(2, 1 + layer));
             }
 
-            for (int i=0; i<numLayers; ++i)
+            for (int i = 0; i < numLayers; ++i)
             {
                 var s = (float)Math.Pow(i + 1, 1.5) * 0.01f;
                 this.scale[i] = new Vector2(s, s);
@@ -65,10 +67,15 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
             float sx = 0;
             float sy = 0;
 
-            sx = -(game.Scenes.Current as TestScene).Level.SpdInPixelPerSecond;
+
+            if (game.Scenes.Current is TestScene)
+                Speed = (game.Scenes.Current as TestScene).Level.SpdInPixelPerSecond;
+
+            sx = -Speed;
+
             sy = 0;
 
-            for (int i=0; i<numStars; ++i)
+            for (int i = 0; i < numStars; ++i)
             {
                 var factor = (i % numLayers) / (float)numLayers;
                 pos[i].X += (float)((spd[i].X + sx) * delta * factor);

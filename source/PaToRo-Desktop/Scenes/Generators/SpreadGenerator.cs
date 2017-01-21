@@ -23,7 +23,7 @@ namespace PaToRo_Desktop.Scenes.Generators
 
         public float GetUpper(float t)
         {
-                return baseGenerator.GetUpper(t) - MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
+            return baseGenerator.GetUpper(t) - MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
         }
         public float GetLower(float t)
         {

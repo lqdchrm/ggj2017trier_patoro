@@ -73,6 +73,8 @@
     <Compile Include="Scenes\Generators\SpreadGenerator.cs" />
     <Compile Include="Scenes\Generators\SineStacked.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
+    <Compile Include="Scenes\StarfieldScene.cs" />
+    <Compile Include="Scenes\StartScene.cs" />
     <Compile Include="Scenes\TheNewWaveRider.cs" />
     <Compile Include="Scenes\Generators\Generator.cs" />
     <Compile Include="Scenes\Level.cs" />

@@ -17,7 +17,7 @@ using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
-    public class TestScene : Scene
+    public class TestScene : StarfieldScene
     {
         private DebugOverlay dbgOverlay;
         internal readonly List<TheNewWaveRider> Riders;
@@ -25,13 +25,13 @@ namespace PaToRo_Desktop.Scenes
         // sound
         private Synth Synth;
 
-        private Starfield starfield;
 
         public Level Level;
 
         private Texture2D part;
         private SoundEffect hitSnd;
 
+        internal static float BaseScale = 1f;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -65,38 +65,35 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.End();
         }
 
-        internal override void LoadContent()
+        internal override void InternalLoadContent()
         {
-            if (!loaded)
-            {
-                base.LoadContent();
+            base.InternalLoadContent();
 
-                // Sound
-                Synth = new Synth();
-                Synth.LoadContent(game.Content);
+            // Sound
+            Synth = new Synth();
+            Synth.LoadContent(game.Content);
 
-                hitSnd = game.Content.Load<SoundEffect>("Sounds/fx/hit");
+            hitSnd = game.Content.Load<SoundEffect>("Sounds/fx/hit");
 
-                // Background
-                starfield = new Starfield(game, 700, 8);
-                starfield.LoadContent(game.Content);
 
-                // Gens
-                Generator generator = new UpDownGenerator(game);
-                //Generator generator = new SpikeGenerator(game);
-                //Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
+            // Gens
+            //Generator generator = new UpDownGenerator(game);
+            //Generator generator = new SpikeGenerator(game);
+            Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 500, 1000);
-                Level.LoadContent(game.Content);
-                Level.Generator = generator; // paddle;
+            Level = new Level(game, 128, TimeSpan.FromSeconds(120), 500, 1000);
+            Level.LoadContent(game.Content);
+            Level.Generator = generator; // paddle;
 
-                part = game.Content.Load<Texture2D>("Images/particle");
-                dbgOverlay = new DebugOverlay(game);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
+            Level.LoadContent(game.Content);
+            Level.Generator = generator; // paddle;
 
-                Children.Add(starfield);
-                Children.Add(Level);
-                Children.Add(dbgOverlay);
-            }
+            part = game.Content.Load<Texture2D>("Images/particle");
+            dbgOverlay = new DebugOverlay(game);
+
+            Children.Add(Level);
+            Children.Add(dbgOverlay);
         }
 
         internal override void Update(GameTime gameTime)
@@ -104,6 +101,12 @@ namespace PaToRo_Desktop.Scenes
             CheckForNewPlayers();
 
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
+
+            if (BaseScale > 1)
+            {
+                BaseScale -= t * 0.05f;
+                BaseScale = MathHelper.Clamp(BaseScale, 1, 3);
+            }
 
             // change background color
             //BgColor = new Color(
