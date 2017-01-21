@@ -12,8 +12,10 @@ namespace PaToRo_Desktop.Engine.Components
         public Vector2 Pos;
         public float Rot;
 
+        public Vector2 Accel;
         public Vector2 Spd;
         public float RotSpd;
+
 
         public Circle HitBox;
 
@@ -34,6 +36,8 @@ namespace PaToRo_Desktop.Engine.Components
             var delta = gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
 
             // update movement
+            Spd.X += Accel.X * delta;
+            Spd.Y += Accel.Y * delta;
             Pos.X = Pos.X + Spd.X * delta;
             Pos.Y = Pos.Y + Spd.Y * delta;
             Rot = Rot + RotSpd * delta;
