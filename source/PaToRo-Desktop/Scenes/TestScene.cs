@@ -32,8 +32,6 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
         private SoundEffect hitSnd;
 
-        // generators
-        private Generator sineGen;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -84,11 +82,13 @@ namespace PaToRo_Desktop.Scenes
                 starfield.LoadContent(game.Content);
 
                 // Gens
-                sineGen = new SpreadGenerator(new SineStackedGenerator(game));
+                Generator generator = new UpDownGenerator(game);
+                //Generator generator = new SpikeGenerator(game);
+                //Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
+                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 500, 1000);
                 Level.LoadContent(game.Content);
-                Level.Generator = sineGen; // paddle;
+                Level.Generator = generator; // paddle;
 
                 part = game.Content.Load<Texture2D>("Images/particle");
                 dbgOverlay = new DebugOverlay(game);
