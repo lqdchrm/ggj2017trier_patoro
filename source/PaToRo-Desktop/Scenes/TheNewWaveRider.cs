@@ -40,7 +40,7 @@ namespace PaToRo_Desktop.Scenes
         public int PlayerNum { get; private set; }
 
         public static Color[] colors = new Color[] {
-            Color.Aquamarine, Color.BlueViolet, Color.Purple, Color.SeaShell, Color.Tomato, Color.Turquoise
+            new Color(0xCC, 0x00, 0x00), new Color(0x99, 0xFF, 0x00), new Color(0xFF, 0xCC, 0x00), new Color(0x33, 0x33, 0xFF)
         };
 
         public TheNewWaveRider(BaseGame game, int playerNum, float radius)
@@ -80,7 +80,7 @@ namespace PaToRo_Desktop.Scenes
             {
                 Colliding -= delta;
             }
-            
+
             // Outer Halo
             var scl = 2 * Radius / halo.Width;
             var scale = new Vector2(scl, scl);
@@ -161,7 +161,8 @@ namespace PaToRo_Desktop.Scenes
                 if (Radius <= 15.0f)
                 {
                     //game.Scenes.Show("end");
-                } else
+                }
+                else
                 {
                     Radius -= 1.2f;
                 }

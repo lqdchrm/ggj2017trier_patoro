@@ -59,7 +59,7 @@ namespace PaToRo_Desktop.Scenes
                 var rider = Riders[i];
                 spriteBatch.DrawString(
                     game.Fonts.Get("debug"),
-                    $"Player {rider.PlayerNum}: {rider.Points} Points",
+                    $"Player {rider.PlayerNum}: {(int)rider.Points} Points",
                     PlayerPointStringPos, rider.BaseColor);
                 PlayerPointStringPos.Y += LineOffset;
             }
