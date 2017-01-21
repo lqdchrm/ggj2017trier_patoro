@@ -139,7 +139,7 @@ namespace PaToRo_Desktop.Scenes
 
 
                 // Dot
-                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, Vector2.One * TestScene.BaseScale, color);
+                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, null, color);
 
                 // Halos
                 float factor = BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.SawUp(t));

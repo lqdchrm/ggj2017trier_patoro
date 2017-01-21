@@ -29,6 +29,7 @@ namespace PaToRo_Desktop.Scenes
 
 
         private state State = state.Lobby;
+        private static float StartZoneSize = 200.0f;
 
         // sound
         private Synth Synth;
@@ -38,8 +39,6 @@ namespace PaToRo_Desktop.Scenes
 
         private Texture2D part;
         private SoundEffect hitSnd;
-
-        internal static float BaseScale = 1f;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -58,9 +57,19 @@ namespace PaToRo_Desktop.Scenes
         internal override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+            spriteBatch.Begin();
+            if (State == state.Lobby)
+            {
+                float dotOffset = 25.0f;
+                Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
+                while (DotPosition.Y < game.Screen.Height)
+                {
+                    spriteBatch.Draw(part, DotPosition, Color.White);
+                    DotPosition.Y += dotOffset;
+                }
+            }
             Vector2 PlayerPointStringPos = new Vector2(0, 20);
             float LineOffset = 20.0f;
-            spriteBatch.Begin();
             for (int i = 0; i < Riders.Count; i++)
             {
                 var rider = Riders[i];
@@ -111,7 +120,7 @@ namespace PaToRo_Desktop.Scenes
                 bool start = Riders.Count > 0 ? true : false;
                 foreach (TheNewWaveRider Rider in Riders)
                 {
-                    start = start && (Rider.Phy.Pos.X > game.Screen.Width - 100.0f);
+                    start = start && (Rider.Phy.Pos.X > game.Screen.Width - StartZoneSize);
                 }
                 if (start)
                 {
@@ -122,12 +131,6 @@ namespace PaToRo_Desktop.Scenes
             else
             {
                 var t = (float)gameTime.TotalGameTime.TotalSeconds;
-
-                if (BaseScale > 1)
-                {
-                    BaseScale -= t * 0.05f;
-                    BaseScale = MathHelper.Clamp(BaseScale, 1, 3);
-                }
 
                 // change background color
                 //BgColor = new Color(
@@ -144,10 +147,8 @@ namespace PaToRo_Desktop.Scenes
 
                 // Sound
                 Synth.Update(gameTime);
-
-
-                CheckPlayerCollisions(gameTime);
             }
+            CheckPlayerCollisions(gameTime);
         }
 
         private void CheckPlayerCollisions(GameTime gameTime)

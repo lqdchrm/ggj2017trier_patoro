@@ -50,6 +50,7 @@ namespace PaToRo_Desktop.Scenes
             public bool wasHit;
             public float cooldown;
             public const float maxCooldown = 0.5f;
+            public float scale;
             public TheNewWaveRider player;
 
             public float Alpha { get { return cooldown / maxCooldown; } }
@@ -65,13 +66,22 @@ namespace PaToRo_Desktop.Scenes
                         cooldown = 0;
                     }
                 }
+
+                if (scale > 1)
+                {
+                    scale -= delta * 8f;
+                }
+                else
+                {
+                    scale = 1;
+                }
             }
             public void Hit(TheNewWaveRider player)
             {
                 wasHit = true;
                 cooldown = maxCooldown;
                 this.player = player;
-                TestScene.BaseScale = 2.5f;
+                scale = 2.5f;
             }
         }
 
@@ -221,10 +231,10 @@ namespace PaToRo_Desktop.Scenes
 
                     pos.X = px;
                     pos.Y = pu;
-                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, upperColl.player != null ? upperColl.player.BaseColor : color, upperColl.Alpha));
+                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * upperColl.scale, Color.Lerp(color, upperColl.player != null ? upperColl.player.BaseColor : color, upperColl.Alpha));
 
                     pos.Y = pl;
-                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * TestScene.BaseScale, Color.Lerp(color, lowerColl.player != null ? lowerColl.player.BaseColor : color, lowerColl.Alpha));
+                    spriteBatch.Draw(part, pos, null, null, origin, 0, Vector2.One * lowerColl.scale, Color.Lerp(color, lowerColl.player != null ? lowerColl.player.BaseColor : color, lowerColl.Alpha));
 
                     // render rects
                     //spriteBatch.FillRectangle(new RectangleF(px - (0.5f * BlockWidth), 0, BlockWidth, pu), Color.Red);
@@ -238,9 +248,9 @@ namespace PaToRo_Desktop.Scenes
                 //pos.X = (game.Scenes.Current as TestScene).Rider.Phy.Pos.X;
                 pos.Y = getUpperAt(pos.X);
                 var scl = new Vector2(4, 4);
-                spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, scl, color);
                 pos.Y = getLowerAt(pos.X);
-                spriteBatch.Draw(part, pos, null, null, origin, 0, scl * TestScene.BaseScale, color);
+                spriteBatch.Draw(part, pos, null, null, origin, 0, scl, color);
 
 
 #if DEBUG
