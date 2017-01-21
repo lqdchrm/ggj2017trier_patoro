@@ -60,6 +60,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\DebugOverlay.cs" />
+    <Compile Include="Scenes\Generators\SineStacked.cs" />
     <Compile Include="Scenes\Player.cs" />
     <Compile Include="Scenes\Controllers\DirectController.cs" />
     <Compile Include="Scenes\TheWaveRider.cs" />

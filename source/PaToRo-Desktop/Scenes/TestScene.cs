@@ -41,9 +41,9 @@ namespace PaToRo_Desktop.Scenes
         {
             base.LoadContent();
 
-            level = new Level(game, 64, 50);
+            level = new Level(game, 128, 15);
             level.LoadContent(game.Content);
-            level.Generator = new SineGenerator(game);
+            level.Generator = new SineStackedGenerator(game);
 
             ball = new TheWaveRider();
             ball.LoadContent(game.Content);
