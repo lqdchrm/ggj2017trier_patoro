@@ -170,6 +170,15 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
+        public void Reset()
+        {
+            Level.Restart();
+            foreach( TheNewWaveRider Rider in Riders)
+            {
+                Rider.Reset();
+            }
+        }
+
         private void CheckForNewPlayers()
         {
             while (Riders.Count < game.Inputs.NumPlayers)

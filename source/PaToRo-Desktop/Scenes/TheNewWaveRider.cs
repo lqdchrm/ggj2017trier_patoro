@@ -89,6 +89,12 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
+        public void Reset()
+        {
+            Points = 0.0f;
+            Spawn();
+        }
+
         public void Die()
         {
             if (Active)

@@ -32,17 +32,16 @@ namespace PaToRo_Desktop.Scenes
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(localTime / Duration.TotalSeconds)); } }
+        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(timePlayed / Duration.TotalSeconds)); } }
 
         public TimeSpan Duration { get; private set; }
-        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - localTime); } }
+        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - timePlayed); } }
 
         public float SpdInPixelPerSecondStart { get; private set; }
         public float SpdInPixelPerSecondEnd { get; private set; }
 
         public float BlocksPerSecond {  get { return SpdInPixelPerSecond / BlockWidth; } }
 
-        private float localTime;
 
         public struct BorderCollision
         {
@@ -125,6 +124,7 @@ namespace PaToRo_Desktop.Scenes
         public void Restart()
         {
             timePlayed = 0;
+            xPos = 0;
         }
 
         private void FillStatic()
@@ -146,7 +146,6 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
-            var t = localTime = (float)gameTime.TotalGameTime.TotalSeconds;
             if (timePlayed > Duration.TotalSeconds)
             {
                 game.Scenes.Show("end");

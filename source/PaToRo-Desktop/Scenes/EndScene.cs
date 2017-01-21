@@ -50,7 +50,7 @@ namespace PaToRo_Desktop.Scenes
             base.Update(gameTime);
             if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start))
             {
-                testScene.Level.Restart();
+                testScene.Reset();
                 game.Scenes.Show("level");
                 return;
             } 
