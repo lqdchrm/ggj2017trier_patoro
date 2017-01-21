@@ -32,6 +32,8 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
         private SoundEffect hitSnd;
 
+        internal static float BaseScale = 1f;
+
         // generators
         private Generator sineGen;
 
@@ -86,7 +88,7 @@ namespace PaToRo_Desktop.Scenes
                 // Gens
                 sineGen = new SpreadGenerator(new SineStackedGenerator(game));
 
-                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 50, 1000);
+                Level = new Level(game, 128, TimeSpan.FromSeconds(120), 500, 1000);
                 Level.LoadContent(game.Content);
                 Level.Generator = sineGen; // paddle;
 
@@ -104,6 +106,12 @@ namespace PaToRo_Desktop.Scenes
             CheckForNewPlayers();
 
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
+
+            if (BaseScale > 1)
+            {
+                BaseScale -= t * 0.05f;
+                BaseScale = MathHelper.Clamp(BaseScale, 1, 3);
+            }
 
             // change background color
             //BgColor = new Color(
