@@ -30,6 +30,8 @@ namespace PaToRo_Desktop.Scenes
         public float SpeedY;
         public float Direction;
         private Texture2D part;
+        private PlayerGenerator paddle;
+        private SineStackedGenerator sineGen;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -61,9 +63,13 @@ namespace PaToRo_Desktop.Scenes
                 starfield = new Starfield(game, 700, 8);
                 starfield.LoadContent(game.Content);
 
-                level = new Level(game, 128, 500);
+                // Gens
+                paddle = new PlayerGenerator(game);
+                sineGen = new SineStackedGenerator(game);
+
+                level = new Level(game, 128, 1000);
                 level.LoadContent(game.Content);
-                level.Generator = new SineStackedGenerator(game);
+                level.Generator = sineGen; // paddle;
 
                 Rider = new TheNewWaveRider(game, 32f);
                 Rider.LoadContent(game.Content);
@@ -81,6 +87,7 @@ namespace PaToRo_Desktop.Scenes
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
+                Children.Add(paddle);
                 Children.Add(level);
                 Children.Add(control);
                 Children.Add(Rider);
