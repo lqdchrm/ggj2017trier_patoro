@@ -31,8 +31,7 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
 
         // generators
-        private PlayerGenerator paddle;
-        private SineStackedGenerator sineGen;
+        private Generator sineGen;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -81,8 +80,7 @@ namespace PaToRo_Desktop.Scenes
                 starfield.LoadContent(game.Content);
 
                 // Gens
-                paddle = new PlayerGenerator(game);
-                sineGen = new SineStackedGenerator(game);
+                sineGen = new SpreadGenerator( new SineStackedGenerator(game));
 
                 Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
                 Level.LoadContent(game.Content);
@@ -92,7 +90,6 @@ namespace PaToRo_Desktop.Scenes
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
-                Children.Add(paddle);
                 Children.Add(Level);
                 Children.Add(dbgOverlay);
             }

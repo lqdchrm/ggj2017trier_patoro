@@ -22,7 +22,7 @@ namespace PaToRo_Desktop.Engine.Sound
         public Synth()
         {
             tracks = new Dictionary<string, Dictionary<string, SoundEffectInstance>>();
-            foreach(var song in songs)
+            foreach (var song in songs)
             {
                 tracks.Add(song, new Dictionary<string, SoundEffectInstance>());
             }
@@ -48,7 +48,7 @@ namespace PaToRo_Desktop.Engine.Sound
             {
                 Play(playing);
             }
-            
+
         }
 
         public void Play(string song)
