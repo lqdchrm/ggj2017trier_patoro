@@ -18,6 +18,7 @@ namespace PaToRo_Desktop.Scenes
     {
         private DebugOverlay dbgOverlay;
         internal TheNewWaveRider[] Riders;
+        internal Color[] Colors = {Color.Blue, Color.White, Color.Red, Color.Green, Color.PaleGoldenrod};
 
         private Starfield starfield;
 
@@ -52,7 +53,7 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.Begin();
             for (int i = 0; i < NumPlayers; i++)
             {
-                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player 1: {(int)Riders[i].Points} Points", PlayerPointStringPos, Color.White);
+                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player {i+1}: {(int)Riders[i].Points} Points", PlayerPointStringPos, Color.White);
                 PlayerPointStringPos.Y += LineOffset;
             }
             spriteBatch.End();
@@ -101,7 +102,7 @@ namespace PaToRo_Desktop.Scenes
         {
             if (NumPlayers < game.Inputs.NumPlayers)
             {
-                Riders[NumPlayers] = new TheNewWaveRider(game, 32f);
+                Riders[NumPlayers] = new TheNewWaveRider(game, 32f, Colors[NumPlayers % Colors.Length]);
                 TheNewWaveRider Rider = Riders[NumPlayers];
                 Rider.LoadContent(game.Content);
                 Rider.Level = Level;
