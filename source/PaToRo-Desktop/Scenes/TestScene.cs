@@ -53,6 +53,20 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
+        internal override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            Vector2 PlayerPointStringPos = new Vector2();
+            float LineOffset = 20.0f;
+            spriteBatch.Begin();
+            for (int i = 0; i < game.Inputs.NumPlayers + 1; i++)
+            {
+                spriteBatch.DrawString(game.Fonts.Get("debug"), $"Player 1: {(int)Rider.Points} Points", PlayerPointStringPos, Color.White);
+                PlayerPointStringPos.Y += LineOffset;
+            }
+            spriteBatch.End();
+        }
+
         internal override void LoadContent()
         {
             if (!loaded)

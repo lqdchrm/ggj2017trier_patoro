@@ -27,6 +27,8 @@ namespace PaToRo_Desktop.Scenes
         public Physics Phy { get; private set; }
         public float Radius;
         public float Colliding;
+        public static float POINTS_PER_FRAME = 0.2f;
+        public float Points;
 
         public Level Level { get; set; }
 
@@ -64,6 +66,7 @@ namespace PaToRo_Desktop.Scenes
                     BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 1)),    // green
                     BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.Sin(t + 2)),    // blue
                     1.0f);
+                Points += POINTS_PER_FRAME;
             }
             else
             {
@@ -137,7 +140,7 @@ namespace PaToRo_Desktop.Scenes
 
             if (Colliding <= 0)
             {
-                Colliding = 0.5f;
+                Colliding = 1.5f;
 
                 game.Inputs.Player(0)?.Rumble(upper ? 0.5f : 0, upper ? 0 : 0.5f, 200);
 
