@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using PaToRo_Desktop.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace PaToRo_Desktop.Engine.Components
             if (game != null)
                 foreach (var physics in game.Scenes.Current.Children.OfType<IHasPhysics>())
                 {
-                    if (ReferenceEquals(physics.Phy, this))
+                    if (ReferenceEquals(physics.Phy, this) || (physics as TheNewWaveRider) == null || !(physics as TheNewWaveRider).Active)
                         continue;
 
                     if (CollidesWith(physics.Phy))

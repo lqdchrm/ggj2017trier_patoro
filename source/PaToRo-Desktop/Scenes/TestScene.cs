@@ -31,7 +31,7 @@ namespace PaToRo_Desktop.Scenes
         private Texture2D part;
 
         // generators
-        private PlayerGenerator paddle;
+//        private PlayerGenerator paddle;
         private SineStackedGenerator sineGen;
 
         public TestScene(BaseGame game) : base(game)
@@ -59,7 +59,7 @@ namespace PaToRo_Desktop.Scenes
                 var rider = Riders[i];
                 spriteBatch.DrawString(
                     game.Fonts.Get("debug"),
-                    $"Player {rider.PlayerNum}: {(int)rider.Points} Points",
+                    $"Player {rider.PlayerNum}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
                     PlayerPointStringPos, rider.BaseColor);
                 PlayerPointStringPos.Y += LineOffset;
             }
@@ -81,7 +81,7 @@ namespace PaToRo_Desktop.Scenes
                 starfield.LoadContent(game.Content);
 
                 // Gens
-                paddle = new PlayerGenerator(game);
+                //paddle = new PlayerGenerator(game);
                 sineGen = new SineStackedGenerator(game);
 
                 Level = new Level(game, 128, TimeSpan.FromMinutes(2), 100, 2000);
@@ -92,7 +92,7 @@ namespace PaToRo_Desktop.Scenes
                 dbgOverlay = new DebugOverlay(game);
 
                 Children.Add(starfield);
-                Children.Add(paddle);
+                //Children.Add(paddle);
                 Children.Add(Level);
                 Children.Add(dbgOverlay);
             }
@@ -105,8 +105,6 @@ namespace PaToRo_Desktop.Scenes
                 var newRider = new TheNewWaveRider(game, Riders.Count, 32f);
                 newRider.LoadContent(game.Content);
                 newRider.Level = Level;
-                newRider.Phy.Pos.X = game.Screen.Width * 0.1f;
-                newRider.Phy.Pos.Y = game.Screen.Height * 0.5f;
                 Children.Add(newRider);
 
                 AccelController controller = new AccelController(game, Riders.Count, newRider);
@@ -114,6 +112,7 @@ namespace PaToRo_Desktop.Scenes
                 Children.Add(controller);
 
                 Riders.Add(newRider);
+                newRider.Spawn();
             }
             var t = (float)gameTime.TotalGameTime.TotalSeconds;
 
