@@ -61,6 +61,7 @@ namespace PaToRo_Desktop.Scenes
             Rider.Phy.RotSpd = 20f;
 
             control = new DirectController(game, 0, Rider);
+            control.LoadContent(game.Content);
 
             LevelSpeedX = 100.0f;
             LevelSpeedY = 150.0f;
