@@ -338,6 +338,7 @@ namespace PaToRo_Desktop.Scenes
         {
             startSpreading = false;
             generator.Reset();
+            generator.NewSpread(0, 8, 0);
             PrepareTimer = DefaultPrepareTimerInSeconds;
             Level.isActive = false;
             Level.Restart();
