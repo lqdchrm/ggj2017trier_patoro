@@ -87,7 +87,7 @@ namespace PaToRo_Desktop.Engine.Sound
             if (!string.IsNullOrEmpty(song) && tracks.ContainsKey(song))
             {
                 loops += 1;
-                Console.WriteLine($"{loops}, {bar}");
+                //Console.WriteLine($"{loops}, {bar}");
                 var s = tracks[song];
                 foreach (var kvp in s)
                 {

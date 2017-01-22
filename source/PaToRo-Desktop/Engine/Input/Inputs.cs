@@ -39,7 +39,7 @@ namespace PaToRo_Desktop.Engine.Input
                 if (!playerMap.ContainsValue(i) && inputState.AnyButtonDown)
                 {
                     playerMap[playerNo] = i;
-                    Console.WriteLine(string.Format("Assigned Controller {0} to Player {1}", i, playerNo));
+                    //Console.WriteLine(string.Format("Assigned Controller {0} to Player {1}", i, playerNo));
                     return true;
                 }
             }

@@ -94,7 +94,7 @@ namespace PaToRo_Desktop.Engine.Entities
                 for (int i = 0; i < 70; ++i)
                     emitters[active].Spawn();
 
-                Console.WriteLine(string.Format("Emitter {0} fired", active));
+            //    Console.WriteLine(string.Format("Emitter {0} fired", active));
 
                 ++active;
             }
