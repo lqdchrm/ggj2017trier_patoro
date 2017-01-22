@@ -141,6 +141,11 @@ namespace PaToRo_Desktop.Scenes
         {
             timePlayed = 0;
             xPos = 0;
+            for (int i = 0; i < upper.Length; i++)
+            {
+                upper[i] = -20.0f;
+                lower[i] = game.Screen.Height + 20.0f;
+            }
         }
 
         private void FillStatic()

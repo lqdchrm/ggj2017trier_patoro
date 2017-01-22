@@ -109,7 +109,7 @@ namespace PaToRo_Desktop.Scenes
             //Generator generator = new SpikeGenerator(game);
             Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(120), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(90), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
