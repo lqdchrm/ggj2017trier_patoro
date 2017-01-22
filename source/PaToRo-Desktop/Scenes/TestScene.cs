@@ -10,6 +10,7 @@ using PaToRo_Desktop.Scenes.Controllers;
 using PaToRo_Desktop.Scenes.Funcs;
 using PaToRo_Desktop.Scenes.Generators;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,16 +21,28 @@ namespace PaToRo_Desktop.Scenes
 {
     enum state
     {
-        Lobby, Prepare, Game
+        Lobby, Prepare, Game, Score
     }
 
     public class TestScene : StarfieldScene
     {
+        class PlayerAndPoints {
+            public int Player;
+            public float Points;
+            public Color color;
+        }
 
+        // score state
+        private Color[] Colors = { new Color(191, 91, 91), new Color(198, 185, 85), new Color(134, 180, 96), new Color(60, 141, 136), new Color(89, 87, 88) };
+        private static float TextAmplitude = 50.0f;
+        private static float TextWavelength = 150.0f;
+        private static float TextSpeed = 500.0f;
+        private List<PlayerAndPoints> FinalPoints = new List<PlayerAndPoints>();
 
         private state State = state.Lobby;
         private static float StartZoneSize = 200.0f;
 
+        private float GameOverPositionX;
         // sound
         private Synth Synth;
 
@@ -54,6 +67,7 @@ namespace PaToRo_Desktop.Scenes
 
         internal override void Initialize()
         {
+            GameOverPositionX = game.Screen.Width;
             if (!initialized)
             {
                 base.Initialize();
@@ -98,6 +112,28 @@ namespace PaToRo_Desktop.Scenes
                 ArrowPos.X += 10.0f;
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
 
+            }
+            else if (State == state.Score)
+            {
+                int Counter = 0;
+                float OffsetX = 30.0f;
+                float OffsetY = 100.0f;
+                Vector2 TextPosition = new Vector2(GameOverPositionX, OffsetY);
+                foreach (char c in "Game Over !")
+                {
+                    TextPosition.X += OffsetX;
+                    TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
+                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
+                    Counter++;
+                }
+                Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, Colors[0]);
+                ScorePosition.Y += 30;
+                foreach (PlayerAndPoints pap in FinalPoints.OrderBy(x => x.Points))
+                {
+                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, pap.color);
+                    ScorePosition.Y += 30;
+                }
             }
             else
             {
@@ -152,6 +188,21 @@ namespace PaToRo_Desktop.Scenes
             PrepareTimer = DefaultPrepareTimerInSeconds;
         }
 
+        internal void endgame()
+        {
+            FinalPoints.Clear();
+            foreach (TheNewWaveRider Rider in Riders)
+            {
+                PlayerAndPoints score = new PlayerAndPoints();
+                score.Player = Rider.PlayerNum + 1;
+                score.Points = Rider.Points;
+                score.color = Rider.BaseColor;
+                FinalPoints.Add(score);
+            }
+            Reset();
+            State = state.Score;
+        }
+
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -188,9 +239,24 @@ namespace PaToRo_Desktop.Scenes
                     State = state.Game;
                 }
             }
-            else
+            else if (State == state.Score)
             {
+                if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start) || XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.Enter))
+                {
+                    Reset();
+                    State = state.Lobby;
+                    return;
+                }
+                if (GameOverPositionX > -500.0f)
+                {
+                    GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else
+                {
+                    GameOverPositionX = game.Screen.Width;
+                }
             }
+            else { }
             Synth.Update(gameTime);
             CheckPlayerCollisions(gameTime);
         }

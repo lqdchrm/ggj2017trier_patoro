@@ -167,7 +167,11 @@ namespace PaToRo_Desktop.Scenes
                 timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
                 if (timePlayed > Duration.TotalSeconds)
                 {
-                    game.Scenes.Show("end");
+                    TestScene scene = (game.Scenes.Current as TestScene);
+                    if (scene != null)
+                    {
+                        scene.endgame();
+                    }
                     return;
                 }
                 var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
