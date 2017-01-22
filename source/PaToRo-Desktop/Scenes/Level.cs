@@ -202,7 +202,7 @@ namespace PaToRo_Desktop.Scenes
                         if (Generator != null)
                         {
                             var dt = numBlocksToSpawn * BlockWidth;
-                            Console.WriteLine($"{xPos} -  {(xPos - dt) / 200}");
+                            //Console.WriteLine($"{xPos} -  {(xPos - dt) / 200}");
                             Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
                         }
                         --numBlocksToSpawn;

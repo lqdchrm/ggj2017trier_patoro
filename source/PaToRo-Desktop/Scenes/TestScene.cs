@@ -173,7 +173,6 @@ namespace PaToRo_Desktop.Scenes
             // Sound
             Synth = new Synth();
             Synth.LoadContent(game.Content);
-
             hitSnd = game.Content.Load<SoundEffect>("Sounds/fx/hit");
 
 
@@ -337,6 +336,16 @@ namespace PaToRo_Desktop.Scenes
         public void Reset()
         {
             startSpreading = false;
+            var random = new Random();
+            var randValue = random.NextDouble();
+
+            if (randValue < 0.3)
+                Synth.Play("ggg_1", true);
+            else if (randValue < 0.6)
+                Synth.Play("ggg_2", true);
+            else
+                Synth.Play("ggg_3", true);
+
             generator.Reset();
             generator.NewSpread(0, 8, 0);
             PrepareTimer = DefaultPrepareTimerInSeconds;
