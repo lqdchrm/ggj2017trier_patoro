@@ -10,25 +10,57 @@ namespace PaToRo_Desktop.Scenes.Generators
 {
     public class SpreadGenerator : Generator
     {
-        private readonly Generator baseGenerator;
+        private Generator BaseScreen;
 
-        private float spread = 500;
-        private float spreadLength = 10;
+        private float from;
+        private float to;
+        private float targetSpread;
+        private float lastSpread;
 
-        public SpreadGenerator(Generator baseGenerator)
+        public float CurrentSpread { get; private set; }
+
+        public void NewSpread(float from, float to, float targetSpread)
         {
-            this.baseGenerator = baseGenerator;
+            this.from = from;
+            this.to = to;
+            this.lastSpread = targetSpread;
+            this.targetSpread = targetSpread;
+
+
+        }
+
+
+        public SpreadGenerator(Generator baseGenerator, float startSpread)
+        {
+            this.BaseScreen = baseGenerator;
+            this.targetSpread = startSpread;
+            this.lastSpread = startSpread;
         }
 
 
         public float GetUpper(float t)
         {
-            return baseGenerator.GetUpper(t) - MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
+            float spread = GetSpread(t);
+
+            return BaseScreen.GetUpper(t) - spread;
         }
+
+
         public float GetLower(float t)
         {
-            return baseGenerator.GetLower(t) + MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
+            float spread = GetSpread(t);
+            return BaseScreen.GetLower(t) + spread;
 
         }
+
+
+        private float GetSpread(float t)
+        {
+            var currentPosition = MathHelper.Clamp(t, from, to);
+            var spread = MathHelper.Lerp(lastSpread, targetSpread, currentPosition);
+            CurrentSpread = spread;
+            return spread;
+        }
+
     }
 }

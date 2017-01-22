@@ -158,16 +158,17 @@ namespace PaToRo_Desktop.Scenes
             }
             else if (State == state.Prepare)
             {
-                PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                foreach (TheNewWaveRider Rider in Riders)
-                {
-                    Rider.Phy.Pos.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
-                    Rider.Phy.Spd.Y = 0.0f;
-                }
-                if (PrepareTimer <= 0)
-                {
-                    State = state.Game;
-                }
+                State = state.Game;
+                //PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //foreach (TheNewWaveRider Rider in Riders)
+                //{
+                //    Rider.Phy.Pos.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
+                //    Rider.Phy.Spd.Y = 0.0f;
+                //}
+                //if (PrepareTimer <= 0)
+                //{
+                //    State = state.Game;
+                //}
             }
             else
             {
