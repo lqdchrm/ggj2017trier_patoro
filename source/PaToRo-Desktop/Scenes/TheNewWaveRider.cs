@@ -227,16 +227,27 @@ namespace PaToRo_Desktop.Scenes
         public void Collide(bool upper)
         {
             hitSnd.Play(0.5f, 0, 0);
+            var level = (game.Scenes.Current as TestScene)?.Level;
 
             if (upper)
-                (game.Scenes.Current as TestScene)?.Level.upperColl.Hit(this);
+            {
+                level.upperColl.Hit(this);
+            }
             else
-                (game.Scenes.Current as TestScene)?.Level.lowerColl.Hit(this);
+            {
+                level.lowerColl.Hit(this);
+            }
+
 
             game.Inputs.Player(PlayerNum)?.Rumble(1.0f, 0, 200);
             if (Colliding <= 0)
             {
-                Colliding = 1.5f;
+                var particles = (game.Scenes.Current as TestScene)?.particles;
+                particles.Explode(Phy.Pos + Vector2.UnitY * Radius * (upper ? -1 : 1), 0.8f, BaseColor, (e) => {
+                    e.Spd.X = -level.SpdInPixelPerSecond;
+                });
+
+                Colliding = 0.5f;
 
                 damageSnd.Play(0.5f, 0, 0);
 
