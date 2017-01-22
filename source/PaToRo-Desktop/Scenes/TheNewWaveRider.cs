@@ -48,9 +48,30 @@ namespace PaToRo_Desktop.Scenes
         public int PlayerNum { get; private set; }
         public float RespawnTimerInSec { get; private set; }
 
+        public bool IsLead {
+            get {
+                if (Level != null)
+                {
+                    var riders = (game.Scenes.Current as TestScene)?.Riders ?? null;
+                    if (riders != null && riders.Count > 1)
+                    {
+                        var max = riders.Max((r) => r.Points);
+                        return Points >= max;
+                    }
+                }
+                return false;
+            }
+        }
+
         public static Color[] colors = new Color[] {
-            new Color(0xCC, 0x00, 0x00), new Color(0x99, 0xFF, 0x00), new Color(0xFF, 0xCC, 0x00), new Color(0x33, 0x33, 0xFF)
+            new Color(0xCC, 0x00, 0x00),    // Red
+            new Color(0x44, 0xFF, 0x00),    // Green
+            new Color(0x00, 0x44, 0xff),    // Blue    
+            new Color(0xFF, 0xCC, 0x00),     // Yellow
+            new Color(0xCC, 0x00, 0x88)     // Purple
         };
+
+        public static Color CakeColor = Color.White;
 
         public TheNewWaveRider(BaseGame game, int playerNum, float radius)
         {
@@ -140,26 +161,29 @@ namespace PaToRo_Desktop.Scenes
 
 
                 // Dot
-                spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, null, color);
+                if (IsLead)
+                {
+                    float _s = BaseFuncs.MapTo(0.5f, 6, BaseFuncs.Sin(17*t));
+                    spriteBatch.Draw(part, Phy.Pos, null, null, partOrigin, Phy.Rot, Vector2.One * _s, CakeColor); 
+                }
 
                 // Halos
                 float factor = BaseFuncs.MapTo(0.5f, 1.0f, BaseFuncs.SawUp(t));
+                color.A = (byte)(255 * factor);
                 scale.X = scl * factor * squish;
                 scale.Y = scl * factor / squish;
-                color.A = (byte)(255 * factor);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
-                // Inner Halos
-                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
+                factor = BaseFuncs.MapTo(0, 1, BaseFuncs.SawUp(2 + t * 2.6f));   // -> 0..1
+                color.A = (byte)(255 * factor);
                 scale.X = scl * factor * squish;
                 scale.Y = scl * factor / squish;
-                color.A = (byte)(255 * factor);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
-                factor = BaseFuncs.ToZeroOne(BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
+                factor = BaseFuncs.MapTo(0, 1, BaseFuncs.SawUp(0.5f + t * 1.4f));   // -> 0..1
+                color.A = (byte)(255 * factor);
                 scale.X = scl * factor * squish;
                 scale.Y = scl * factor / squish;
-                color.A = (byte)(255 * factor);
                 spriteBatch.Draw(halo, Phy.Pos, null, null, haloOrigin, Phy.Rot, scale, color);
 
                 // Border
