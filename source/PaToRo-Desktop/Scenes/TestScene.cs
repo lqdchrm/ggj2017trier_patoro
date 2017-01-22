@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using PaToRo_Desktop.Engine;
+using PaToRo_Desktop.Engine.Entities;
 using PaToRo_Desktop.Engine.Input;
 using PaToRo_Desktop.Engine.Sound;
 using PaToRo_Desktop.Scenes.Backgrounds;
@@ -24,8 +25,6 @@ namespace PaToRo_Desktop.Scenes
 
     public class TestScene : StarfieldScene
     {
-        private DebugOverlay dbgOverlay;
-        internal readonly List<TheNewWaveRider> Riders;
 
 
         private state State = state.Lobby;
@@ -34,9 +33,13 @@ namespace PaToRo_Desktop.Scenes
         // sound
         private Synth Synth;
 
-
+        // entities
         public Level Level;
+        private DebugOverlay dbgOverlay;
+        internal readonly List<TheNewWaveRider> Riders;
+        public ParticleSystem particles;
 
+        // assets
         private Texture2D part;
         private SoundEffect hitSnd;
         private Texture2D arrow;
@@ -111,6 +114,9 @@ namespace PaToRo_Desktop.Scenes
             Level.Generator = generator; // paddle;
 
             arrow = game.Content.Load<Texture2D>("Images/Arrow");
+            particles = new ParticleSystem(game, 10);
+            particles.LoadContent(game.Content);
+
             part = game.Content.Load<Texture2D>("Images/particle");
             dbgOverlay = new DebugOverlay(game);
 
@@ -118,6 +124,7 @@ namespace PaToRo_Desktop.Scenes
             Children.Add(dbgOverlay);
 
             Reset();
+            Children.Add(particles);
         }
 
         internal override void Update(GameTime gameTime)

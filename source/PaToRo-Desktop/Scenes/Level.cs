@@ -23,7 +23,7 @@ namespace PaToRo_Desktop.Scenes
         private float[] upper;
         private float[] lower;
         private int start = 0;
-        private float xOffset;
+        public float xOffset;
         private float accumulator = 0;          // tracks time till new spawn
         private float xPos;
         private double timePlayed;

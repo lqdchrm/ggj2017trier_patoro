@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -38,6 +40,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Entities\ParticleEmitter.cs" />
+    <Compile Include="Engine\Entities\ParticleSystem.cs" />
     <Compile Include="Scenes\EndScene.cs" />
     <Compile Include="Engine\BaseGame.cs" />
     <Compile Include="Engine\Components\Circle.cs" />
@@ -120,6 +124,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <Import Project="..\..\packages\openal.redist.2.0.7.0\build\net45\openal.redist.targets" Condition="Exists('..\..\packages\openal.redist.2.0.7.0\build\net45\openal.redist.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\openal.redist.2.0.7.0\build\net45\openal.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\openal.redist.2.0.7.0\build\net45\openal.redist.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
