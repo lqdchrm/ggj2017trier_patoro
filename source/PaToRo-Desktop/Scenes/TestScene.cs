@@ -39,6 +39,8 @@ namespace PaToRo_Desktop.Scenes
 
         private Texture2D part;
         private SoundEffect hitSnd;
+        private Texture2D arrow;
+        private float colorOffset;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -60,6 +62,8 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.Begin();
             if (State == state.Lobby)
             {
+                colorOffset += 0.05f;
+                if (colorOffset > 1.0f) colorOffset = 0;
                 float dotOffset = 25.0f;
                 Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
                 while (DotPosition.Y < game.Screen.Height)
@@ -67,6 +71,10 @@ namespace PaToRo_Desktop.Scenes
                     spriteBatch.Draw(part, DotPosition, Color.White);
                     DotPosition.Y += dotOffset;
                 }
+                Vector2 ArrowPos = new Vector2(game.Screen.Width - StartZoneSize/2.0f - 50.0f, game.Screen.Height/2.0f - 128);
+                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * colorOffset, 0.8f * colorOffset, 0.8f * colorOffset, 0.5f * colorOffset));
+                ArrowPos.X += 10.0f;
+                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
             }
             Vector2 PlayerPointStringPos = new Vector2(0, 20);
             float LineOffset = 20.0f;
@@ -102,6 +110,7 @@ namespace PaToRo_Desktop.Scenes
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
+            arrow = game.Content.Load<Texture2D>("Images/Arrow");
             part = game.Content.Load<Texture2D>("Images/particle");
             dbgOverlay = new DebugOverlay(game);
 
