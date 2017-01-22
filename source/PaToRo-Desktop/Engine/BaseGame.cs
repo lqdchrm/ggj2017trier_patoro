@@ -59,8 +59,15 @@ namespace PaToRo_Desktop.Engine
 
             Inputs.Update(gameTime);
 
-            if (Inputs.NumPlayers > 0 && Inputs.Player(0).WasPressed(Buttons.ToggleFullscreen))
-                Screen.ToggleFullscreen();
+
+            for (int i = 0; i < Inputs.NumPlayers; i++)
+            {
+                if (Inputs.Player(i).WasPressed(Buttons.ToggleFullscreen))
+                {
+                    Screen.ToggleFullscreen();
+                    break;
+                }
+            }
 
             return Inputs.NumPlayers;
         }
