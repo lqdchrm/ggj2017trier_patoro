@@ -29,7 +29,7 @@ namespace PaToRo_Desktop
             Scenes.Add("start", new StartScene(this));
 
             //Scenes.Show("level");
-            Scenes.Show("level");
+            Scenes.Show("start");
 
 #if !DEBUG
             Screen.ToggleFullscreen();

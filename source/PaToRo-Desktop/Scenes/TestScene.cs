@@ -133,6 +133,7 @@ namespace PaToRo_Desktop.Scenes
                 }
                 if (start)
                 {
+                    Reset(); // has to be called before State=state.Game and Level.isActive
                     State = state.Game;
                     Level.isActive = true;
                 }
@@ -209,7 +210,8 @@ namespace PaToRo_Desktop.Scenes
 
         public void Reset()
         {
-            CheckForNewPlayers();
+            Level.isActive = false;
+            State = state.Lobby;
             starfield.Speed = 100.0f;
             Level.Restart();
             foreach (TheNewWaveRider Rider in Riders)
