@@ -10,7 +10,7 @@ namespace PaToRo_Desktop.Scenes.Generators
 {
     public class SpreadGenerator : Generator
     {
-        private Generator BaseScreen;
+        public Generator BaseScreen { get; set; }
 
         private float from;
         private float to;
@@ -23,7 +23,7 @@ namespace PaToRo_Desktop.Scenes.Generators
         {
             this.from = from;
             this.to = to;
-            this.lastSpread = targetSpread;
+            this.lastSpread = this.targetSpread;
             this.targetSpread = targetSpread;
 
 
@@ -56,7 +56,7 @@ namespace PaToRo_Desktop.Scenes.Generators
 
         private float GetSpread(float t)
         {
-            var currentPosition = MathHelper.Clamp(t, from, to);
+            var currentPosition = Funcs.BaseFuncs.MapTo(0, 1, MathHelper.Clamp(t, from, to), from, to);
             var spread = MathHelper.Lerp(lastSpread, targetSpread, currentPosition);
             CurrentSpread = spread;
             return spread;

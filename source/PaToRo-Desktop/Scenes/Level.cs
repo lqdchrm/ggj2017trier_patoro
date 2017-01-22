@@ -34,15 +34,26 @@ namespace PaToRo_Desktop.Scenes
         public float TimeStep { get; set; }    // time interval to spawn next value
 
         public float BlockWidth { get { return game.Screen.Width / NumValues; } }
-        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(timePlayed / Duration.TotalSeconds)); } }
+        public float SpdInPixelPerSecond { get { return MathHelper.Lerp(SpdInPixelPerSecondStart, SpdInPixelPerSecondEnd, (float)(TimePlayed / Duration.TotalSeconds)); } }
 
         public TimeSpan Duration { get; private set; }
-        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - timePlayed); } }
+        public TimeSpan Elapsed { get { return TimeSpan.FromSeconds(Duration.TotalSeconds - TimePlayed); } }
 
         public float SpdInPixelPerSecondStart { get; private set; }
         public float SpdInPixelPerSecondEnd { get; private set; }
 
         public float BlocksPerSecond { get { return SpdInPixelPerSecond / BlockWidth; } }
+
+        public double TimePlayed => timePlayed;
+
+        public float CurrentLevelPosition
+        {
+            get
+            {
+                var dt = accumulator;
+                return (xPos - dt) / 200;
+            }
+        }
 
 
         public struct BorderCollision
@@ -150,7 +161,7 @@ namespace PaToRo_Desktop.Scenes
 
         private void FillStatic()
         {
-            accumulator += BlockWidth * upper.Length /2;
+            accumulator += BlockWidth * upper.Length / 2;
         }
 
         internal void LoadContent(ContentManager content)
@@ -165,7 +176,7 @@ namespace PaToRo_Desktop.Scenes
             if (isActive)
             {
                 timePlayed += gameTime.ElapsedGameTime.TotalSeconds;
-                if (timePlayed > Duration.TotalSeconds)
+                if (TimePlayed > Duration.TotalSeconds)
                 {
                     game.Scenes.Show("end");
                     return;
@@ -187,6 +198,7 @@ namespace PaToRo_Desktop.Scenes
                         if (Generator != null)
                         {
                             var dt = numBlocksToSpawn * BlockWidth;
+                            Console.WriteLine($"{xPos} -  {(xPos - dt) / 200}");
                             Push(Generator.GetUpper((xPos - dt) / 200), Generator.GetLower((xPos - dt) / 200));
                         }
                         --numBlocksToSpawn;

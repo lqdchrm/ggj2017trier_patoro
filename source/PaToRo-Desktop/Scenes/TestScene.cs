@@ -46,6 +46,7 @@ namespace PaToRo_Desktop.Scenes
         private float colorOffset;
         private float PrepareTimer;
         private static float DefaultPrepareTimerInSeconds = 3.0f;
+        private SpreadGenerator generator;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -112,9 +113,10 @@ namespace PaToRo_Desktop.Scenes
             // Gens
             //Generator generator = new UpDownGenerator(game);
             //Generator generator = new SpikeGenerator(game);
-            Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
+            generator = new SpreadGenerator(new SineStackedGenerator(game), 500);
+            generator.NewSpread(0, 8, 0);
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(9), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(30), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
@@ -133,7 +135,7 @@ namespace PaToRo_Desktop.Scenes
 
             PrepareTimer = DefaultPrepareTimerInSeconds;
         }
-
+        private bool test;
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -158,6 +160,7 @@ namespace PaToRo_Desktop.Scenes
             }
             else if (State == state.Prepare)
             {
+                Level.Restart();
                 State = state.Game;
                 //PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //foreach (TheNewWaveRider Rider in Riders)
@@ -172,6 +175,12 @@ namespace PaToRo_Desktop.Scenes
             }
             else
             {
+                if (Level.CurrentLevelPosition > 20 && !test)
+                {
+                    test = true;
+                    generator.NewSpread(Level.CurrentLevelPosition + 2f, Level.CurrentLevelPosition + 7, 500);
+
+                }
             }
             Synth.Update(gameTime);
             CheckPlayerCollisions(gameTime);
