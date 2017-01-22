@@ -103,7 +103,7 @@ namespace PaToRo_Desktop.Scenes
                 if (colorOffset > 1.0f) colorOffset = 0;
                 float dotOffset = 25.0f;
                 Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
-                DotPosition.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
+                DotPosition.X = (PrepareTimer / DefaultPrepareTimerInSeconds) * game.Screen.Width - StartZoneSize;
                 while (DotPosition.Y < game.Screen.Height)
                 {
                     spriteBatch.Draw(part, DotPosition, Color.White);
@@ -324,7 +324,6 @@ namespace PaToRo_Desktop.Scenes
         {
             startSpreading = false;
             generator.Reset();
-            generator.NewSpread(0, 8, 0);
             PrepareTimer = DefaultPrepareTimerInSeconds;
             Level.isActive = false;
             Level.Restart();
