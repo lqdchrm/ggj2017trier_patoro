@@ -10,25 +10,63 @@ namespace PaToRo_Desktop.Scenes.Generators
 {
     public class SpreadGenerator : Generator
     {
-        private readonly Generator baseGenerator;
+        public Generator BaseScreen { get; set; }
 
-        private float spread = 500;
-        private float spreadLength = 10;
+        private float from;
+        private float to;
+        private float targetSpread;
+        private float lastSpread;
+        private float startSpread;
 
-        public SpreadGenerator(Generator baseGenerator)
+        public float CurrentSpread { get; private set; }
+
+        public SpreadGenerator(Generator baseGenerator, float startSpread)
         {
-            this.baseGenerator = baseGenerator;
+            this.BaseScreen = baseGenerator;
+            this.targetSpread = startSpread;
+            this.lastSpread = startSpread;
+            this.startSpread = startSpread;
         }
+
+
+        public void NewSpread(float from, float to, float targetSpread)
+        {
+            this.from = from;
+            this.to = to;
+            this.lastSpread = this.targetSpread;
+            this.targetSpread = targetSpread;
+        }
+
 
 
         public float GetUpper(float t)
         {
-            return baseGenerator.GetUpper(t) - MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
+            float spread = GetSpread(t);
+
+            return BaseScreen.GetUpper(t) - spread;
         }
+
+
         public float GetLower(float t)
         {
-            return baseGenerator.GetLower(t) + MathHelper.Lerp(spread, 0, MathHelper.Clamp(t, 0, spreadLength) / spreadLength);
+            float spread = GetSpread(t);
+            return BaseScreen.GetLower(t) + spread;
 
+        }
+
+
+        private float GetSpread(float t)
+        {
+            var currentPosition = Funcs.BaseFuncs.MapTo(0, 1, MathHelper.Clamp(t, from, to), from, to);
+            var spread = MathHelper.Lerp(lastSpread, targetSpread, currentPosition);
+            CurrentSpread = spread;
+            return spread;
+        }
+
+        internal void Reset()
+        {
+            targetSpread = startSpread;
+            lastSpread = startSpread;
         }
     }
 }

@@ -59,6 +59,8 @@ namespace PaToRo_Desktop.Scenes
         private float colorOffset;
         private float PrepareTimer;
         private static float DefaultPrepareTimerInSeconds = 3.0f;
+        private SpreadGenerator generator;
+        private bool startSpreading = false;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -166,9 +168,10 @@ namespace PaToRo_Desktop.Scenes
             // Gens
             //Generator generator = new UpDownGenerator(game);
             //Generator generator = new SpikeGenerator(game);
-            Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
+            generator = new SpreadGenerator(new SineStackedGenerator(game), 500);
+            generator.NewSpread(0, 8, 0);
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(9), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(20), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
@@ -256,7 +259,16 @@ namespace PaToRo_Desktop.Scenes
                     GameOverPositionX = game.Screen.Width;
                 }
             }
-            else { }
+            else {
+                if (Level.Elapsed.TotalSeconds < 2.5)
+                {
+                    if (!startSpreading)
+                    {
+                        startSpreading = true;
+                        generator.NewSpread(Level.CurrentLevelPosition + 1, Level.CurrentLevelPosition + 6, 500);
+                    }
+                }
+            }
             Synth.Update(gameTime);
             CheckPlayerCollisions(gameTime);
         }
@@ -310,6 +322,9 @@ namespace PaToRo_Desktop.Scenes
 
         public void Reset()
         {
+            startSpreading = false;
+            generator.Reset();
+            generator.NewSpread(0, 8, 0);
             PrepareTimer = DefaultPrepareTimerInSeconds;
             Level.isActive = false;
             Level.Restart();

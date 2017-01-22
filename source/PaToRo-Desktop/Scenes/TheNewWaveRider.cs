@@ -244,7 +244,7 @@ namespace PaToRo_Desktop.Scenes
             if (Colliding <= 0)
             {
                 var particles = (game.Scenes.Current as TestScene)?.particles;
-                particles.Explode(Phy.Pos + Vector2.UnitY * Radius * (upper ? -1 : 1), 0.5f, BaseColor, (e) => {
+                particles?.Explode(Phy.Pos + Vector2.UnitY * Radius * (upper ? -1 : 1), 0.5f, BaseColor, (e) => {
                     e.Spd.X = -level.SpdInPixelPerSecond;
                 });
 
