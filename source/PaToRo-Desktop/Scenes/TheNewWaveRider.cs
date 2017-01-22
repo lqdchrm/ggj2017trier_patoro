@@ -229,7 +229,7 @@ namespace PaToRo_Desktop.Scenes
         {
             hitSnd.Play(0.5f, 0, 0);
             var level = (game.Scenes.Current as TestScene)?.Level;
-
+            if (level == null) return; // sometimes crashes on scene change to end scene
             if (upper)
             {
                 level.upperColl.Hit(this);
