@@ -138,7 +138,7 @@ namespace PaToRo_Desktop.Scenes
                 Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
                 spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, drawColor);
                 ScorePosition.Y += 60;
-                foreach (PlayerAndPoints pap in FinalPoints.OrderBy(x => x.Points))
+                foreach (PlayerAndPoints pap in FinalPoints.OrderByDescending(x => x.Points))
                 {
 
                     drawColor = pap.color;
