@@ -24,12 +24,12 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(spriteBatch, gameTime);
             if (Text != null)
-                spriteBatch.DrawString(game.Fonts.Get("debug"), Text, Vector2.Zero, Color.Blue);
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), Text, Vector2.Zero, Color.Blue);
 
             var elapsed = (game.Scenes.Current as TestScene).Level.Elapsed;
             var shownTime = elapsed.ToString("mm") + ":" + elapsed.ToString("ss");
            
-            spriteBatch.DrawString(game.Fonts.Get("debug"), shownTime, new Vector2(game.Screen.Width * 0.5f - 50f, 0), Color.Yellow);
+            spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), shownTime, new Vector2(game.Screen.Width * 0.5f - 50f, 10f), Color.Yellow);
         }
     }
 }

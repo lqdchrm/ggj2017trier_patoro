@@ -151,7 +151,7 @@ namespace PaToRo_Desktop.Scenes
             }
             else
             {
-                Vector2 PlayerPointStringPos = new Vector2(0, 20);
+                Vector2 PlayerPointStringPos = new Vector2(8f, 10f);
                 float LineOffset = 20.0f;
                 for (int i = 0; i < Riders.Count; i++)
                 {
@@ -384,7 +384,7 @@ namespace PaToRo_Desktop.Scenes
             // register Players
             if (numPlayers < 6)
             {
-                dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
+                //dbgOverlay.Text = string.Format("Player {0}, please press a button", numPlayers);
                 game.Inputs.AssignToPlayer(numPlayers);
             }
 
