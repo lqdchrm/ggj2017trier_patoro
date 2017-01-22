@@ -26,7 +26,8 @@ namespace PaToRo_Desktop.Scenes
 
     public class TestScene : StarfieldScene
     {
-        class PlayerAndPoints {
+        class PlayerAndPoints
+        {
             public int Player;
             public float Points;
             public Color color;
@@ -61,6 +62,7 @@ namespace PaToRo_Desktop.Scenes
         private static float DefaultPrepareTimerInSeconds = 3.0f;
         private SpreadGenerator generator;
         private bool startSpreading = false;
+        private TimeSpan gameEndedAt;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -128,12 +130,22 @@ namespace PaToRo_Desktop.Scenes
                     spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
                     Counter++;
                 }
+
+
+                var drawColor = Colors[0];
+                drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
+
                 Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
-                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, Colors[0]);
-                ScorePosition.Y += 30;
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, drawColor);
+                ScorePosition.Y += 60;
                 foreach (PlayerAndPoints pap in FinalPoints.OrderBy(x => x.Points))
                 {
-                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, pap.color);
+
+                    drawColor = pap.color;
+                    drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
+
+
+                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
                     ScorePosition.Y += 30;
                 }
             }
@@ -191,7 +203,7 @@ namespace PaToRo_Desktop.Scenes
             PrepareTimer = DefaultPrepareTimerInSeconds;
         }
 
-        internal void endgame()
+        internal void endgame(GameTime gameTime)
         {
             FinalPoints.Clear();
             foreach (TheNewWaveRider Rider in Riders)
@@ -203,6 +215,7 @@ namespace PaToRo_Desktop.Scenes
                 FinalPoints.Add(score);
             }
             Reset();
+            gameEndedAt = gameTime.TotalGameTime;
             State = state.Score;
         }
 
@@ -259,7 +272,8 @@ namespace PaToRo_Desktop.Scenes
                     GameOverPositionX = game.Screen.Width;
                 }
             }
-            else {
+            else
+            {
                 if (Level.Elapsed.TotalSeconds < 2.5)
                 {
                     if (!startSpreading)

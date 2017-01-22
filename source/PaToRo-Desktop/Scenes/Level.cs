@@ -181,7 +181,7 @@ namespace PaToRo_Desktop.Scenes
                     TestScene scene = (game.Scenes.Current as TestScene);
                     if (scene != null)
                     {
-                        scene.endgame();
+                        scene.endgame(gameTime);
                     }
                     return;
                 }
