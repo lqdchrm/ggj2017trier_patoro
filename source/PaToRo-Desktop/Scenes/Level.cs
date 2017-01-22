@@ -134,7 +134,7 @@ namespace PaToRo_Desktop.Scenes
             this.SpdInPixelPerSecondStart = spdInPixelPerSecondStart;
             this.SpdInPixelPerSecondEnd = spdInPixelPerSecondEnd;
 
-            FillStatic();
+            //FillStatic();
         }
 
         public void Restart()
@@ -150,7 +150,7 @@ namespace PaToRo_Desktop.Scenes
 
         private void FillStatic()
         {
-            accumulator += BlockWidth * upper.Length;
+            accumulator += BlockWidth * upper.Length /2;
         }
 
         internal void LoadContent(ContentManager content)

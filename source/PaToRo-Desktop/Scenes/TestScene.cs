@@ -20,7 +20,7 @@ namespace PaToRo_Desktop.Scenes
 {
     enum state
     {
-        Lobby, Game
+        Lobby, Prepare, Game
     }
 
     public class TestScene : StarfieldScene
@@ -44,6 +44,8 @@ namespace PaToRo_Desktop.Scenes
         private SoundEffect hitSnd;
         private Texture2D arrow;
         private float colorOffset;
+        private float PrepareTimer;
+        private static float DefaultPrepareTimerInSeconds = 3.0f;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -74,21 +76,24 @@ namespace PaToRo_Desktop.Scenes
                     spriteBatch.Draw(part, DotPosition, Color.White);
                     DotPosition.Y += dotOffset;
                 }
-                Vector2 ArrowPos = new Vector2(game.Screen.Width - StartZoneSize/2.0f - 50.0f, game.Screen.Height/2.0f - 128);
+                Vector2 ArrowPos = new Vector2(game.Screen.Width - StartZoneSize / 2.0f - 50.0f, game.Screen.Height / 2.0f - 128);
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * colorOffset, 0.8f * colorOffset, 0.8f * colorOffset, 0.5f * colorOffset));
                 ArrowPos.X += 10.0f;
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
             }
-            Vector2 PlayerPointStringPos = new Vector2(0, 20);
-            float LineOffset = 20.0f;
-            for (int i = 0; i < Riders.Count; i++)
+            else
             {
-                var rider = Riders[i];
-                spriteBatch.DrawString(
-                    game.Fonts.Get("debug"),
-                    $"Player {rider.PlayerNum + 1}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
-                    PlayerPointStringPos, rider.BaseColor);
-                PlayerPointStringPos.Y += LineOffset;
+                Vector2 PlayerPointStringPos = new Vector2(0, 20);
+                float LineOffset = 20.0f;
+                for (int i = 0; i < Riders.Count; i++)
+                {
+                    var rider = Riders[i];
+                    spriteBatch.DrawString(
+                        game.Fonts.Get("debug"),
+                        $"Player {rider.PlayerNum + 1}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
+                        PlayerPointStringPos, rider.BaseColor);
+                    PlayerPointStringPos.Y += LineOffset;
+                }
             }
             spriteBatch.End();
         }
@@ -109,7 +114,7 @@ namespace PaToRo_Desktop.Scenes
             //Generator generator = new SpikeGenerator(game);
             Generator generator = new SpreadGenerator(new SineStackedGenerator(game));
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(90), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(9), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
@@ -125,6 +130,8 @@ namespace PaToRo_Desktop.Scenes
 
             Reset();
             Children.Add(particles);
+
+            PrepareTimer = DefaultPrepareTimerInSeconds;
         }
 
         internal override void Update(GameTime gameTime)
@@ -140,31 +147,32 @@ namespace PaToRo_Desktop.Scenes
                 }
                 if (start)
                 {
-                    Reset(); // has to be called before State=state.Game and Level.isActive
-                    State = state.Game;
+                    foreach (TheNewWaveRider Rider in Riders)
+                    {
+                        Rider.Points = 0;
+                    }
+                    Level.Restart();
                     Level.isActive = true;
+                    State = state.Prepare;
+                }
+            }
+            else if (State == state.Prepare)
+            {
+                PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                foreach (TheNewWaveRider Rider in Riders)
+                {
+                    Rider.Phy.Pos.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
+                    Rider.Phy.Spd.Y = 0.0f;
+                }
+                if (PrepareTimer <= 0)
+                {
+                    State = state.Game;
                 }
             }
             else
             {
-                var t = (float)gameTime.TotalGameTime.TotalSeconds;
-
-                // change background color
-                //BgColor = new Color(
-                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.2f * t)),           // red
-                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.1f * -t + 0.8f)),   // green
-                //    BaseFuncs.MapTo(0.0f, 0.2f, BaseFuncs.Sin(0.4f * t + 1.7f)),    // blue
-                //    1.0f);
-
-                // manipulate screen matrix
-                //screenMatrix = Matrix.CreateTranslation(-game.Screen.Width * 0.5f, -game.Screen.Height * 0.5f, 0)
-                //    * Matrix.CreateScale(BaseFuncs.MapTo(1f, 1.15f, BaseFuncs.Saw(t*0.2f)))
-                //    * Matrix.CreateRotationZ(0.3f * MathHelper.PiOver4 * BaseFuncs.Sin(0.05f * t))
-                //    * Matrix.CreateTranslation(game.Screen.Width * 0.5f, game.Screen.Height * 0.5f, 0);
-
-                // Sound
-                Synth.Update(gameTime);
             }
+            Synth.Update(gameTime);
             CheckPlayerCollisions(gameTime);
         }
 
@@ -217,10 +225,11 @@ namespace PaToRo_Desktop.Scenes
 
         public void Reset()
         {
+            PrepareTimer = DefaultPrepareTimerInSeconds;
             Level.isActive = false;
+            Level.Restart();
             State = state.Lobby;
             starfield.Speed = 100.0f;
-            Level.Restart();
             foreach (TheNewWaveRider Rider in Riders)
             {
                 Rider.Reset();

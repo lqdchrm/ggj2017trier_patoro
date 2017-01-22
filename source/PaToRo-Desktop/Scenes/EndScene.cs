@@ -2,6 +2,7 @@
 using PaToRo_Desktop.Engine;
 using System;
 using System.Linq;
+using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
@@ -36,12 +37,12 @@ namespace PaToRo_Desktop.Scenes
                 Counter++;
             }
             Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
-            Counter = 0;
+            spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, Colors[0]);
+            ScorePosition.Y += 30;
             foreach (TheNewWaveRider Rider in testScene.Riders.OrderByDescending(r => r.Points))
             {
-                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Score Player {Rider.PlayerNum + 1}: {Rider.Points:0}", ScorePosition, Rider.BaseColor);
+                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Player {Rider.PlayerNum + 1}: {Rider.Points:0}", ScorePosition, Rider.BaseColor);
                 ScorePosition.Y += 30;
-                Counter++;
             }
             spriteBatch.End();
         }
@@ -49,7 +50,7 @@ namespace PaToRo_Desktop.Scenes
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start))
+            if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start) || XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.Enter))
             {
                 testScene.Reset();
                 game.Scenes.Show("level");
