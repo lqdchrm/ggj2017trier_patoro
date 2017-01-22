@@ -81,6 +81,24 @@ namespace PaToRo_Desktop.Scenes
                 ArrowPos.X += 10.0f;
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
             }
+            else if (State == state.Prepare)
+            {
+                colorOffset += 0.05f;
+                if (colorOffset > 1.0f) colorOffset = 0;
+                float dotOffset = 25.0f;
+                Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
+                DotPosition.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
+                while (DotPosition.Y < game.Screen.Height)
+                {
+                    spriteBatch.Draw(part, DotPosition, Color.White);
+                    DotPosition.Y += dotOffset;
+                }
+                Vector2 ArrowPos = new Vector2(DotPosition.X + 50.0f, game.Screen.Height / 2.0f - 128);
+                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * colorOffset, 0.8f * colorOffset, 0.8f * colorOffset, 0.5f * colorOffset));
+                ArrowPos.X += 10.0f;
+                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
+
+            }
             else
             {
                 Vector2 PlayerPointStringPos = new Vector2(0, 20);
@@ -151,21 +169,22 @@ namespace PaToRo_Desktop.Scenes
                     {
                         Rider.Points = 0;
                     }
-                    Level.Restart();
-                    Level.isActive = true;
                     State = state.Prepare;
                 }
             }
             else if (State == state.Prepare)
             {
                 PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                starfield.Speed = 1000.0f;
                 foreach (TheNewWaveRider Rider in Riders)
                 {
-                    Rider.Phy.Pos.X = game.Screen.Width * 0.1f + (PrepareTimer / DefaultPrepareTimerInSeconds) * (game.Screen.Width - StartZoneSize - game.Screen.Width * 0.1f);
-                    Rider.Phy.Spd.Y = 0.0f;
+                    Rider.Phy.Spd.X -= 10.0f;
                 }
                 if (PrepareTimer <= 0)
                 {
+                    starfield.Speed = 100.0f;
+                    Level.Restart();
+                    Level.isActive = true;
                     State = state.Game;
                 }
             }
