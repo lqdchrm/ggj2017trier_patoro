@@ -72,7 +72,14 @@ namespace PaToRo_Desktop.Engine.Sound
                 var oldSong = tracks[playing];
                 foreach (var track in oldSong.Values)
                 {
-                    track.Stop();
+                    try
+                    {
+                        track.Stop();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                     bar = 0;
                 }
             }
@@ -86,7 +93,7 @@ namespace PaToRo_Desktop.Engine.Sound
                 {
                     var track = kvp.Value;
                     track.IsLooped = false;
-                    switch(kvp.Key)
+                    switch (kvp.Key)
                     {
                         case "Arps": track.Volume = 1; break;
                         case "Buzz": track.Volume = loops > 1 ? 1 : 0; break;
@@ -96,7 +103,15 @@ namespace PaToRo_Desktop.Engine.Sound
                         case "Strings": track.Volume = loops > 9 ? 1 : 0; break;
                         default: track.Volume = 0.0f; break;
                     }
-                    track.Play();
+                    try
+                    {
+                        track.Play();
+
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
             }
             playing = song;
