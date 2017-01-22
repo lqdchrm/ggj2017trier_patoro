@@ -73,24 +73,27 @@ namespace PaToRo_Desktop.Scenes
             damageSnd = content.Load<SoundEffect>("Sounds/fx/damage");
         }
 
-        public void Spawn()
+        public void Spawn(bool restePosition = true)
         {
             if (!Active)
             {
                 Active = true;
-                Phy.Pos.X = game.Screen.Width * 0.1f;
-                Phy.Pos.Y = game.Screen.Height * 0.5f;
-                Phy.Spd = Vector2.Zero;
-                Phy.Accel = Vector2.Zero;
+                if (restePosition)
+                {
+                    Phy.Pos.X = game.Screen.Width * 0.1f;
+                    Phy.Pos.Y = game.Screen.Height * 0.5f;
+                    Phy.Spd = Vector2.Zero;
+                    Phy.Accel = Vector2.Zero;
+                }
                 Radius = initialRadius;
             }
         }
 
-        public void Reset()
+        public void Reset(bool resetPosition = true)
         {
             Points = 0.0f;
             Active = false;
-            Spawn();
+            Spawn(resetPosition);
         }
 
         public void Die()
@@ -244,7 +247,8 @@ namespace PaToRo_Desktop.Scenes
             if (Colliding <= 0)
             {
                 var particles = (game.Scenes.Current as TestScene)?.particles;
-                particles?.Explode(Phy.Pos + Vector2.UnitY * Radius * (upper ? -1 : 1), 0.5f, BaseColor, (e) => {
+                particles?.Explode(Phy.Pos + Vector2.UnitY * Radius * (upper ? -1 : 1), 0.5f, BaseColor, (e) =>
+                {
                     e.Spd.X = -level.SpdInPixelPerSecond;
                 });
 

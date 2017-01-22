@@ -332,7 +332,7 @@ namespace PaToRo_Desktop.Scenes
             starfield.Speed = 100.0f;
             foreach (TheNewWaveRider Rider in Riders)
             {
-                Rider.Reset();
+                Rider.Reset(false);
             }
         }
 
