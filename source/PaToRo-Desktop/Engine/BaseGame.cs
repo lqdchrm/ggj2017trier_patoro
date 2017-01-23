@@ -42,8 +42,7 @@ namespace PaToRo_Desktop.Engine
 
         protected override void LoadContent()
         {
-            Fonts.Add("debug", "Fonts/DebugFont");
-            Fonts.Add("PressStart2P", "Fonts/PressStart2P");
+            Fonts.LoadContent();
         }
 
         protected override void UnloadContent()

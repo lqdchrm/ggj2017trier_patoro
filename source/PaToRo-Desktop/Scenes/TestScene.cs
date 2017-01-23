@@ -127,7 +127,7 @@ namespace PaToRo_Desktop.Scenes
                 {
                     TextPosition.X += OffsetX;
                     TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
-                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
+                    spriteBatch.DrawString(game.Fonts.Get( Font.PressStart2P20), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
                     Counter++;
                 }
 
@@ -136,7 +136,7 @@ namespace PaToRo_Desktop.Scenes
                 drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
 
                 Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
-                spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), "Score", ScorePosition, drawColor);
+                spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), "Score", ScorePosition, drawColor);
                 ScorePosition.Y += 60;
                 foreach (PlayerAndPoints pap in FinalPoints.OrderByDescending(x => x.Points))
                 {
@@ -145,7 +145,7 @@ namespace PaToRo_Desktop.Scenes
                     drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
 
 
-                    spriteBatch.DrawString(game.Fonts.Get("PressStart2P"), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
+                    spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
                     ScorePosition.Y += 30;
                 }
             }
@@ -157,7 +157,7 @@ namespace PaToRo_Desktop.Scenes
                 {
                     var rider = Riders[i];
                     spriteBatch.DrawString(
-                        game.Fonts.Get("debug"),
+                        game.Fonts.Get(Font.PressStart2P07),
                         $"Player {rider.PlayerNum + 1}: {(int)rider.Points} Points {(rider.Active ? "" : "DEAD")}",
                         PlayerPointStringPos, rider.BaseColor);
                     PlayerPointStringPos.Y += LineOffset;

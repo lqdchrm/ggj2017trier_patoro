@@ -24,7 +24,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.InternalLoadContent();
 
-            font = game.Fonts.Get("PressStart2P");
+            font = game.Fonts.Get(Font.PressStart2P20);
         }
 
         internal override void Draw(SpriteBatch batch, GameTime gameTime)

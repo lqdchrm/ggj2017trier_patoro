@@ -277,12 +277,6 @@
 /processorParam:Quality=Best
 /build:Sounds/fx/hit2.wav
 
-#begin Fonts/PressStart2P.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:Fonts/PressStart2P.spritefont
-
 #begin Images/Arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -294,4 +288,46 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Arrow.png
+
+#begin Fonts\PressStart2P20.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts\PressStart2P20.spritefont
+
+#begin Fonts/PressStart2P12.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P12.spritefont
+
+#begin Fonts/PressStart2P16.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P16.spritefont
+
+#begin Fonts/PressStart2P18.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P18.spritefont
+
+#begin Fonts/PressStart2P07.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P07.spritefont
+
+#begin Fonts/PressStart2P09.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P09.spritefont
+
+#begin Fonts/PressStart2P10.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PressStart2P10.spritefont
 
