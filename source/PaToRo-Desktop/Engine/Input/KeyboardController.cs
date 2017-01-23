@@ -79,20 +79,10 @@ namespace PaToRo_Desktop.Engine.Input
             return 0.0f;
         }
 
-        private bool triggered = false;
-        private bool vibrating = false;
-        private double cooldown = 0;
-        private SharpDX.XInput.Vibration vibration;
 
         public override void Rumble(float low, float high, int ms)
         {
-            if (!vibrating)
-            {
-                triggered = true;
-                cooldown = ms;
-                vibration.LeftMotorSpeed = (ushort)(ushort.MaxValue * low);
-                vibration.RightMotorSpeed = (ushort)(ushort.MaxValue * high);
-            }
+
         }
     }
 }
