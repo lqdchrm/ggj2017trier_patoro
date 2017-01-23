@@ -74,6 +74,12 @@ namespace PaToRo_Desktop.Scenes
                 this.LastState = lobby;
                 StateChangedTime = TimeSpan.Zero;
             }
+
+            public bool IsStateOrTransitionOfState(State stateToCheck, GameTime gameTime)
+            {
+                return CurrentState == stateToCheck || LastState == stateToCheck && gameTime.TotalGameTime - StateChangedTime < stateTransitionTime;
+            }
+
         }
 
         // score state
@@ -130,9 +136,29 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.Begin();
             if (State.CurrentState == Scenes.State.Lobby)
             {
+                colorOffset += 0.05f;
+                if (colorOffset > 1.0f)
+                    colorOffset = 0;
+                float dotOffset = 25.0f;
+                Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
+                while (DotPosition.Y < game.Screen.Height)
+                {
+                    spriteBatch.Draw(part, DotPosition, BlendInOrOut(Scenes.State.Lobby, gameTime, Color.White));
+                    DotPosition.Y += dotOffset;
+                }
+                Vector2 ArrowPos = new Vector2(game.Screen.Width - StartZoneSize / 2.0f - 50.0f, game.Screen.Height / 2.0f - 128);
+                spriteBatch.Draw(arrow, ArrowPos, BlendInOrOut(Scenes.State.Lobby, gameTime, new Color(0.8f * colorOffset, 0.8f * colorOffset, 0.8f * colorOffset, 0.5f * colorOffset)));
+                ArrowPos.X += 10.0f;
+                spriteBatch.Draw(arrow, ArrowPos, BlendInOrOut(Scenes.State.Lobby, gameTime, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset))));
+            }
+
+            if (State.IsStateOrTransitionOfState(Scenes.State.Lobby, gameTime))
+            {
 
                 if (FinalPoints.Any())
                 {
+
+
                     int Counter = 0;
                     float OffsetX = 30.0f;
                     float OffsetY = 100.0f;
@@ -141,13 +167,21 @@ namespace PaToRo_Desktop.Scenes
                     {
                         TextPosition.X += OffsetX;
                         TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
-                        spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
+                        var color = Colors[Counter % Colors.Length];
+
+                        color = BlendInOrOut(Scenes.State.Lobby, gameTime, color);
+
+
+                        spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"{c}", TextPosition, color);
                         Counter++;
                     }
 
 
                     var drawColor = Colors[0];
-                    drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / 2, 0, 1));
+                    if (State.CurrentState == Scenes.State.Lobby)
+                        drawColor = BlendIn(gameTime, drawColor);
+                    else
+                        drawColor = BlendOut(gameTime, drawColor);
 
                     Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
                     spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), "Score", ScorePosition, drawColor);
@@ -156,58 +190,52 @@ namespace PaToRo_Desktop.Scenes
                     {
 
                         drawColor = pap.color;
-                        drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / 2, 0, 1));
-
+                        drawColor = BlendInOrOut(Scenes.State.Lobby, gameTime, drawColor);
 
                         spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
                         ScorePosition.Y += 30;
                     }
+
+
+                    drawColor = Colors[0];
+                    drawColor = BlendInOrOut(Scenes.State.Lobby, gameTime, drawColor);
+
+
+                    var subTitle = "Press Start To Join";
+
+                    var subFont = this.game.Fonts.Get(Font.PressStart2P12);
+                    var subM = subFont.MeasureString(subTitle);
+                    var subPosition = new Vector2(game.Screen.Width / 2f - subM.X / 2f, ScorePosition.Y);
+
+
+                    if (Math.Floor(gameTime.TotalGameTime.TotalSeconds) % 2 == 0 && this.game.Inputs.NumPlayers < 6)
+                        spriteBatch.DrawString(subFont, subTitle, subPosition, drawColor);
+
                 }
-                else
-                {
-
-
-                }
-
-
-
-                colorOffset += 0.05f;
-                if (colorOffset > 1.0f)
-                    colorOffset = 0;
-                float dotOffset = 25.0f;
-                Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
-                while (DotPosition.Y < game.Screen.Height)
-                {
-                    spriteBatch.Draw(part, DotPosition, Color.White);
-                    DotPosition.Y += dotOffset;
-                }
-                Vector2 ArrowPos = new Vector2(game.Screen.Width - StartZoneSize / 2.0f - 50.0f, game.Screen.Height / 2.0f - 128);
-                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * colorOffset, 0.8f * colorOffset, 0.8f * colorOffset, 0.5f * colorOffset));
-                ArrowPos.X += 10.0f;
-                spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
-            }
-
-            if (State.CurrentState == Scenes.State.Lobby || State.LastState == Scenes.State.Lobby && gameTime.TotalGameTime - State.StateChangedTime < State.stateTransitionTime)
-            {
-
-                if (!FinalPoints.Any())
+                else // Draw Start Text
                 {
                     var font = this.game.Fonts.Get(Font.PressStart2P20);
                     var title = "Wave Tracer";
-
                     var m = font.MeasureString(title);
-
-
                     var position = (new Vector2(game.Screen.Width, game.Screen.Height) - m) / 2f;
 
                     var baseColor = Color.Red;
-                    //if (this.startGame)
-                    //{
-                    //    var progress = MathHelper.Clamp(((float)gameTime.TotalGameTime.TotalSeconds - (float)startPressed), 0f, 1f);
-                    //    baseColor = Color.Lerp(baseColor, Color.Transparent, progress);
-                    //}
+                    if (State.CurrentState != Scenes.State.Lobby)
+                        baseColor = BlendOut(gameTime, baseColor);
 
                     spriteBatch.DrawString(font, title, position, baseColor);
+
+                    var subTitle = "Press Start To Join";
+
+                    var subFont = this.game.Fonts.Get(Font.PressStart2P12);
+                    var subM = subFont.MeasureString(subTitle);
+                    var subPosition = (new Vector2(game.Screen.Width, game.Screen.Height + 2 * m.Y) - subM) / 2f;
+
+
+                    if (Math.Floor(gameTime.TotalGameTime.TotalSeconds) % 2 == 0 && this.game.Inputs.NumPlayers < 6)
+                        spriteBatch.DrawString(subFont, subTitle, subPosition, baseColor);
+
+
                 }
 
             }
@@ -230,10 +258,7 @@ namespace PaToRo_Desktop.Scenes
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
 
             }
-            //if (State == state.Score)
-            //{
 
-            //}
             if (State.CurrentState == Scenes.State.Game)
             {
                 Vector2 PlayerPointStringPos = new Vector2(8f, 10f);
@@ -251,6 +276,30 @@ namespace PaToRo_Desktop.Scenes
             spriteBatch.End();
         }
 
+        private Color BlendInOrOut(Scenes.State state, GameTime gameTime, Color drawColor)
+        {
+            if (State.CurrentState == state)
+                drawColor = BlendIn(gameTime, drawColor);
+            else
+                drawColor = BlendOut(gameTime, drawColor);
+            return drawColor;
+        }
+
+        private Color BlendOut(GameTime gameTime, Color baseColor)
+        {
+            var progress = MathHelper.Clamp(((float)((gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / State.stateTransitionTime.TotalSeconds)), 0f, 1f);
+            baseColor = Color.Lerp(baseColor, Color.Transparent, progress);
+            return baseColor;
+        }
+
+        private Color BlendIn(GameTime gameTime, Color baseColor)
+        {
+            var progress = MathHelper.Clamp(((float)((gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / State.stateTransitionTime.TotalSeconds)), 0f, 1f);
+            baseColor = Color.Lerp(Color.Transparent, baseColor, progress);
+            return baseColor;
+        }
+
+
         internal override void InternalLoadContent()
         {
             base.InternalLoadContent();
@@ -267,7 +316,7 @@ namespace PaToRo_Desktop.Scenes
             generator = new SpreadGenerator(new SineStackedGenerator(game), 500);
             generator.NewSpread(0, 8, 0);
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(10), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(90), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
@@ -321,8 +370,28 @@ namespace PaToRo_Desktop.Scenes
                     }
                     State.ChangeState(Scenes.State.Prepare, gameTime);
                 }
+
+
+
             }
-            else if (State.CurrentState == Scenes.State.Prepare)
+
+
+            if (State.IsStateOrTransitionOfState(Scenes.State.Lobby, gameTime))
+            {
+                if (FinalPoints.Any())
+                {
+                    if (GameOverPositionX > -500.0f)
+                    {
+                        GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        GameOverPositionX = game.Screen.Width;
+                    }
+                }
+            }
+
+            if (State.CurrentState == Scenes.State.Prepare)
             {
                 PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 starfield.Speed = 1000.0f;
@@ -355,7 +424,7 @@ namespace PaToRo_Desktop.Scenes
             //        GameOverPositionX = game.Screen.Width;
             //    }
             //}
-            else
+            if (State.CurrentState == Scenes.State.Game)
             {
                 if (Level.Elapsed.TotalSeconds < 2.5)
                 {
