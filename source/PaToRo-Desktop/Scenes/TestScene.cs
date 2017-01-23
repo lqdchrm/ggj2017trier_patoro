@@ -114,6 +114,17 @@ namespace PaToRo_Desktop.Scenes
         private SpreadGenerator generator;
         private bool startSpreading = false;
 
+        // hints
+        private readonly string[] hints = new string[] {
+            "Press A to Dash",
+            "Press B to Break (Keyboard s)",
+            "As long as you do not hit the waves\nyou gain Points",
+            "If You hit the waves to often you die",
+            "If your dead you will be Respawn",
+            "But you will not get any points\nuntill then",
+            "Smash in your oponents\nso they hit the wave",
+            "There is no reson to die"
+        };
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -134,7 +145,7 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(gameTime);
             spriteBatch.Begin();
-            if (State.CurrentState == Scenes.State.Lobby)
+            if (State.CurrentState == Scenes.State.Lobby) // Because we have a Transition state between Loby and Game we do not add this in the if block below this.
             {
                 colorOffset += 0.05f;
                 if (colorOffset > 1.0f)
@@ -155,10 +166,23 @@ namespace PaToRo_Desktop.Scenes
             if (State.IsStateOrTransitionOfState(Scenes.State.Lobby, gameTime))
             {
 
+                // Hints
+
+
+                var font = this.game.Fonts.Get(Font.PressStart2P16);
+                const int timeToShowText = 4;
+                var hintIndex = ((int)gameTime.TotalGameTime.TotalSeconds / timeToShowText) % hints.Length;
+                var hint = hints[hintIndex];
+                var m = font.MeasureString(hint);
+                var position = (new Vector2(game.Screen.Width, game.Screen.Height / 2f) - m) / 2f;
+
+                spriteBatch.DrawString(font, hint, position, BlendInOrOut(Scenes.State.Lobby, gameTime, Color.Red));
+
+
+
+
                 if (FinalPoints.Any())
                 {
-
-
                     int Counter = 0;
                     float OffsetX = 30.0f;
                     float OffsetY = 100.0f;
@@ -214,10 +238,10 @@ namespace PaToRo_Desktop.Scenes
                 }
                 else // Draw Start Text
                 {
-                    var font = this.game.Fonts.Get(Font.PressStart2P20);
+                    font = this.game.Fonts.Get(Font.PressStart2P20);
                     var title = "Wave Tracer";
-                    var m = font.MeasureString(title);
-                    var position = (new Vector2(game.Screen.Width, game.Screen.Height) - m) / 2f;
+                    m = font.MeasureString(title);
+                    position = (new Vector2(game.Screen.Width, game.Screen.Height) - m) / 2f;
 
                     var baseColor = Color.Red;
                     if (State.CurrentState != Scenes.State.Lobby)
