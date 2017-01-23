@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Extended.Shapes;
 
 namespace PaToRo_Desktop.Engine.Components
 {
@@ -19,11 +20,12 @@ namespace PaToRo_Desktop.Engine.Components
         public Vector2 Accel;
         public float Dmp = 1.0f;
 
-        public Circle HitBox;
+        public CircleF HitBox;
 
         private BaseGame game;
 
-        public Physics(float? radius, BaseGame game)
+
+        public Physics(float radius, BaseGame game)
         {
             Pos = new Vector2();
             Rot = 0;
@@ -31,7 +33,7 @@ namespace PaToRo_Desktop.Engine.Components
             Spd = new Vector2();
             RotSpd = 0;
 
-            HitBox = radius.HasValue ? new Circle(Vector2.Zero, radius.Value) : null;
+            HitBox = new CircleF(Vector2.Zero, radius);
 
             this.game = game;
         }
@@ -57,11 +59,7 @@ namespace PaToRo_Desktop.Engine.Components
             Accel = Vector2.Zero;
 
             // update hitbox
-            if (HitBox != null)
-            {
-                HitBox.Center.X = Pos.X;
-                HitBox.Center.Y = Pos.Y;
-            }
+                HitBox.Center = Pos;
 
             //if (game != null)
             //{
@@ -86,8 +84,6 @@ namespace PaToRo_Desktop.Engine.Components
 
         public bool CollidesWith(Physics other)
         {
-            if (HitBox == null || other.HitBox == null)
-                return false;
 
             return HitBox.Intersects(other.HitBox);
         }

@@ -27,9 +27,9 @@ namespace PaToRo_Desktop.Scenes
             font = game.Fonts.Get(Font.PressStart2P20);
         }
 
-        internal override void Draw(SpriteBatch batch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            base.Draw(batch, gameTime);
+            base.DrawInternal(spriteBatch, gameTime);
 
             var title = "Wave Tracer";
 

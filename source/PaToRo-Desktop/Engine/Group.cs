@@ -17,7 +17,7 @@ namespace PaToRo_Desktop.Engine
             Children = new List<Entity>();
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             foreach (var c in Children)
                 c.Draw(spriteBatch, gameTime);

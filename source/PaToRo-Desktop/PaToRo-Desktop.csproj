@@ -40,6 +40,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Entities\Button.cs" />
     <Compile Include="Engine\Entities\ParticleEmitter.cs" />
     <Compile Include="Engine\Entities\ParticleSystem.cs" />
     <Compile Include="Engine\BaseGame.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Engine\Components\Physics.cs" />
     <Compile Include="Engine\Components\Image.cs" />
     <Compile Include="Engine\Entities\Sprite.cs" />
+    <Compile Include="Engine\Entities\SwitchButtons.cs" />
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Fonts.cs" />
     <Compile Include="Engine\Group.cs" />

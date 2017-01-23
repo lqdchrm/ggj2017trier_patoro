@@ -80,7 +80,7 @@ namespace PaToRo_Desktop.Scenes.Generators
             position = MathHelper.Clamp(position + possitionChange, -(distanceFromCenter - braodness / 2f), distanceFromCenter - braodness / 2f);
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
 
             var left = Left;

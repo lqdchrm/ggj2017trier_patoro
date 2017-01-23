@@ -26,7 +26,7 @@ namespace PaToRo_Desktop.Engine.Entities
             Phy = new Physics(Gfx.origin.X, null);
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             Gfx.Draw(spriteBatch, Phy.Pos, Phy.Rot);
         }

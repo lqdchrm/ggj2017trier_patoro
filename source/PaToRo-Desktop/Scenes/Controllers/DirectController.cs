@@ -49,7 +49,7 @@ namespace PaToRo_Desktop.Scenes.Controllers
             }
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             var pos = new Vector2(Entity.Phy.Pos.X, Entity.Phy.Pos.Y);
             for (int i=1; i<10; ++i)

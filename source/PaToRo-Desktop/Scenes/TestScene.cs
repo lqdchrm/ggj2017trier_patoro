@@ -125,6 +125,12 @@ namespace PaToRo_Desktop.Scenes
             "Smash in your oponents\nso they hit the wave",
             "There is no reson to die"
         };
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private UpDownGenerator upDownGenerator;
+        private SpikeGenerator spikeGenerator;
+        private SineStackedGenerator sineGenerator;
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -333,11 +339,19 @@ namespace PaToRo_Desktop.Scenes
             Synth.LoadContent(game.Content);
             hitSnd = game.Content.Load<SoundEffect>("Sounds/fx/hit");
 
+            // Buttons
+            button1 = new Button("L1", new Vector2(50, 200), game);
+            button2 = new Button("L2", new Vector2(50, 400), game);
+            button3 = new Button("L3", new Vector2(50, 600), game);
+            var levelSelection = new SwitchButtons(button1, button2, button3);
+
+            Children.Add(levelSelection);
 
             // Gens
-            //Generator generator = new UpDownGenerator(game);
-            //Generator generator = new SpikeGenerator(game);
-            generator = new SpreadGenerator(new SineStackedGenerator(game), 500);
+            upDownGenerator = new UpDownGenerator(game);
+            spikeGenerator = new SpikeGenerator(game);
+            sineGenerator = new SineStackedGenerator(game);
+            generator = new SpreadGenerator(sineGenerator, 500);
             generator.NewSpread(0, 8, 0);
 
             Level = new Level(game, 128, TimeSpan.FromSeconds(90), 500, 1000);
@@ -372,6 +386,12 @@ namespace PaToRo_Desktop.Scenes
                 FinalPoints.Add(score);
             }
             Reset(gameTime);
+            generator.BaseGenerator = null; // we must only reset the basegenerator after the game, not every time reset is called.
+            // and we must reset the buttons.
+            button1.IsSelected = false;
+            button2.IsSelected = false;
+            button3.IsSelected = false;
+
             State.ChangeState(Scenes.State.Lobby, gameTime);
         }
 
@@ -380,13 +400,35 @@ namespace PaToRo_Desktop.Scenes
             base.Update(gameTime);
             if (State.CurrentState == Scenes.State.Lobby)
             {
+                button1.IsVisible = true;
+                button2.IsVisible = true;
+                button3.IsVisible = true;
+
+                if (button1.IsSelected)
+                {
+                    generator.BaseGenerator = sineGenerator;
+                }
+                else if (button2.IsSelected)
+                {
+                    generator.BaseGenerator = spikeGenerator;
+                }
+                else if (button3.IsSelected)
+                {
+                    generator.BaseGenerator = upDownGenerator;
+                }
+                else
+                {
+                    generator.BaseGenerator = null;
+                }
+
+
                 CheckForNewPlayers();
                 bool start = Riders.Count > 0 ? true : false;
                 foreach (TheNewWaveRider Rider in Riders)
                 {
                     start = start && (Rider.Phy.Pos.X > game.Screen.Width - StartZoneSize);
                 }
-                if (start)
+                if (start && generator.BaseGenerator != null)
                 {
                     foreach (TheNewWaveRider Rider in Riders)
                     {
@@ -396,7 +438,12 @@ namespace PaToRo_Desktop.Scenes
                 }
 
 
-
+            }
+            else
+            {
+                button1.IsVisible = false;
+                button2.IsVisible = false;
+                button3.IsVisible = false;
             }
 
 

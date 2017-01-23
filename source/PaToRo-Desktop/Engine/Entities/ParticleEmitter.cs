@@ -45,7 +45,7 @@ namespace PaToRo_Desktop.Engine.Entities
 
         private bool _emitting;
         public bool Emitting { get { return _emitting; } set { _emitting = value; if (!value) active = 0; } }
-        
+
         public ParticleEmitter(BaseGame game, string asset, int maxParticles, float spawnRateInPartPerSec)
         {
             this.game = game;
@@ -90,9 +90,9 @@ namespace PaToRo_Desktop.Engine.Entities
             }
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            for (int i = 0; i<active; ++i)
+            for (int i = 0; i < active; ++i)
             {
                 var _scl = Vector2.Lerp(scl[i], maxScl[i], age[i] / maxAgeInSecs);
                 var _col = Color.Lerp(col[i], maxCol[i], age[i] / maxAgeInSecs);
@@ -109,7 +109,7 @@ namespace PaToRo_Desktop.Engine.Entities
             accumulator += delta;
             var numParticlesToSpawn = accumulator * SpawnRate;
 
-            while(numParticlesToSpawn > 1)
+            while (numParticlesToSpawn > 1)
             {
                 Spawn();
                 accumulator -= 1 / SpawnRate;
@@ -117,7 +117,7 @@ namespace PaToRo_Desktop.Engine.Entities
             }
 
             // Update
-            for (int i=0; i<active; ++i)
+            for (int i = 0; i < active; ++i)
             {
                 pos[i] += spd[i] * delta * Dmp;
                 age[i] += delta;

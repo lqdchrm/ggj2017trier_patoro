@@ -20,9 +20,9 @@ namespace PaToRo_Desktop.Scenes
             this.game = game;
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            base.Draw(spriteBatch, gameTime);
+            base.DrawInternal(spriteBatch, gameTime);
             if (Text != null)
                 spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), Text, Vector2.Zero, Color.Blue);
 

@@ -60,9 +60,9 @@ namespace PaToRo_Desktop.Engine
             base.Update(gameTime);
         }
 
-        internal override void Draw(SpriteBatch batch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch batch, GameTime gameTime)
         {
-            base.Draw(batch, gameTime);
+            base.DrawInternal(batch, gameTime);
         }
 
         internal virtual void Draw(GameTime gameTime)
@@ -70,7 +70,7 @@ namespace PaToRo_Desktop.Engine
             game.GraphicsDevice.Clear(BgColor);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, screenMatrix);
-            Draw(spriteBatch, gameTime);
+            base.Draw(spriteBatch, gameTime);
             spriteBatch.End();
         }
     }

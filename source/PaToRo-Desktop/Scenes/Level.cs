@@ -227,7 +227,7 @@ namespace PaToRo_Desktop.Scenes
             lower[insertPos] = _lower;
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (isActive)
             {

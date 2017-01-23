@@ -126,7 +126,7 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (Active)
             {

@@ -68,7 +68,7 @@ namespace PaToRo_Desktop.Engine.Entities
             }
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             for (int i = 0; i < active; ++i)
             {

@@ -89,7 +89,7 @@ namespace PaToRo_Desktop.Scenes.Backgrounds
             }
         }
 
-        internal override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        protected override void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime)
         {
             for (int i = 0; i < numStars; ++i)
             {

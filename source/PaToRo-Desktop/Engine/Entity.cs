@@ -11,8 +11,16 @@ namespace PaToRo_Desktop.Engine
 {
     public abstract class Entity
     {
+        public bool IsVisible { get; set; } = true;
+
         internal abstract void Update(GameTime gameTime);
 
-        internal abstract void Draw(SpriteBatch spriteBatch, GameTime gameTime);
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (IsVisible)
+                DrawInternal(spriteBatch, gameTime);
+        }
+        protected abstract void DrawInternal(SpriteBatch spriteBatch, GameTime gameTime);
     }
 }
