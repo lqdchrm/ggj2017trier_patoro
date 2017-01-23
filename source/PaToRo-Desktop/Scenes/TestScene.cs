@@ -19,9 +19,12 @@ using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace PaToRo_Desktop.Scenes
 {
-    enum state
+    enum State
     {
-        Lobby, Prepare, Game, Score
+        Lobby,
+        Prepare,
+        Game,
+        //Score
     }
 
     public class TestScene : StarfieldScene
@@ -33,6 +36,46 @@ namespace PaToRo_Desktop.Scenes
             public Color color;
         }
 
+        class StateManager
+        {
+
+            /// <summary>
+            /// The current State of the Game
+            /// </summary>
+            public State CurrentState { get; private set; }
+
+            /// <summary>
+            /// The last State of the Game.
+            /// </summary>
+            public State LastState { get; private set; }
+
+            /// <summary>
+            /// The time when the state Changed. used for transisionts.
+            /// </summary>
+            public TimeSpan StateChangedTime { get; private set; }
+
+
+            public void ChangeState(State newState, GameTime gameTime)
+            {
+                if (CurrentState != newState)
+                {
+                    LastState = CurrentState;
+                    CurrentState = newState;
+                    StateChangedTime = gameTime.TotalGameTime;
+
+                }
+            }
+
+            public readonly TimeSpan stateTransitionTime = TimeSpan.FromSeconds(1.5);
+
+            public StateManager(State lobby)
+            {
+                this.CurrentState = lobby;
+                this.LastState = lobby;
+                StateChangedTime = TimeSpan.Zero;
+            }
+        }
+
         // score state
         private Color[] Colors = { new Color(191, 91, 91), new Color(198, 185, 85), new Color(134, 180, 96), new Color(60, 141, 136), new Color(89, 87, 88) };
         private static float TextAmplitude = 50.0f;
@@ -40,7 +83,9 @@ namespace PaToRo_Desktop.Scenes
         private static float TextSpeed = 500.0f;
         private List<PlayerAndPoints> FinalPoints = new List<PlayerAndPoints>();
 
-        private state State = state.Lobby;
+        private StateManager State { get; } = new StateManager(Scenes.State.Lobby);
+
+
         private static float StartZoneSize = 200.0f;
 
         private float GameOverPositionX;
@@ -62,7 +107,7 @@ namespace PaToRo_Desktop.Scenes
         private static float DefaultPrepareTimerInSeconds = 3.0f;
         private SpreadGenerator generator;
         private bool startSpreading = false;
-        private TimeSpan gameEndedAt;
+
 
         public TestScene(BaseGame game) : base(game)
         {
@@ -83,10 +128,52 @@ namespace PaToRo_Desktop.Scenes
         {
             base.Draw(gameTime);
             spriteBatch.Begin();
-            if (State == state.Lobby)
+            if (State.CurrentState == Scenes.State.Lobby)
             {
+
+                if (FinalPoints.Any())
+                {
+                    int Counter = 0;
+                    float OffsetX = 30.0f;
+                    float OffsetY = 100.0f;
+                    Vector2 TextPosition = new Vector2(GameOverPositionX, OffsetY);
+                    foreach (char c in "Game Over !")
+                    {
+                        TextPosition.X += OffsetX;
+                        TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
+                        spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
+                        Counter++;
+                    }
+
+
+                    var drawColor = Colors[0];
+                    drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / 2, 0, 1));
+
+                    Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
+                    spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), "Score", ScorePosition, drawColor);
+                    ScorePosition.Y += 60;
+                    foreach (PlayerAndPoints pap in FinalPoints.OrderByDescending(x => x.Points))
+                    {
+
+                        drawColor = pap.color;
+                        drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - State.StateChangedTime).TotalSeconds / 2, 0, 1));
+
+
+                        spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
+                        ScorePosition.Y += 30;
+                    }
+                }
+                else
+                {
+
+
+                }
+
+
+
                 colorOffset += 0.05f;
-                if (colorOffset > 1.0f) colorOffset = 0;
+                if (colorOffset > 1.0f)
+                    colorOffset = 0;
                 float dotOffset = 25.0f;
                 Vector2 DotPosition = new Vector2(game.Screen.Width - StartZoneSize, 0);
                 while (DotPosition.Y < game.Screen.Height)
@@ -99,7 +186,33 @@ namespace PaToRo_Desktop.Scenes
                 ArrowPos.X += 10.0f;
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
             }
-            else if (State == state.Prepare)
+
+            if (State.CurrentState == Scenes.State.Lobby || State.LastState == Scenes.State.Lobby && gameTime.TotalGameTime - State.StateChangedTime < State.stateTransitionTime)
+            {
+
+                if (!FinalPoints.Any())
+                {
+                    var font = this.game.Fonts.Get(Font.PressStart2P20);
+                    var title = "Wave Tracer";
+
+                    var m = font.MeasureString(title);
+
+
+                    var position = (new Vector2(game.Screen.Width, game.Screen.Height) - m) / 2f;
+
+                    var baseColor = Color.Red;
+                    //if (this.startGame)
+                    //{
+                    //    var progress = MathHelper.Clamp(((float)gameTime.TotalGameTime.TotalSeconds - (float)startPressed), 0f, 1f);
+                    //    baseColor = Color.Lerp(baseColor, Color.Transparent, progress);
+                    //}
+
+                    spriteBatch.DrawString(font, title, position, baseColor);
+                }
+
+            }
+
+            if (State.CurrentState == Scenes.State.Prepare)
             {
                 colorOffset += 0.05f;
                 if (colorOffset > 1.0f) colorOffset = 0;
@@ -117,39 +230,11 @@ namespace PaToRo_Desktop.Scenes
                 spriteBatch.Draw(arrow, ArrowPos, new Color(0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.8f * (1.0f - colorOffset), 0.5f * (1.0f - colorOffset)));
 
             }
-            else if (State == state.Score)
-            {
-                int Counter = 0;
-                float OffsetX = 30.0f;
-                float OffsetY = 100.0f;
-                Vector2 TextPosition = new Vector2(GameOverPositionX, OffsetY);
-                foreach (char c in "Game Over !")
-                {
-                    TextPosition.X += OffsetX;
-                    TextPosition.Y = (float)Math.Sin(TextPosition.X * 1 / TextWavelength) * TextAmplitude + OffsetY;
-                    spriteBatch.DrawString(game.Fonts.Get( Font.PressStart2P20), $"{c}", TextPosition, Colors[Counter % Colors.Length]);
-                    Counter++;
-                }
+            //if (State == state.Score)
+            //{
 
-
-                var drawColor = Colors[0];
-                drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
-
-                Vector2 ScorePosition = new Vector2(game.Screen.Width / 2.0f - 200f, game.Screen.Height / 2.0f);
-                spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), "Score", ScorePosition, drawColor);
-                ScorePosition.Y += 60;
-                foreach (PlayerAndPoints pap in FinalPoints.OrderByDescending(x => x.Points))
-                {
-
-                    drawColor = pap.color;
-                    drawColor = Color.Lerp(Color.Transparent, drawColor, MathHelper.Clamp((float)(gameTime.TotalGameTime - gameEndedAt).TotalSeconds / 2, 0, 1));
-
-
-                    spriteBatch.DrawString(game.Fonts.Get(Font.PressStart2P20), $"Player {pap.Player}: {pap.Points:0}", ScorePosition, drawColor);
-                    ScorePosition.Y += 30;
-                }
-            }
-            else
+            //}
+            if (State.CurrentState == Scenes.State.Game)
             {
                 Vector2 PlayerPointStringPos = new Vector2(8f, 10f);
                 float LineOffset = 20.0f;
@@ -182,7 +267,7 @@ namespace PaToRo_Desktop.Scenes
             generator = new SpreadGenerator(new SineStackedGenerator(game), 500);
             generator.NewSpread(0, 8, 0);
 
-            Level = new Level(game, 128, TimeSpan.FromSeconds(90), 500, 1000);
+            Level = new Level(game, 128, TimeSpan.FromSeconds(10), 500, 1000);
             Level.LoadContent(game.Content);
             Level.Generator = generator; // paddle;
 
@@ -196,7 +281,7 @@ namespace PaToRo_Desktop.Scenes
             Children.Add(Level);
             Children.Add(dbgOverlay);
 
-            Reset();
+            Reset(new GameTime());
             Children.Add(particles);
 
             PrepareTimer = DefaultPrepareTimerInSeconds;
@@ -213,15 +298,14 @@ namespace PaToRo_Desktop.Scenes
                 score.color = Rider.BaseColor;
                 FinalPoints.Add(score);
             }
-            Reset();
-            gameEndedAt = gameTime.TotalGameTime;
-            State = state.Score;
+            Reset(gameTime);
+            State.ChangeState(Scenes.State.Lobby, gameTime);
         }
 
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (State == state.Lobby)
+            if (State.CurrentState == Scenes.State.Lobby)
             {
                 CheckForNewPlayers();
                 bool start = Riders.Count > 0 ? true : false;
@@ -235,10 +319,10 @@ namespace PaToRo_Desktop.Scenes
                     {
                         Rider.Points = 0;
                     }
-                    State = state.Prepare;
+                    State.ChangeState(Scenes.State.Prepare, gameTime);
                 }
             }
-            else if (State == state.Prepare)
+            else if (State.CurrentState == Scenes.State.Prepare)
             {
                 PrepareTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 starfield.Speed = 1000.0f;
@@ -251,26 +335,26 @@ namespace PaToRo_Desktop.Scenes
                     starfield.Speed = 100.0f;
                     Level.Restart();
                     Level.isActive = true;
-                    State = state.Game;
+                    State.ChangeState(Scenes.State.Game, gameTime);
                 }
             }
-            else if (State == state.Score)
-            {
-                if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start) || XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.Enter))
-                {
-                    Reset();
-                    State = state.Lobby;
-                    return;
-                }
-                if (GameOverPositionX > -500.0f)
-                {
-                    GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-                else
-                {
-                    GameOverPositionX = game.Screen.Width;
-                }
-            }
+            //else if (State == state.Score)
+            //{
+            //    if (game.Inputs[0].IsDown(Engine.Input.Buttons.Start) || XnaInput.Keyboard.GetState().IsKeyDown(XnaInput.Keys.Enter))
+            //    {
+            //        Reset();
+            //        State = state.Lobby;
+            //        return;
+            //    }
+            //    if (GameOverPositionX > -500.0f)
+            //    {
+            //        GameOverPositionX -= TextSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //    }
+            //    else
+            //    {
+            //        GameOverPositionX = game.Screen.Width;
+            //    }
+            //}
             else
             {
                 if (Level.Elapsed.TotalSeconds < 2.5)
@@ -333,7 +417,7 @@ namespace PaToRo_Desktop.Scenes
             }
         }
 
-        public void Reset()
+        public void Reset(GameTime gameTime)
         {
             startSpreading = false;
             var random = new Random();
@@ -351,7 +435,7 @@ namespace PaToRo_Desktop.Scenes
             PrepareTimer = DefaultPrepareTimerInSeconds;
             Level.isActive = false;
             Level.Restart();
-            State = state.Lobby;
+            State.ChangeState(Scenes.State.Lobby, gameTime);
             starfield.Speed = 100.0f;
             foreach (TheNewWaveRider Rider in Riders)
             {
