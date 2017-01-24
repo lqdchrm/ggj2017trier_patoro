@@ -9,5 +9,8 @@ The game can be controlled with Gamepad and Keyboard. You join by pressing a but
 You move around with the left analog stick, dash with A and resist with B. A keyboard player uses
 the arrow keys and A + S.
 
+## Media
+A Video of the game play can be seen on [vimeo](https://vimeo.com/200588807).
+
 ## Build
 This game was made with Visual Studio 2015 and uses MonoGame. All libs are included (VS should fetch missing things via NuGet).
