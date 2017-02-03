@@ -1,4 +1,4 @@
-# WaveTracer by PaToRo @ GlobalGameJam 2017 Trier
+# WaveTracer by RoToPa @ GlobalGameJam 2017 Trier
 
 ## Gameplay
 You and up to 4 friends control colorful squishy blobs though a **wavey** corridor and try to push each other around.
